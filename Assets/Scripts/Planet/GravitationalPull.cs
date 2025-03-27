@@ -9,7 +9,7 @@ public class GravitationalPull : MonoBehaviour
     private Transform playerTransform;
     private Rigidbody playerRB;
     
-    [SerializeField] private float gravityForce = 100f;
+    [SerializeField] private float gravityForce = 50f;
     [SerializeField] float rotationSpeed = 5f;
     
     private Vector3 directionOfGravity = Vector3.zero;
@@ -29,9 +29,12 @@ public class GravitationalPull : MonoBehaviour
         
         playerRB.AddForce(directionOfGravity * gravityForce, ForceMode.Force);
         
+        
+        
         targetRotation = Quaternion.FromToRotation(playerTransform.up, -directionOfGravity) * playerTransform.rotation;
         
-        playerTransform.rotation = Quaternion.Slerp(playerTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        playerTransform.rotation = targetRotation;
+        //playerTransform.rotation = Quaternion.Slerp(playerTransform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
 
         // show direction of attraction
         Debug.DrawLine(playerTransform.position, playerTransform.position + directionOfGravity * 2, Color.magenta);
