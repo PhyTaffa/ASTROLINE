@@ -14,23 +14,23 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject cameraRefGO = null;
     private Transform cameraTransform;
     private GameObject cameraPlaneGO = null;
-    
+
     //saving directions, excessive
-    private float rawZDirection = 0f;
-    private float rawXDirection = 0f;
-    private Vector3 processedXDirection = Vector3.zero;
-    private Vector3 processedZDirection = Vector3.zero;
-    private Vector3 proccessInput = Vector3.zero;
-    private Vector3 cameraRight = Vector3.zero;
-    private Vector3 cameraForward = Vector3.zero;
+    //private float rawZDirection = 0f;
+    //private float rawXDirection = 0f;
+    //private Vector3 processedXDirection = Vector3.zero;
+    //private Vector3 processedZDirection = Vector3.zero;
+    //private Vector3 cameraRight = Vector3.zero;
+    //private Vector3 cameraForward = Vector3.zero;
     
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         
+        //for simplicity should also metch the ackrual camera GO
         cameraTransform = cameraRefGO.GetComponent<Transform>();
-        cameraRight = cameraTransform.right;
-        cameraForward = cameraTransform.forward;
+        //cameraRight = cameraTransform.right;
+        //cameraForward = cameraTransform.forward;
     }
 
     void FixedUpdate()
@@ -50,17 +50,19 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovementAccordingToCamera()
     {
-        rawZDirection = Input.GetAxis("Vertical") * Time.fixedDeltaTime;
-        rawXDirection = Input.GetAxis("Horizontal") * Time.fixedDeltaTime;
+        float rawZDirection = Input.GetAxis("Vertical");
+        float rawXDirection = Input.GetAxis("Horizontal");
         
-        //amongus
-        processedXDirection = rawXDirection * cameraRight;
-        processedZDirection = rawZDirection * cameraForward;
+        float deltaTimedXDirection = rawXDirection * Time.fixedDeltaTime;
+        float deltaTimedZDirection = rawZDirection * Time.fixedDeltaTime;
+        
+        //Merging all the direction
+        Vector3 processedXDirection = rawXDirection * cameraTransform.right;
+        Vector3 processedZDirection = rawZDirection * cameraTransform.forward;
         Vector3 processedDirection = (processedXDirection + processedZDirection) * speed;
         
-        proccessInput = processedDirection;
-
-        transform.position += proccessInput;
+        //acktaul moving
+        transform.position += processedDirection;
         //rb.velocity = proccessInput;
         //rb.AddForce(proccessInput, ForceMode.Force);
     }

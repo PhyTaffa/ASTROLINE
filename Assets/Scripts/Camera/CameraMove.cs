@@ -9,38 +9,64 @@ public class CameraMove : MonoBehaviour
     private Vector3 targetPosition = Vector3.zero;
 
     [SerializeField] private float cameraMoveSpeed = 11f;
-
-    private Vector3 initialForward = Vector3.zero;
-    private Vector3 initialRight = Vector3.zero;
+    
+    //player's info
+    private GameObject playerGO = null;
+    private Transform playerTransform = null;
     
     void Start()
     {
         targetToChaseGO = GameObject.FindGameObjectWithTag("Camera Target");
         targetTransform = targetToChaseGO.GetComponent<Transform>();
 
+        
+        //polayer's info
+        playerGO = GameObject.FindGameObjectWithTag("Player");
+        playerTransform = playerGO.GetComponent<Transform>();
+        
         //debugg
         // Ensure the camera starts unrotated
         transform.rotation = Quaternion.identity;
-
-        // Grab the correct directions while the camera is aligned with world space
-        initialForward = transform.forward;
-        initialRight = transform.right;
-
+        
+        
         // Now apply the desired rotation
-        transform.rotation = Quaternion.Euler(20, 0, 0);
+        //transform.rotation = Quaternion.Euler(20, 0, 0);
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    void LateUpdate()
     {
         //repositioning the target position
         targetPosition = targetTransform.position;
         
-        this.transform.position = Vector3.Slerp(transform.position, targetPosition, Time.deltaTime * cameraMoveSpeed);
+        //this.transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * cameraMoveSpeed);
+        this.transform.position = targetPosition;
+
         
+        MoveAround();
+
+        DebugRays();
+
+        LookAtMFPlayer();
+    }
+
+    private void LookAtMFPlayer()
+    {
+        Vector3 direction = new Vector3(playerTransform.position.x - this.transform.position.x, 0, playerTransform.position.z  - this.transform.position.z);
+        
+        this.transform.rotation = Quaternion.LookRotation(direction);
+    }
+
+    private void MoveAround()
+    {
+        
+    }
+
+    private void DebugRays()
+    {
         //debugg
-        // Use the correct forward and right vectors if needed
-        Debug.DrawRay(transform.position, initialForward * 2, Color.blue);  // Visualize forward
-        Debug.DrawRay(transform.position, initialRight * 2, Color.red);     // Visualize right
+        // Use the correct forward and right vectors
+        Debug.DrawRay(transform.position, transform.forward * 3, Color.blue);  // Visualize forward
+        Debug.DrawRay(transform.position, transform.right * 3, Color.red);     // Visualize right
+
     }
 }
