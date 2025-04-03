@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Planet
   - Camera Target
+  - Back of Player
   layers:
   - Default
   - TransparentFX
