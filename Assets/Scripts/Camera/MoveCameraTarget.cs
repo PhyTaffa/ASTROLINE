@@ -16,6 +16,8 @@ public class MoveCameraTarget : MonoBehaviour
 
     private float thisY = 0f;
 
+    private Transform BackOfPlayerTransform = null;
+    
     private void Start()
     {
         playerTransform = transform.parent;
@@ -30,6 +32,9 @@ public class MoveCameraTarget : MonoBehaviour
         
         angle = Mathf.Atan2(targetVector.z, targetVector.x);
         initialAngle = angle;
+        
+        //back of player shid
+        BackOfPlayerTransform = GameObject.FindGameObjectWithTag("Back of Player").GetComponent<Transform>();
     }
 
     private void Update()
@@ -50,11 +55,10 @@ public class MoveCameraTarget : MonoBehaviour
 
     private void ZoomTarget()
     {
-        //use zoom anc clamp it
         float zoomInput = Input.GetAxis("Mouse ScrollWheel");
-        float zoomSpeed = 10f; // Adjust zoom speed as needed
+        float zoomSpeed = 10f; 
 
-        radius -= zoomInput * zoomSpeed; // Subtract to zoom in, add to zoom out
+        radius -= zoomInput * zoomSpeed; 
         radius = Mathf.Clamp(radius, radiusMin, radiusMax);
     }
 
@@ -72,8 +76,16 @@ public class MoveCameraTarget : MonoBehaviour
 
     public void ResetAngle()
     {
-        //hardcoded cuz im dumbdumb, not anymore ඞ
-        //angle = 4.7f;
-        angle = initialAngle;
+        // Get the direction behind the player based on their rotation
+        Vector3 backDirection = -playerTransform.forward;
+
+        // Flatten it so Y doesn't affect horizontal angle
+        backDirection.y = 0;
+
+        // Normalize it to be safe
+        backDirection.Normalize();
+
+        // Calculate the new angle based on the direction behind the player
+        angle = Mathf.Atan2(backDirection.z, backDirection.x);
     }
 }

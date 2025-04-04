@@ -51,20 +51,12 @@ public class CameraMove : MonoBehaviour
         //use this one to avoid weird lerp shenanignas related to the forward and right of the camera, could be changed to be the one of the target so that lerp can lerp
         this.transform.position = targetPosition;
 
-       
-        //FaceBackOfPlayer();
+        
         LookAtMFPlayer();
 
         DebugRays();
     }
-    
-    // private void FaceBackOfPlayer()
-    // {
-    //     if (Input.GetMouseButtonDown(4))
-    //     {
-    //         this.transform.position = playerBackTarget.position;
-    //     }
-    // }
+
 
     private void LookAtMFPlayer()
     {
