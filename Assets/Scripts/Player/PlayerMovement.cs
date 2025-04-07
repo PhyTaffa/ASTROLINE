@@ -15,8 +15,6 @@ public class PlayerMovement : MonoBehaviour
     private Transform cameraTransform;
     private GameObject cameraPlaneGO = null;
 
-    private Transform targetThatCameraFollowTransform = null;
-    
     //saving directions, excessive
     //private float rawZDirection = 0f;
     //private float rawXDirection = 0f;
@@ -33,9 +31,6 @@ public class PlayerMovement : MonoBehaviour
         cameraTransform = cameraRefGO.GetComponent<Transform>();
         //cameraRight = cameraTransform.right;
         //cameraForward = cameraTransform.forward;
-        
-        targetThatCameraFollowTransform = GameObject.FindGameObjectWithTag("Camera Target").transform;
-        
     }
 
     void FixedUpdate()
@@ -66,8 +61,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 processedZDirection = rawZDirection * cameraTransform.forward;
         Vector3 processedDirection = (processedXDirection + processedZDirection) * speed;
         
-        
-        //acktaul moving -- shouldn't be using position but velocity
+        //acktaul moving
         transform.position += processedDirection;
         //rb.velocity = proccessInput;
         //rb.AddForce(proccessInput, ForceMode.Force);

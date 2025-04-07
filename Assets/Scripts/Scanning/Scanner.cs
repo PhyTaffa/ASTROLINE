@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,20 +10,48 @@ public class Scanner : MonoBehaviour
     public LayerMask scannableLayer; // Assign "Scannable" layer in Inspector
     public Image scanProgressUI; // UI element for scan progress
     public float scanTime = 2f; // Time required to scan
+    public Material highlightMaterial;
 
     private float scanProgress = 0f;
     private bool isScanning = false;
     private Transform currentTarget;
 
+    [SerializeField] private GameObject currScanning = null;
+    [SerializeField] private GameObject[] queueToArray;
+    private Queue<GameObject> GOBuffer = new Queue<GameObject>();
+    [SerializeField] private int maxGOBufferSize = 2;
+
+    private Material originalMaterial;
+    private Renderer targetRenderer;
+
+    private void Start()
+    {
+        Debug.Log($"element in starting queue {GOBuffer.Count}");
+        GOBuffer.Enqueue(null);
+    }
+
     void Update()
     {
-        if (Input.GetKey(KeyCode.E)) // Only scan when "E" is held down
+        if (Input.GetKey(KeyCode.E))
         {
             ScanForObjects();
         }
         else
         {
             ResetScan();
+        }
+
+        // visual Debug cuz filippio lZY
+        if (Input.GetKey(KeyCode.Z))
+        {
+            Array.Clear(queueToArray, 0, queueToArray.Length);
+            queueToArray = GOBuffer.ToArray();
+            int i = 0;
+            foreach (GameObject elementInArray in queueToArray)
+            {
+                Debug.Log($"element {i} is {elementInArray?.name ?? "null"}");
+                i++;
+            }
         }
     }
 
@@ -30,16 +60,24 @@ public class Scanner : MonoBehaviour
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         RaycastHit hit;
 
-        Debug.DrawRay(ray.origin, ray.direction * scanRange, Color.red); // Visualize Raycast
+        Debug.DrawRay(ray.origin, ray.direction * scanRange, Color.red);
 
         if (Physics.Raycast(ray, out hit, scanRange, scannableLayer))
         {
-            Debug.Log("Raycast hit: " + hit.transform.name); // Debugging
+            Debug.Log("Raycast hit: " + hit.transform.name);
 
             if (currentTarget != hit.transform)
             {
+                ResetHighlight();
                 currentTarget = hit.transform;
-                scanProgress = 0f; // Reset progress if new target
+                scanProgress = 0f;
+
+                targetRenderer = currentTarget.GetComponent<Renderer>();
+                if (targetRenderer != null)
+                {
+                    originalMaterial = targetRenderer.material;
+                    targetRenderer.material = highlightMaterial;
+                }
             }
 
             isScanning = true;
@@ -48,8 +86,9 @@ public class Scanner : MonoBehaviour
             if (scanProgressUI != null)
                 scanProgressUI.fillAmount = scanProgress / scanTime;
 
-            if (scanProgress >= scanTime)
+            if (scanProgress >= scanTime && !GOBuffer.Contains(hit.transform.gameObject))
             {
+                BufferGOIstance(hit.transform.gameObject);
                 CompleteScan();
             }
         }
@@ -57,6 +96,15 @@ public class Scanner : MonoBehaviour
         {
             ResetScan();
         }
+    }
+
+    private void BufferGOIstance(GameObject GOToValidate)
+    {
+        if (GOBuffer.Count >= maxGOBufferSize)
+        {
+            GOBuffer.Dequeue();
+        }
+        GOBuffer.Enqueue(GOToValidate);
     }
 
     void CompleteScan()
@@ -73,8 +121,20 @@ public class Scanner : MonoBehaviour
         {
             scanProgressUI.fillAmount = 0f;
         }
+        ResetHighlight();
+    }
+
+    void ResetHighlight()
+    {
+        if (targetRenderer != null && originalMaterial != null)
+        {
+            targetRenderer.material = originalMaterial;
+            targetRenderer = null;
+            originalMaterial = null;
+        }
     }
 }
+
 
 
 
