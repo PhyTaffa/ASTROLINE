@@ -11,6 +11,7 @@ public class Scanner : MonoBehaviour
     public Image scanProgressUI; // UI element for scan progress
     public float scanTime = 2f; // Time required to scan
     public Material highlightMaterial;
+    public NotebookManager notebookManager;
 
     private float scanProgress = 0f;
     private bool isScanning = false;
@@ -26,8 +27,12 @@ public class Scanner : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log($"element in starting queue {GOBuffer.Count}");
+        //buffering nulls to VOID  probwlms
         GOBuffer.Enqueue(null);
+        GOBuffer.Enqueue(null);
+
+
+
     }
 
     void Update()
@@ -109,9 +114,15 @@ public class Scanner : MonoBehaviour
 
     void CompleteScan()
     {
-        Debug.Log("Scan Complete: " + currentTarget.name);
-        ResetScan();
+        ScannableObject scannable = currentTarget.GetComponent<ScannableObject>();
+        if (scannable != null && scannable.scanData != null)
+        {
+            notebookManager.AddEntry(scannable.scanData);
+        }
+        Debug.Log("Adding to notebook: " + scannable.scanData.objectName);
+
     }
+
 
     void ResetScan()
     {
