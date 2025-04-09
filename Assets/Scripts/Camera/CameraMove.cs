@@ -16,8 +16,6 @@ public class CameraMove : MonoBehaviour
     private GameObject playerGO = null;
     private Transform playerTransform = null;
     
-    //Player's back postion
-    private Transform playerBackTarget = null;
     
     void Start()
     {
@@ -37,19 +35,17 @@ public class CameraMove : MonoBehaviour
         // Now apply the desired rotation
         //transform.rotation = Quaternion.Euler(20, 0, 0);
         
-        playerBackTarget = GameObject.FindGameObjectWithTag("Back of Player").GetComponent<Transform>();
     }
     
     void LateUpdate()
     {
-        //repositioning the target position
-        targetPosition = targetTransform.position;
-        
+
         //use this to have the camera ler towards the point childed to the player
         //this.transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * cameraMoveSpeed);
         
         //use this one to avoid weird lerp shenanignas related to the forward and right of the camera, could be changed to be the one of the target so that lerp can lerp
-        this.transform.position = targetPosition;
+        
+        this.transform.position = targetTransform.position;
 
         
         LookAtMFPlayer();

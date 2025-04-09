@@ -33,6 +33,7 @@ public class CameraManager : MonoBehaviour
     {
         if (Input.GetKeyDown(switchKey))
         {
+            //reset the 3rd camera to the player's back
             isFirstPersonActive = !isFirstPersonActive;
             SetCameraState(isFirstPersonActive);
         }
