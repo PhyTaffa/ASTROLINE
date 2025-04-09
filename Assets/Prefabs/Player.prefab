@@ -305,7 +305,7 @@ GameObject:
   m_Layer: 0
   m_Name: Camera target
   m_TagString: Camera Target
-  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -479,7 +479,7 @@ GameObject:
   m_Component:
   - component: {fileID: 38046876341398308}
   m_Layer: 0
-  m_Name: 3rd person
+  m_Name: 3rd Person GamObjects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -620,7 +620,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2947855051849362069}
   m_Layer: 0
-  m_Name: 1st Camera
+  m_Name: 1st Person GamObjects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -750,7 +750,7 @@ GameObject:
   - component: {fileID: 2597914216627719800}
   - component: {fileID: 1807929718410039794}
   m_Layer: 0
-  m_Name: Camera Manager (1)
+  m_Name: Camera Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

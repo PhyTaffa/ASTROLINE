@@ -12,17 +12,18 @@ public class MoveCameraTarget : MonoBehaviour
     private float radiusMax = 0f;
     private float radiusMin = 0f;
     private float angle = 0f;
-    private float initialAngle = 0f;
 
     private float thisY = 0f;
 
-    private Transform BackOfPlayerTransform = null;
-    
+    [SerializeField] private float zoomSpeed = 12f;
+    private Vector3 targetVectorY = Vector3.zero;
+    private Vector3 direction = Vector3.zero;
+
     private void Start()
     {
         playerTransform = transform.parent;
         
-        targetVector = transform.position - playerTransform.position;
+        targetVector =  playerTransform.position - this.transform.position;
         
         radius = targetVector.magnitude;
         radiusMax = radius;
@@ -30,39 +31,36 @@ public class MoveCameraTarget : MonoBehaviour
 
         thisY = this.transform.position.y;
         
+        //sets the angle with the given position
         angle = Mathf.Atan2(targetVector.z, targetVector.x);
-        initialAngle = angle;
-        
-        //back of player shid
-        BackOfPlayerTransform = GameObject.FindGameObjectWithTag("Back of Player").GetComponent<Transform>();
     }
 
-    private void Update()
+    private void LateUpdate()
     {
+        //calculates the vector connecting player to target, used in the pitch and orbit
+        //direction = new Vector3(playerTransform.position.x - this.transform.position.x, 0, playerTransform.position.z  - this.transform.position.z);
+
+        OrbitTargetAroundPlayer();
+        
+        //pitches the target so that it's Vector3.right and Vector3.forward are correctly setted.
+        PitchTargetToPlayer();
+        
+        ZoomTarget();
+        
+        //circular orbit around player's position.
+        
+        
+
         if (Input.GetMouseButton(2))
         {
             ResetAngle();
         }
 
-        ZoomTarget();
-        
-        RotateTargetAroundPlayer();
-        //Debug.Log($"ANgle: {angle}");
-        //Vector3 direction = new Vector3(playerTransform.position.x - this.transform.position.x, playerTransform.position.y - this.transform.position.y, playerTransform.position.z  - this.transform.position.z);
-        
-        //this.transform.rotation = Quaternion.LookRotation(direction);
+        //Debug
+        DrawDirection();
     }
-
-    private void ZoomTarget()
-    {
-        float zoomInput = Input.GetAxis("Mouse ScrollWheel");
-        float zoomSpeed = 10f; 
-
-        radius -= zoomInput * zoomSpeed; 
-        radius = Mathf.Clamp(radius, radiusMin, radiusMax);
-    }
-
-    private void RotateTargetAroundPlayer()
+    
+        private void OrbitTargetAroundPlayer()
     {
         float h = Input.GetAxis("Mouse X");
         
@@ -71,8 +69,24 @@ public class MoveCameraTarget : MonoBehaviour
         float x = playerTransform.position.x + Mathf.Cos(angle) * radius;
         float z = playerTransform.position.z + Mathf.Sin(angle) * radius;
         
-        transform.position = new Vector3(x, thisY, z);
+        this.transform.position = new Vector3(x, thisY, z);
     }
+
+    private void PitchTargetToPlayer()
+    {
+        //the y is 0 because this fuckers right and forward is used to change the direction of the player's movement
+        Vector3 direction = new Vector3(playerTransform.position.x - this.transform.position.x, 0, playerTransform.position.z  - this.transform.position.z);
+        this.transform.rotation = Quaternion.LookRotation(direction);
+    }
+
+    private void ZoomTarget()
+    {
+        float zoomInput = Input.GetAxis("Mouse ScrollWheel");
+
+        radius -= zoomInput * zoomSpeed; 
+        radius = Mathf.Clamp(radius, radiusMin, radiusMax);
+    }
+
 
     public void ResetAngle()
     {
@@ -88,4 +102,13 @@ public class MoveCameraTarget : MonoBehaviour
         // Calculate the new angle based on the direction behind the player
         angle = Mathf.Atan2(backDirection.z, backDirection.x);
     }
+    
+    //Debug shids
+    private void DrawDirection()
+    {
+        //visualize direction of walking
+        Debug.DrawRay(transform.position, transform.forward * 10, Color.blue);  // Visualize forward
+        Debug.DrawRay(transform.position, transform.right * 10, Color.red);     // Visualize right
+    }
+
 }
