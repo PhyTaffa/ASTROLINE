@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     //movement according to camera
     [SerializeField] private GameObject cameraRefGO = null;
     private Transform cameraTransform;
-    private GameObject cameraPlaneGO = null;
 
     //saving directions, excessive
     //private float rawZDirection = 0f;
