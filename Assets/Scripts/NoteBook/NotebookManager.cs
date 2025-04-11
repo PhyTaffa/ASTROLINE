@@ -26,6 +26,7 @@ public class NotebookManager : MonoBehaviour
         }
     }
 
+
     public void AddEntry(ScanData data)
     {
         if (!scannedEntries.Contains(data))
