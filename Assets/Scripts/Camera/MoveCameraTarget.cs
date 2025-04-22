@@ -101,43 +101,31 @@ public class MoveCameraTarget : MonoBehaviour
 
         float objectOccRadius = cameraMove.HitValue;
         bool isOccludedThisFrame = cameraMove.IsCurrentlyOccluded;
-
+        
         if (isOccludedThisFrame)
         {
-            framesClear = 0;
             radius = Mathf.Min(radiusZoomed, objectOccRadius);
         }
         else
         {
-            framesClear++;
-            if (wasOccludedLastFrame && framesClear >= requiredClearFrames)
+            //positon prediciton
+            float x = playerTransform.position.x + Mathf.Cos(angle) * radiusZoomed;
+            float z = playerTransform.position.z + Mathf.Sin(angle) * radiusZoomed;
+            Vector3 predictedPos = new Vector3(x, thisY, z);
+
+            
+            //Raycast on prediciotn
+            Vector3 checkDir = playerTransform.position - predictedPos;
+
+            bool notGoingToBeOccluded = Physics.Raycast(predictedPos, checkDir, out hit, checkDir.magnitude);
+            Debug.DrawRay(predictedPos, checkDir, Color.cyan);
+            if (notGoingToBeOccluded)
             {
                 radius = Mathf.Lerp(radius, radiusZoomed, Time.deltaTime * radiusLerpSpeed);
-            }
-            else if (!wasOccludedLastFrame)
-            {
-                radius = radiusZoomed;
             }
         }
         radius = Mathf.Clamp(radius, radiusMin, radiusMax);
     }
-
-    // private void ObjectOcclusion()
-    // {
-    //     RaycastHit hit;
-    //     // Does the ray intersect any objects excluding the player layer
-    //     if (Physics.Raycast(transform.position, targetVector, out hit, targetVector.magnitude))
-    //     { 
-    //         Debug.DrawRay(transform.position, targetVector * hit.distance, Color.yellow); 
-    //         Debug.Log("Did Hit"); 
-    //     }
-    //     else
-    //     { 
-    //         Debug.DrawRay(transform.position, targetVector * 10, Color.white);
-    //         Debug.Log("Did not Hit"); 
-    //     }
-    // }
-
 
     private void ResetAngle()
     {
