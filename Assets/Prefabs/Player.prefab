@@ -333,10 +333,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5735199044848711641}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f5438ccdf09ea64cb0c27cb2f5e1520, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b211762b999e0945937e6c7c7750516, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedRotation: 10
+  speedRotation: 15
+  zoomSpeed: 12
 --- !u!1 &5865689750360709791
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,6 +452,7 @@ MonoBehaviour:
   scanProgressUI: {fileID: 0}
   scanTime: 2
   highlightMaterial: {fileID: 0}
+  notebookManager: {fileID: 0}
   currScanning: {fileID: 0}
   queueToArray: []
   maxGOBufferSize: 2

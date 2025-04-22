@@ -15,42 +15,53 @@ public class MoveCameraTarget : MonoBehaviour
 
     private float thisY = 0f;
 
+    private float radiusPreviousToHit = 0f;
+
     [SerializeField] private float zoomSpeed = 12f;
     private Vector3 targetVectorY = Vector3.zero;
     private Vector3 direction = Vector3.zero;
+    
+    [SerializeField] private GameObject thirdPersonCamera = null;
+    private CameraMove cameraMove = null;
+    
+    private float radiusZoomed = 0f;
+    private bool wasOccludedLastFrame = false;
+    [SerializeField] private float radiusLerpSpeed = 0f;
+    
+    private int framesClear = 0;
+    [SerializeField] private int requiredClearFrames = 5;
 
     private void Start()
     {
         playerTransform = transform.parent;
-        
-        targetVector =  playerTransform.position - this.transform.position;
-        
-        radius = targetVector.magnitude;
-        radiusMax = radius;
-        radiusMin = radius/5;
+        targetVector = playerTransform.position - transform.position;
 
-        thisY = this.transform.position.y;
-        
-        //sets the angle with the given position
+        radius = targetVector.magnitude;
+        radiusZoomed = radius; // set the initial zoomed radius to current radius
+        radiusMax = radius;
+        radiusMin = radius / 5;
+
+        thisY = transform.position.y;
         angle = Mathf.Atan2(targetVector.z, targetVector.x);
+        cameraMove = FindObjectOfType<CameraMove>();
     }
 
     private void LateUpdate()
     {
         //calculates the vector connecting player to target, used in the pitch and orbit
+        
         //direction = new Vector3(playerTransform.position.x - this.transform.position.x, 0, playerTransform.position.z  - this.transform.position.z);
-
+        
+        ZoomTarget();
+        
         OrbitTargetAroundPlayer();
         
         //pitches the target so that it's Vector3.right and Vector3.forward are correctly setted.
         PitchTargetToPlayer();
         
-        ZoomTarget();
-        
-        //circular orbit around player's position.
         
         
-
+        
         if (Input.GetMouseButton(2))
         {
             ResetAngle();
@@ -60,7 +71,7 @@ public class MoveCameraTarget : MonoBehaviour
         DrawDirection();
     }
     
-        private void OrbitTargetAroundPlayer()
+    private void OrbitTargetAroundPlayer()
     {
         float h = Input.GetAxis("Mouse X");
         
@@ -79,16 +90,56 @@ public class MoveCameraTarget : MonoBehaviour
         this.transform.rotation = Quaternion.LookRotation(direction);
     }
 
+    /// <summary>
+    /// Gets the input of the mouse wheel ans chges it's value according to the direction and clamps it, RADIUS which is later used to define the posiiton of the target
+    /// </summary>
     private void ZoomTarget()
     {
         float zoomInput = Input.GetAxis("Mouse ScrollWheel");
+        radiusZoomed -= zoomInput * zoomSpeed;
+        radiusZoomed = Mathf.Clamp(radiusZoomed, radiusMin, radiusMax);
 
-        radius -= zoomInput * zoomSpeed; 
+        float objectOccRadius = cameraMove.HitValue;
+        bool isOccludedThisFrame = cameraMove.IsCurrentlyOccluded;
+
+        if (isOccludedThisFrame)
+        {
+            framesClear = 0;
+            radius = Mathf.Min(radiusZoomed, objectOccRadius);
+        }
+        else
+        {
+            framesClear++;
+            if (wasOccludedLastFrame && framesClear >= requiredClearFrames)
+            {
+                radius = Mathf.Lerp(radius, radiusZoomed, Time.deltaTime * radiusLerpSpeed);
+            }
+            else if (!wasOccludedLastFrame)
+            {
+                radius = radiusZoomed;
+            }
+        }
         radius = Mathf.Clamp(radius, radiusMin, radiusMax);
     }
 
+    // private void ObjectOcclusion()
+    // {
+    //     RaycastHit hit;
+    //     // Does the ray intersect any objects excluding the player layer
+    //     if (Physics.Raycast(transform.position, targetVector, out hit, targetVector.magnitude))
+    //     { 
+    //         Debug.DrawRay(transform.position, targetVector * hit.distance, Color.yellow); 
+    //         Debug.Log("Did Hit"); 
+    //     }
+    //     else
+    //     { 
+    //         Debug.DrawRay(transform.position, targetVector * 10, Color.white);
+    //         Debug.Log("Did not Hit"); 
+    //     }
+    // }
 
-    public void ResetAngle()
+
+    private void ResetAngle()
     {
         // Get the direction behind the player based on their rotation
         Vector3 backDirection = -playerTransform.forward;
@@ -109,6 +160,8 @@ public class MoveCameraTarget : MonoBehaviour
         //visualize direction of walking
         Debug.DrawRay(transform.position, transform.forward * 10, Color.blue);  // Visualize forward
         Debug.DrawRay(transform.position, transform.right * 10, Color.red);     // Visualize right
+        
+        
     }
 
 }

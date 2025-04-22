@@ -15,6 +15,23 @@ public class CameraMove : MonoBehaviour
     private GameObject playerGO = null;
     private Transform playerTransform = null;
     
+    private Vector3 direction = Vector3.zero;
+
+    private float hitValue = 0f;
+    public float HitValue
+    {
+        get { return hitValue; }
+        set { hitValue = value; }
+    }
+    private bool isCurrentlyOccluded = false;
+
+    public bool IsCurrentlyOccluded
+    {
+        get { return isCurrentlyOccluded; }
+        set { isCurrentlyOccluded = value; }
+    }
+    private Vector3 hitPosition = Vector3.zero;
+
     void Start()
     {
         targetToChaseGO = GameObject.FindGameObjectWithTag("Camera Target");
@@ -46,14 +63,86 @@ public class CameraMove : MonoBehaviour
 
         
         LookAtMFPlayer();
-
+        CheckForOcclusion();
+        //float a = ObjectOcclusion();
+        
         //DebugRays();
     }
 
+    /// <summary>
+    /// Used in the MoveCameraTarget; as the name suggests; it's used for the object occlusion 
+    /// </summary>
+    /// <returns>distance value that will be used in the radius of orbit of camera</returns>
+    // public float ObjectOcclusion()
+    // {
+    //     
+    //     //using the directoin vector3 and this posiiont i cast the ray
+    //     RaycastHit hit;
+    //     // Does the ray intersect any objects excluding the player layer
+    //     if (Physics.Raycast(playerTransform.position, -direction, out hit, direction.magnitude))
+    //     {
+    //         Debug.DrawRay(playerTransform.position, -direction, Color.yellow);
+    //         //Debug.Log($"Hit name: {hit.collider.name}");
+    //         return hit.distance;
+    //     }
+    //     else
+    //     {
+    //         Debug.DrawRay(playerTransform.position, -direction, Color.white);
+    //         //Debug.Log("Did not Hit");
+    //     }
+    //     
+    //     return -1f;
+    // }
+    
+    // public bool IsOccluded()
+    // {
+    //     RaycastHit hit;
+    //     Vector3 direction = transform.position - playerTransform.position;
+    //
+    //     if (Physics.Raycast(playerTransform.position, -direction, out hit, direction.magnitude))
+    //     {
+    //         Debug.DrawRay(playerTransform.position, -direction, Color.yellow);
+    //         //Debug.Log($"Hit name: {hit.collider.name}");
+    //         hitPosition = hit.point;
+    //         
+    //         hitValue = hit.distance;
+    //         HitValue = hitValue;
+    //         
+    //         return true;
+    //     }
+    //     else
+    //     {
+    //         Debug.DrawRay(playerTransform.position, -direction, Color.white);
+    //         hitValue = -1f;
+    //         HitValue = hitValue;
+    //         //Debug.Log("Did not Hit");
+    //     }
+    //     return false;
+    // }
+
+    private void CheckForOcclusion()
+    {
+        RaycastHit hit;
+        direction = transform.position - playerTransform.position;
+
+        if (Physics.Raycast(playerTransform.position, direction, out hit, direction.magnitude))
+        {
+            Debug.DrawRay(playerTransform.position, direction, Color.yellow);
+            hitPosition = hit.point;
+            HitValue = hit.distance;
+            IsCurrentlyOccluded = true;
+        }
+        else
+        {
+            Debug.DrawRay(playerTransform.position, direction, Color.white);
+            HitValue = -1f;
+            IsCurrentlyOccluded = false;
+        }
+    }
 
     private void LookAtMFPlayer()
     {
-        Vector3 direction = new Vector3(
+        direction = new Vector3(
             playerTransform.position.x - this.transform.position.x, 
             playerTransform.position.y - this.transform.position.y, 
             playerTransform.position.z  - this.transform.position.z
@@ -66,8 +155,9 @@ public class CameraMove : MonoBehaviour
     {
         //debugg
         // Use the correct forward and right vectors
-        Debug.DrawRay(transform.position, transform.forward * 3, Color.blue);  // Visualize forward
-        Debug.DrawRay(transform.position, transform.right * 3, Color.red);     // Visualize right
+        //Debug.DrawRay(transform.position, transform.forward * 3, Color.blue);  // Visualize forward
+        //Debug.DrawRay(transform.position, transform.right * 3, Color.red);     // Visualize right
 
+        Debug.DrawRay(transform.position, playerTransform.position - transform.position, Color.green);
     }
 }
