@@ -117,6 +117,7 @@ public class MoveCameraTarget : MonoBehaviour
             //Raycast on prediciotn
             Vector3 checkDir = playerTransform.position - predictedPos;
 
+            RaycastHit hit;
             bool notGoingToBeOccluded = Physics.Raycast(predictedPos, checkDir, out hit, checkDir.magnitude);
             Debug.DrawRay(predictedPos, checkDir, Color.cyan);
             if (notGoingToBeOccluded)
