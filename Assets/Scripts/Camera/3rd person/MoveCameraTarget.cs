@@ -128,10 +128,10 @@ public class MoveCameraTarget : MonoBehaviour
             //{
                 //Debug.Log($"hit name : {hit.collider.gameObject.name}");
             //}
-            if (willBeOccluded)
-             {
+            if (!willBeOccluded)
+            {
                  radius = Mathf.Lerp(radius, radiusZoomed, Time.deltaTime * radiusLerpSpeed);
-             }
+            }
             else
             {
                 radius = Mathf.Min(radius, hit.distance - 0.1f); // buffer to reduce jitter
