@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class InteractiveWorld : MonoBehaviour {
     
+    public Camera planetCamera;
+    
     public float rotationSpeed = 5f;  
     
     private bool isDragging = false;
@@ -19,6 +21,8 @@ public class InteractiveWorld : MonoBehaviour {
     }
 
     void Update(){
+        
+        if (!planetCamera.enabled) return;
         
         if (Input.GetKeyDown(KeyCode.R)){
             
