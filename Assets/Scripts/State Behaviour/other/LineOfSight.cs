@@ -37,7 +37,7 @@ public class LineOfSight : MonoBehaviour
         Ray ray = new Ray(transform.position, directionalMagnitudeToPlayer.normalized);
         RaycastHit hitInfo;
 
-        Debug.DrawLine(ray.origin, ray.origin + ray.direction * distanceToHeadset, Color.red, 100.0f) ;
+        Debug.DrawLine(ray.origin, ray.origin + ray.direction * distanceToHeadset, Color.red, 10.0f) ;
 
         if (Physics.Raycast(ray, out hitInfo, distanceToHeadset))
         {
