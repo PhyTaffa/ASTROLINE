@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BodyGravity : MonoBehaviour
-{
+public class BodyGravity : MonoBehaviour {
     
     [SerializeField] private WorldGravity gravity;
 
@@ -18,15 +17,16 @@ public class BodyGravity : MonoBehaviour
         
         tf = transform;
 
-        if (gravity == null)
-        {
+        if (gravity == null) {
+            
             gravity = GameObject.FindGameObjectWithTag("World").GetComponent<WorldGravity>();
         }
     }
 
     private void Update() {
-        if (gravity != null)
-        {
+        
+        if (gravity != null) {
+            
             gravity.Gravity(tf);
         }
     }

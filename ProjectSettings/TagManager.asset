@@ -7,6 +7,7 @@ TagManager:
   - Planet
   - Camera Target
   - Back of Player
+  - TrainStopUI
   layers:
   - Default
   - TransparentFX

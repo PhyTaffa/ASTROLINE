@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class InteractiveWorld : MonoBehaviour {
@@ -9,6 +10,7 @@ public class InteractiveWorld : MonoBehaviour {
     private bool isDragging = false;
     private bool rotateMode = false;
     private Quaternion initialRotation;
+    private Vector3 mouseDownPosition;
 
     void Start(){
         initialRotation = transform.rotation;
@@ -42,10 +44,33 @@ public class InteractiveWorld : MonoBehaviour {
 
             if (Input.GetMouseButtonDown(0)){
                 
-                isDragging = true; 
+                isDragging = false;
+                mouseDownPosition = Input.mousePosition;
             }
-
+            
+            if (Input.GetMouseButton(0)){
+                if(Vector3.Distance(mouseDownPosition, Input.mousePosition) > 1f){
+                    isDragging = true; // Only set to true if mouse moved significantly
+                }
+            }
+            
             if (Input.GetMouseButtonUp(0)){
+                
+                if (!isDragging)
+                {
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+
+                    if (Physics.Raycast(ray, out hit) && hit.collider.CompareTag("TrainStopUI"))
+                    {
+                        TrainStop stop = hit.collider.GetComponent<TrainStop>();
+                        if (stop != null)
+                        {
+                            PlayerPrefs.SetString("SpawnPoint", stop.spawnPointName);
+                            SceneManager.LoadScene("Miguel Testing Gorunds");
+                        }
+                    }
+                }
                 
                 isDragging = false;
             }
