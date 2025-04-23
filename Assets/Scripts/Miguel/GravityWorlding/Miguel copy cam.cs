@@ -6,10 +6,10 @@ public class Miguelcopycam : MonoBehaviour
 {
     
     // inspector variables
-    [SerializeField, Tooltip("Player transform for camera to follow")]
+    [SerializeField]
     private Transform playerTransform;
-    [SerializeField, Tooltip("Camera offset from player (x not used)")]
-    private Vector3 offsetPosition = new Vector3(0, 5, 5);
+    [SerializeField]
+    private Vector3 offsetPosition = new Vector3(0, 13, 13);
     [SerializeField]
     private bool lookAt = true;
 
