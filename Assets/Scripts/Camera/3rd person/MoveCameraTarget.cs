@@ -104,7 +104,7 @@ public class MoveCameraTarget : MonoBehaviour
         
         if (isOccludedThisFrame)
         {
-            radius = Mathf.Min(radiusZoomed, objectOccRadius);
+            radius = Mathf.Min(radiusZoomed, (objectOccRadius - 0.1f));
         }
         else
         {
@@ -115,14 +115,26 @@ public class MoveCameraTarget : MonoBehaviour
 
             
             //Raycast on prediciotn
-            Vector3 checkDir = playerTransform.position - predictedPos;
+            Vector3 rayDir = predictedPos - playerTransform.position;
+            float rayLength = rayDir.magnitude;
+            rayDir.Normalize();
 
             RaycastHit hit;
-            bool notGoingToBeOccluded = Physics.Raycast(predictedPos, checkDir, out hit, checkDir.magnitude);
-            Debug.DrawRay(predictedPos, checkDir, Color.cyan);
-            if (notGoingToBeOccluded)
+            bool willBeOccluded = Physics.Raycast(playerTransform.position, rayDir, out hit, rayLength);
+
+            Debug.DrawRay(playerTransform.position, rayDir * rayLength, Color.cyan);
+            
+            //if (!hit.collider.gameObject.CompareTag("Player") )
+            //{
+                //Debug.Log($"hit name : {hit.collider.gameObject.name}");
+            //}
+            if (willBeOccluded)
+             {
+                 radius = Mathf.Lerp(radius, radiusZoomed, Time.deltaTime * radiusLerpSpeed);
+             }
+            else
             {
-                radius = Mathf.Lerp(radius, radiusZoomed, Time.deltaTime * radiusLerpSpeed);
+                radius = Mathf.Min(radius, hit.distance - 0.1f); // buffer to reduce jitter
             }
         }
         radius = Mathf.Clamp(radius, radiusMin, radiusMax);

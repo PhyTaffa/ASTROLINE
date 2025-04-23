@@ -11,12 +11,18 @@ public class PlayerController : MonoBehaviour{
     private Rigidbody rb;
     private Transform tf;
     private WorldGravity worldGravity;
+    
+    //movement according to camera, cameraRefGO is CameraTarget
+    [SerializeField] private GameObject cameraRefGO = null;
+    private Transform cameraTransform;
 
     private void Start(){
         
         rb = GetComponent<Rigidbody>();
         tf = transform;
         //worldGravity = GetComponent<BodyGravity>();
+        
+        cameraTransform = cameraRefGO.GetComponent<Transform>();
         
     }
 
@@ -32,12 +38,16 @@ public class PlayerController : MonoBehaviour{
     }
 
     private void FixedUpdate(){
-        rb.MovePosition(rb.position + transform.TransformDirection(input * moveSpeed * Time.deltaTime));
+        rb.MovePosition(rb.position + transform.TransformDirection(input * (moveSpeed * Time.deltaTime)));
     }
 
     private void HandleInputs()
     {
-        input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+        Vector3 inputDirection = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+        
+        input = inputDirection.x * cameraTransform.right + inputDirection.z * cameraTransform.forward;
+
+        //input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
 
     }
     //

@@ -127,17 +127,20 @@ public class CameraMove : MonoBehaviour
 
         if (Physics.Raycast(playerTransform.position, direction, out hit, direction.magnitude))
         {
-            Debug.DrawRay(playerTransform.position, direction, Color.yellow);
-            hitPosition = hit.point;
-            HitValue = hit.distance;
-            IsCurrentlyOccluded = true;
+            //occluded
+            if (!hit.collider.CompareTag("Player"))
+            {
+                Debug.DrawRay(playerTransform.position, direction, Color.yellow);
+                hitPosition = hit.point;
+                HitValue = hit.distance;
+                IsCurrentlyOccluded = true;
+                return;
+            }
         }
-        else
-        {
-            Debug.DrawRay(playerTransform.position, direction, Color.white);
-            HitValue = -1f;
-            IsCurrentlyOccluded = false;
-        }
+
+        Debug.DrawRay(playerTransform.position, direction, Color.white);
+        HitValue = -1f;
+        IsCurrentlyOccluded = false;
     }
 
     private void LookAtMFPlayer()
