@@ -4,23 +4,11 @@ using UnityEngine;
 
 public class WorldGravity : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
     //faster better because less stuttering
     private float fastRotationSpeed = 500;
     private float gravitylevel = -10;
     
-    public void Gravity(Transform worldObjects) {
+    public void Gravity(Transform worldObjects,  bool isFlying) {
    
         //Calculating the Gravity Direction
         //Calculate the normalised vector that points any object in the world towards the center of the planet
@@ -34,8 +22,10 @@ public class WorldGravity : MonoBehaviour
         //Applying the Gravitational Force
         //this keeps the object on the ground floor
         //remove this for flying ai objects
-        worldObjects.GetComponent<Rigidbody>().AddForce(vectorPointingObjectTowardCenter * (gravitylevel));
-     
+        if (!isFlying) {
+            worldObjects.GetComponent<Rigidbody>().AddForce(vectorPointingObjectTowardCenter * gravitylevel);
+        }
+        
         //Calculating the Target Rotation
         //this way fixes the stutter
         //rotates the character based on the world-position not the character-position based on the world

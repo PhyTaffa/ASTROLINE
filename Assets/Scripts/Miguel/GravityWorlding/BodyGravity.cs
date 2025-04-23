@@ -6,6 +6,7 @@ public class BodyGravity : MonoBehaviour {
     
     [SerializeField] private WorldGravity gravity;
 
+    public bool isFlying = false; 
     private Rigidbody rb;
     private Transform tf;
     
@@ -18,16 +19,13 @@ public class BodyGravity : MonoBehaviour {
         tf = transform;
 
         if (gravity == null) {
-            
             gravity = GameObject.FindGameObjectWithTag("World").GetComponent<WorldGravity>();
         }
     }
 
     private void Update() {
-        
         if (gravity != null) {
-            
-            gravity.Gravity(tf);
+            gravity.Gravity(tf, isFlying); // Pass flag into gravity method
         }
     }
 }
