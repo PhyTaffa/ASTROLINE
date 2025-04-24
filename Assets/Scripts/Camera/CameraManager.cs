@@ -9,6 +9,7 @@ public class CameraManager : MonoBehaviour
     //[SerializeField] private MonoBehaviour[] firstPersonScripts;
     //[SerializeField] private MonoBehaviour[] thirdPersonScripts;
     [SerializeField] private KeyCode switchKey = KeyCode.V;
+    [SerializeField] private GameObject scannerUIRoot;
 
     private MonoBehaviour[] firstPersonScripts;
     private MonoBehaviour[] thirdPersonScripts;
@@ -48,5 +49,8 @@ public class CameraManager : MonoBehaviour
 
         foreach (MonoBehaviour script in thirdPersonScripts)
             script.enabled = !firstPersonActive;
+
+        if (scannerUIRoot != null)
+            scannerUIRoot.SetActive(firstPersonActive);
     }
 }
