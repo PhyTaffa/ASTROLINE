@@ -16,6 +16,20 @@ public class NotebookManager : MonoBehaviour
     private List<ScanData> scannedEntries = new List<ScanData>();
     private bool isNotebookOpen = false;
 
+    public Slider scanProgressSlider;
+    [SerializeField] private int totalScannables = 15; // Total unique entries possible
+
+    public TextMeshProUGUI scanPercentText;
+
+    void Start()
+    {
+        if (scanProgressSlider != null)
+        {
+            scanProgressSlider.maxValue = totalScannables;
+            scanProgressSlider.value = scannedEntries.Count;
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -60,8 +74,22 @@ public class NotebookManager : MonoBehaviour
         {
             scannedEntries.Add(data);
             Debug.Log("Added new entry to notebook: " + data.objectName);
+
+            // Update the progress slider
+            if (scanProgressSlider != null)
+            {
+                scanProgressSlider.value = scannedEntries.Count;
+            }
         }
+
+        if (scanPercentText != null)
+        {
+            float percent = ((float)scannedEntries.Count / totalScannables) * 100f;
+            scanPercentText.text = $"{percent:F0}% Complete";
+        }
+
     }
+
 
     public void ShowEntry(int index)
     {

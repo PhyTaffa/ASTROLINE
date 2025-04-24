@@ -8,7 +8,7 @@ public class Scanner : MonoBehaviour
     public Camera playerCamera; // Assign the player's camera
     public float scanRange = 5f; // Max scan distance
     public LayerMask scannableLayer; // Assign "Scannable" layer in Inspector
-    public Image scanProgressUI; // UI element for scan progress
+    public Slider scanProgressUI; // UI element for scan progress
     public float scanTime = 2f; // Time required to scan
     public Material highlightMaterial;
     public NotebookManager notebookManager;
@@ -25,14 +25,14 @@ public class Scanner : MonoBehaviour
     private Material originalMaterial;
     private Renderer targetRenderer;
 
+    public Slider scanChargeSlider; 
+    public ScannerUIManager scannerUIManager;
+
     private void Start()
     {
         //buffering nulls to VOID  probwlms
         GOBuffer.Enqueue(null);
         GOBuffer.Enqueue(null);
-
-
-
     }
 
     void Update()
@@ -89,7 +89,8 @@ public class Scanner : MonoBehaviour
             scanProgress += Time.deltaTime;
 
             if (scanProgressUI != null)
-                scanProgressUI.fillAmount = scanProgress / scanTime;
+                scanProgressUI.value = scanProgress / scanTime;
+               //scanProgressUI.fillAmount = 
 
             if (scanProgress >= scanTime && !GOBuffer.Contains(hit.transform.gameObject))
             {
@@ -112,16 +113,33 @@ public class Scanner : MonoBehaviour
         GOBuffer.Enqueue(GOToValidate);
     }
 
+    //void CompleteScan()
+    //{
+    //    ScannableObject scannable = currentTarget.GetComponent<ScannableObject>();
+    //    if (scannable != null && scannable.scanData != null)
+    //    {
+    //        notebookManager.AddEntry(scannable.scanData);
+    //    }
+    //    Debug.Log("Adding to notebook: " + scannable.scanData.objectName);
+
+    //}
     void CompleteScan()
     {
         ScannableObject scannable = currentTarget.GetComponent<ScannableObject>();
         if (scannable != null && scannable.scanData != null)
         {
-            notebookManager.AddEntry(scannable.scanData);
-        }
-        Debug.Log("Adding to notebook: " + scannable.scanData.objectName);
+            notebookManager.AddEntry(scannable.scanData); 
 
+            if (scannerUIManager != null)
+            {
+                scannerUIManager.AddScan(scannable.scanData);
+            }
+
+            Debug.Log("Scan completed: " + scannable.scanData.objectName);
+        }
     }
+
+
 
 
     void ResetScan()
@@ -130,7 +148,7 @@ public class Scanner : MonoBehaviour
         scanProgress = 0f;
         if (scanProgressUI != null)
         {
-            scanProgressUI.fillAmount = 0f;
+            scanProgressUI.value = 0f;
         }
         ResetHighlight();
     }
