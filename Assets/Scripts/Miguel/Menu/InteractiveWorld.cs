@@ -31,14 +31,14 @@ public class InteractiveWorld : MonoBehaviour {
             
             //checks if false
             if (rotateMode){  
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.Confined;
+                // Cursor.visible = true;
+                // Cursor.lockState = CursorLockMode.Confined;
                 
             }else{
                 
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                transform.rotation = initialRotation;
+                // Cursor.visible = false;
+                // Cursor.lockState = CursorLockMode.Locked;
+                // transform.rotation = initialRotation;
             }                                
               
         }
