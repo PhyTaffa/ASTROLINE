@@ -3,12 +3,22 @@ using UnityEngine.SceneManagement;
 
 public class NotebookPages : MonoBehaviour
 {
+    [Header("UI References")]
     [SerializeField] private GameObject notebookUI;
+    [SerializeField] private GameObject settingsPage;
+    [SerializeField] private GameObject floraPage;
+    [SerializeField] private GameObject faunaPage;
 
     private bool isPaused = false;
 
+    private enum NotebookState { Settings, Flora, Fauna }
+    private NotebookState currentState = NotebookState.Settings;
+    
     void Start() {
         notebookUI.SetActive(false);
+        settingsPage.SetActive(false);
+        floraPage.SetActive(false);
+        faunaPage.SetActive(false);
     }
     
     void Update(){
@@ -22,13 +32,16 @@ public class NotebookPages : MonoBehaviour
     {
         isPaused = !isPaused;
         Time.timeScale = isPaused ? 0f : 1f;
-
-        if (notebookUI != null) {
-            notebookUI.SetActive(isPaused);
-        }
-
+        
+        notebookUI.SetActive(isPaused);
+        
         Cursor.visible = isPaused;
         Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
+
+        if (isPaused) {
+            SwitchToPage(NotebookState.Settings); 
+        }
+            
     }
     
     public void ResumeGame() {
@@ -56,6 +69,16 @@ public class NotebookPages : MonoBehaviour
     public void GoToMainTitle() {
         
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Start"); // Change this to your main menu scene name
+        SceneManager.LoadScene("Start"); 
     }
+    private void SwitchToPage(NotebookState newState) {
+        
+        settingsPage.SetActive(newState == NotebookState.Settings);
+        floraPage.SetActive(newState == NotebookState.Flora);
+        faunaPage.SetActive(newState == NotebookState.Fauna);
+        currentState = newState;
+    }
+    public void OpenSettingsPage() => SwitchToPage(NotebookState.Settings);
+    public void OpenFloraPage() => SwitchToPage(NotebookState.Flora);
+    public void OpenFaunaPage() => SwitchToPage(NotebookState.Fauna);
 }
