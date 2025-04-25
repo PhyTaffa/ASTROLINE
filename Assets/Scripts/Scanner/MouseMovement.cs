@@ -49,19 +49,10 @@ public class MouseMovement : MonoBehaviour
          // --- Yaw (rotate player around their up axis)
         playerTransform.Rotate(playerTransform.up, mouseX, Space.World);
 
-        // --- Pitch: limit and smoothen camera pitch when hitting the clamps
-        if (pitch - mouseY < bottomClamp && pitch - mouseY > topClamp)
-        {
-            pitch -= mouseY;
-        }
-        else if (pitch - mouseY <= bottomClamp)
-        {
-            pitch = bottomClamp;
-        }
-        else if (pitch - mouseY >= topClamp)
-        {
-            pitch = topClamp;
-        }
+        // --- Pitch: Use Mathf.Clamp to keep pitch within bounds
+        pitch -= mouseY; // Apply mouseY to pitch
+        pitch = Mathf.Clamp(pitch, topClamp, bottomClamp); // Clamp pitch to the specified range
+
     
         // Apply the pitch to the camera pivot (only the pitch, no yaw)
         transform.localRotation = Quaternion.Euler(pitch, 0f, 0f);
