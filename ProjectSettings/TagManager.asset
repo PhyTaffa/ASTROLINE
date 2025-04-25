@@ -8,6 +8,7 @@ TagManager:
   - Camera Target
   - Back of Player
   - TrainStopUI
+  - Top of Player
   layers:
   - Default
   - TransparentFX

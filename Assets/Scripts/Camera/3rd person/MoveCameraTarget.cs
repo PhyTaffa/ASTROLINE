@@ -73,14 +73,52 @@ public class MoveCameraTarget : MonoBehaviour
     
     private void OrbitTargetAroundPlayer()
     {
+         # region orbit on a plane
+         // float h = Input.GetAxis("Mouse X");
+         //
+         // angle += speedRotation * Time.deltaTime * h;
+         //
+         // float x = playerTransform.position.x + Mathf.Cos(angle) * radius;
+         // float z = playerTransform.position.z + Mathf.Sin(angle) * radius;
+         //
+         // //thisY = playerTransform.up.y * 4f;
+         // thisY = playerTransform.up.y * 4f + playerTransform.position.y;
+         //
+         // this.transform.position = new Vector3(x, thisY, z);
+         # endregion
+
+
+        #region no clue
+            //got no clue
+            // Vector3 localUp = playerTransform.up;
+            // Vector3 offset = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, localUp) * (transform.position - playerTransform.position).normalized * radius;
+            // transform.position = playerTransform.position + offset;
+            //
+            // transform.LookAt(playerTransform.position, localUp);
+        #endregion
+
         float h = Input.GetAxis("Mouse X");
-        
         angle += speedRotation * Time.deltaTime * h;
-        
-        float x = playerTransform.position.x + Mathf.Cos(angle) * radius;
-        float z = playerTransform.position.z + Mathf.Sin(angle) * radius;
-        
-        this.transform.position = new Vector3(x, thisY, z);
+
+        // The up vector is the "north pole" at the player's position on the sphere
+        Vector3 localUp = playerTransform.up;
+
+        // Create a rotation around the local up axis
+        Quaternion rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, localUp);
+
+        // Get a base offset direction — use any perpendicular vector to localUp
+        Vector3 baseDirection = Vector3.Cross(localUp, playerTransform.right).normalized;
+
+        // Orbit offset is a rotated version of the base direction
+        Vector3 orbitOffset = rotation * baseDirection * radius;
+
+        // Final camera position is orbit position + height offset along up
+        Vector3 heightOffset = localUp * 4f; // adjust height as needed
+        transform.position = playerTransform.position + orbitOffset + heightOffset;
+
+        // Rotate the target according to the player's up vector
+        transform.rotation = Quaternion.LookRotation(playerTransform.position - transform.position, localUp);
+
     }
 
     private void PitchTargetToPlayer()
@@ -159,8 +197,8 @@ public class MoveCameraTarget : MonoBehaviour
     private void DrawDirection()
     {
         //visualize direction of walking
-        Debug.DrawRay(transform.position, transform.forward * 10, Color.blue);  // Visualize forward
-        Debug.DrawRay(transform.position, transform.right * 10, Color.red);     // Visualize right
+        Debug.DrawRay(transform.position, playerTransform.forward * 1000, Color.blue);  // Visualize forward
+        Debug.DrawRay(transform.position, playerTransform.right * 1000, Color.red);     // Visualize right
         
         
     }

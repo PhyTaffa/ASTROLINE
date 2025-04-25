@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class MouseMovement : MonoBehaviour
@@ -12,14 +13,24 @@ public class MouseMovement : MonoBehaviour
     public float topClamp = -90f;
     public float bottomClamp = 90f;
    
-    private Transform playerTransform; 
+    private Transform playerTransform;
+    
+    private CinemachineVirtualCamera vcam;
+    private CinemachinePOV pov;
 
+    private int i = 0;
+    
     void Start()
     {
         // locking the cursor and making it invisible
         Cursor.lockState = CursorLockMode.Locked;
         
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        
+        vcam = GetComponent<CinemachineVirtualCamera>();
+        
+        Vector3 projectedForward = Vector3.ProjectOnPlane(playerTransform.forward, playerTransform.up).normalized;
+        yRotation = Vector3.SignedAngle(Vector3.forward, projectedForward, playerTransform.up);
     }
 
     // Update is called once per frame
@@ -39,8 +50,9 @@ public class MouseMovement : MonoBehaviour
         yRotation += mouseX;
 
         // apply the rotation
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        playerTransform.localRotation = Quaternion.Euler(0f, yRotation, 0f);
+        //transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        //playerTransform.localRotation = Quaternion.Euler(0f, yRotation, 0f);
+        //playerTransform.rotation = Quaternion.AngleAxis(yRotation, playerTransform.up);
         
     }
     void FixedUpdate()
