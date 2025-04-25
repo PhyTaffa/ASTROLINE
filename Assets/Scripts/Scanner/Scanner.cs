@@ -1,36 +1,31 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Scanner : MonoBehaviour
 {
-    public Camera playerCamera; // Assign the player's camera
-    public float scanRange = 5f; // Max scan distance
-    public LayerMask scannableLayer; // Assign "Scannable" layer in Inspector
-    public Slider scanProgressUI; // UI element for scan progress
-    public float scanTime = 2f; // Time required to scan
+    [Header("Scan Settings")]
+    public Camera playerCamera;
+    public float scanRange = 5f;
+    public LayerMask scannableLayer;
+    public float scanTime = 2f;
     public Material highlightMaterial;
+
+    [Header("Notebook and UI")]
     public NotebookManager notebookManager;
+    public ScannerUIManager scannerUIManager;
 
     private float scanProgress = 0f;
     private bool isScanning = false;
     private Transform currentTarget;
 
-    [SerializeField] private GameObject currScanning = null;
-    [SerializeField] private GameObject[] queueToArray;
-    private Queue<GameObject> GOBuffer = new Queue<GameObject>();
-    [SerializeField] private int maxGOBufferSize = 2;
-
     private Material originalMaterial;
     private Renderer targetRenderer;
 
-    public Slider scanChargeSlider; 
-    public ScannerUIManager scannerUIManager;
+    private Queue<GameObject> GOBuffer = new Queue<GameObject>();
+    [SerializeField] private int maxGOBufferSize = 2;
 
     private void Start()
     {
-        //buffering nulls to VOID  probwlms
         GOBuffer.Enqueue(null);
         GOBuffer.Enqueue(null);
     }
@@ -45,19 +40,6 @@ public class Scanner : MonoBehaviour
         {
             ResetScan();
         }
-
-        // visual Debug cuz filippio lZY
-        if (Input.GetKey(KeyCode.Z))
-        {
-            Array.Clear(queueToArray, 0, queueToArray.Length);
-            queueToArray = GOBuffer.ToArray();
-            int i = 0;
-            foreach (GameObject elementInArray in queueToArray)
-            {
-                Debug.Log($"element {i} is {elementInArray?.name ?? "null"}");
-                i++;
-            }
-        }
     }
 
     void ScanForObjects()
@@ -69,8 +51,6 @@ public class Scanner : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, scanRange, scannableLayer))
         {
-            Debug.Log("Raycast hit: " + hit.transform.name);
-
             if (currentTarget != hit.transform)
             {
                 ResetHighlight();
@@ -88,13 +68,9 @@ public class Scanner : MonoBehaviour
             isScanning = true;
             scanProgress += Time.deltaTime;
 
-            if (scanProgressUI != null)
-                scanProgressUI.value = scanProgress / scanTime;
-               //scanProgressUI.fillAmount = 
-
             if (scanProgress >= scanTime && !GOBuffer.Contains(hit.transform.gameObject))
             {
-                BufferGOIstance(hit.transform.gameObject);
+                BufferScannedObject(hit.transform.gameObject);
                 CompleteScan();
             }
         }
@@ -104,31 +80,14 @@ public class Scanner : MonoBehaviour
         }
     }
 
-    private void BufferGOIstance(GameObject GOToValidate)
-    {
-        if (GOBuffer.Count >= maxGOBufferSize)
-        {
-            GOBuffer.Dequeue();
-        }
-        GOBuffer.Enqueue(GOToValidate);
-    }
-
-    //void CompleteScan()
-    //{
-    //    ScannableObject scannable = currentTarget.GetComponent<ScannableObject>();
-    //    if (scannable != null && scannable.scanData != null)
-    //    {
-    //        notebookManager.AddEntry(scannable.scanData);
-    //    }
-    //    Debug.Log("Adding to notebook: " + scannable.scanData.objectName);
-
-    //}
     void CompleteScan()
     {
+        if (currentTarget == null) return;
+
         ScannableObject scannable = currentTarget.GetComponent<ScannableObject>();
         if (scannable != null && scannable.scanData != null)
         {
-            notebookManager.AddEntry(scannable.scanData); 
+            notebookManager.AddEntry(scannable.scanData);
 
             if (scannerUIManager != null)
             {
@@ -139,17 +98,10 @@ public class Scanner : MonoBehaviour
         }
     }
 
-
-
-
     void ResetScan()
     {
         isScanning = false;
         scanProgress = 0f;
-        if (scanProgressUI != null)
-        {
-            scanProgressUI.value = 0f;
-        }
         ResetHighlight();
     }
 
@@ -162,9 +114,13 @@ public class Scanner : MonoBehaviour
             originalMaterial = null;
         }
     }
+
+    private void BufferScannedObject(GameObject scannedObject)
+    {
+        if (GOBuffer.Count >= maxGOBufferSize)
+        {
+            GOBuffer.Dequeue();
+        }
+        GOBuffer.Enqueue(scannedObject);
+    }
 }
-
-
-
-
-
