@@ -6,6 +6,7 @@ using Cinemachine;
 public class CameraManager : MonoBehaviour
 {
     [SerializeField] private GameObject firstPersonRoot;
+    [SerializeField] private GameObject fpRig;
     [SerializeField] private GameObject thirdPersonRoot;
     
     [SerializeField] private Canvas firstPersonUI;
@@ -37,6 +38,7 @@ public class CameraManager : MonoBehaviour
         if (Input.GetKeyDown(switchKey))
         {
             isFirstPersonActive = !isFirstPersonActive;
+            fpRig.SetActive(isFirstPersonActive);
             SetCameraState(isFirstPersonActive);
         }
     }

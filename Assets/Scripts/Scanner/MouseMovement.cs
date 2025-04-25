@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class MouseMovement : MonoBehaviour
 {
-    public float mouseSensitivity = 10f;
-    public float topClamp = -80f;
-    public float bottomClamp = 80f;
+    public float mouseSensitivity = 100f;
+    public float topClamp = -30f;
+    public float bottomClamp = 30f;
 
     private float yaw = 0f;   // left/right
     private float pitch = 0f; // up/down
@@ -49,14 +49,22 @@ public class MouseMovement : MonoBehaviour
          // --- Yaw (rotate player around their up axis)
         playerTransform.Rotate(playerTransform.up, mouseX, Space.World);
 
-        // --- Pitch (rotate camera around local right, clamped)
-        pitch -= mouseY;
-        pitch = Mathf.Clamp(pitch, bottomClamp, topClamp);
-
-        Vector3 playerRight = playerTransform.right;
-        Quaternion pitchRotation = Quaternion.AngleAxis(pitch, playerRight);
-        
-        
+        // --- Pitch: limit and smoothen camera pitch when hitting the clamps
+        if (pitch - mouseY < bottomClamp && pitch - mouseY > topClamp)
+        {
+            pitch -= mouseY;
+        }
+        else if (pitch - mouseY <= bottomClamp)
+        {
+            pitch = bottomClamp;
+        }
+        else if (pitch - mouseY >= topClamp)
+        {
+            pitch = topClamp;
+        }
+    
+        // Apply the pitch to the camera pivot (only the pitch, no yaw)
+        transform.localRotation = Quaternion.Euler(pitch, 0f, 0f);
         //transform.rotation = pitchRotation * playerTransform.rotation;
         
         Debug.DrawRay(playerTransform.position, playerTransform.up * 200f, Color.green); // up
