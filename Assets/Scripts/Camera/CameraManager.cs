@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class CameraManager : MonoBehaviour
 {
     [SerializeField] private GameObject firstPersonRoot;
+    [SerializeField] private GameObject fpRig;
     [SerializeField] private GameObject thirdPersonRoot;
-    //[SerializeField] private MonoBehaviour[] firstPersonScripts;
-    //[SerializeField] private MonoBehaviour[] thirdPersonScripts;
+    
+    [SerializeField] private Canvas firstPersonUI;
+    [SerializeField] private Canvas thirdPersonUI;
+
     [SerializeField] private KeyCode switchKey = KeyCode.V;
     [SerializeField] private GameObject scannerUIRoot;
 
@@ -16,33 +20,34 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField] private bool isFirstPersonActive = true;
 
-    private Camera firstPersonCamera = null;
-    private Camera thirdPersonCamera = null;
+    private CinemachineVirtualCamera firstPersonCam;
+    private CinemachineVirtualCamera thirdPersonCam;
 
     void Start()
     {
         firstPersonScripts = firstPersonRoot.GetComponentsInChildren<MonoBehaviour>(true);
         thirdPersonScripts = thirdPersonRoot.GetComponentsInChildren<MonoBehaviour>(true);
-        
-        firstPersonCamera = firstPersonRoot.GetComponent<Camera>();
-        thirdPersonCamera = thirdPersonRoot.GetComponent<Camera>();
+
+        firstPersonCam = firstPersonRoot.GetComponentInChildren<CinemachineVirtualCamera>(true);
+        thirdPersonCam = thirdPersonRoot.GetComponentInChildren<CinemachineVirtualCamera>(true);
 
         SetCameraState(isFirstPersonActive);
     }
+
     private void Update()
     {
         if (Input.GetKeyDown(switchKey))
         {
-            //reset the 3rd camera to the player's back
             isFirstPersonActive = !isFirstPersonActive;
+            fpRig.SetActive(isFirstPersonActive);
             SetCameraState(isFirstPersonActive);
         }
     }
 
     private void SetCameraState(bool firstPersonActive)
     {
-        firstPersonCamera.enabled = firstPersonActive;
-        thirdPersonCamera.enabled = !firstPersonActive;
+        firstPersonCam.Priority = firstPersonActive ? 10 : 0;
+        thirdPersonCam.Priority = firstPersonActive ? 0 : 10;
 
         foreach (MonoBehaviour script in firstPersonScripts)
             script.enabled = firstPersonActive;

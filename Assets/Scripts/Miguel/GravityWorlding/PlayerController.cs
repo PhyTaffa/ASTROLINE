@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public class PlayerController : MonoBehaviour{
     
@@ -12,29 +15,67 @@ public class PlayerController : MonoBehaviour{
     private Transform tf;
     private WorldGravity worldGravity;
     
-    //movement according to camera, cameraRefGO is CameraTarget
-    [SerializeField] private GameObject cameraRefGO = null;
-    private Transform cameraTransform;
-
+    //movement according to camera
+    private Transform activeCameraTransform;
+    [SerializeField] private CinemachineBrain cinemachineBrain;
+    [SerializeField] private Transform tihngThatMoveWithCamera;
     private void Start(){
         
         rb = GetComponent<Rigidbody>();
         tf = transform;
         //worldGravity = GetComponent<BodyGravity>();
         
-        cameraTransform = cameraRefGO.GetComponent<Transform>();
-        
+        //cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
+        cinemachineBrain.m_CameraActivatedEvent.AddListener(OnCameraActivated);
+
+
+        // Initialize with the current virtual camera
+        if (cinemachineBrain.ActiveVirtualCamera is CinemachineVirtualCamera cam)
+            activeCameraTransform = cam.transform;
     }
 
+    void OnDestroy()
+    {
+        cinemachineBrain.m_CameraActivatedEvent.RemoveListener(OnCameraActivated);
+    }
+
+    private void OnCameraActivated(ICinemachineCamera fromCam, ICinemachineCamera toCam)
+    {
+        // if (toCam is CinemachineVirtualCamera newCam)
+        // {
+        //     activeCameraTransform = newCam.transform;
+        // }
+    }
+    
     private void Update(){
         
         HandleInputs();
         
+        
+        // Debug.DrawRay(this.transform.position, this.transform.forward * 10f, Color.green);
+        // Debug.DrawRay(this.transform.position, this.transform.right * 10f, Color.yellow);
+
+
         //RotateForward();
         
         //new
         // AlignToPlanetSurface();
         // MovePlayer();
+        
+        // if (!isFirstPersonActive && activeCameraTransform != null)
+        // {
+        //     Vector3 camForward = activeCameraTransform.forward;
+        //     Vector3 projectedForward = Vector3.ProjectOnPlane(camForward, tf.up).normalized;
+        //
+        //     if (projectedForward.sqrMagnitude > 0.001f)
+        //     {
+        //         Quaternion targetRot = Quaternion.LookRotation(projectedForward, tf.up);
+        //         tf.rotation = Quaternion.Slerp(tf.rotation, targetRot, rotateSpeed * Time.deltaTime);
+        //     }
+        // }
+
+        //Debug.DrawRay(this.transform.position, this.transform.up * 10f, Color.magenta);
+        
     }
 
     private void FixedUpdate(){
@@ -45,7 +86,25 @@ public class PlayerController : MonoBehaviour{
     {
         Vector3 inputDirection = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
         
-        input = inputDirection.x * cameraTransform.right + inputDirection.z * cameraTransform.forward;
+        CinemachineVirtualCamera currentCam = cinemachineBrain.ActiveVirtualCamera as CinemachineVirtualCamera;
+        if (currentCam != null)
+        {
+            Vector3 gravityUp = tf.up; // or calculate from planet center if you’re not rotating the player yet
+
+            Vector3 camForward = Vector3.ProjectOnPlane(currentCam.transform.forward, gravityUp).normalized;
+            Vector3 camRight = Vector3.ProjectOnPlane(currentCam.transform.right, gravityUp).normalized;
+
+            Debug.DrawRay(this.transform.position, currentCam.transform.forward * 100f, Color.cyan);
+            Debug.DrawRay(this.transform.position, currentCam.transform.right * 100f, Color.magenta);
+
+            //input = inputDirection.x  +  inputDirection.z;
+            input = inputDirection;
+        }
+        else
+        {
+            input = inputDirection;
+        }
+
 
         //input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
 
