@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,10 +17,12 @@ public class NotebookManager : MonoBehaviour
     private List<ScanData> scannedEntries = new List<ScanData>();
     private bool isNotebookOpen = false;
 
-    void Start()
+
+    private void Start()
     {
-       
+      
     }
+
 
     void Update()
     {
@@ -27,6 +30,7 @@ public class NotebookManager : MonoBehaviour
         {
             ToggleNotebook();
         }
+
     }
 
     void ToggleNotebook()

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ScannerUIManager : MonoBehaviour
 {
     [Header("Scan Progress UI")]
+    public GameObject ScanUI;
     public Slider scanProgressSlider;
     public TextMeshProUGUI scanProgressText;
     [SerializeField] private int totalScannables = 15;
@@ -36,5 +37,15 @@ public class ScannerUIManager : MonoBehaviour
             scanProgressText.text = $"{uniqueScans.Count} / {totalScannables} scanned ({percent:F0}%)";
         }
     }
+
+
+    public void UpdateScanProgress(float normalizedProgress)
+    {
+        if (scanProgressSlider != null)
+        {
+            scanProgressSlider.value = Mathf.Clamp01(normalizedProgress) * totalScannables;
+        }
+    }
+
 
 }

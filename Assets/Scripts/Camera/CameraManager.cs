@@ -8,7 +8,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private GameObject firstPersonRoot;
     [SerializeField] private GameObject fpRig;
     [SerializeField] private GameObject thirdPersonRoot;
-    
+
     [SerializeField] private Canvas firstPersonUI;
     [SerializeField] private Canvas thirdPersonUI;
 
@@ -58,4 +58,11 @@ public class CameraManager : MonoBehaviour
         if (scannerUIRoot != null)
             scannerUIRoot.SetActive(firstPersonActive);
     }
+
+
+    public bool IsFirstPersonActive()
+    {
+        return isFirstPersonActive;
+    }
+
 }

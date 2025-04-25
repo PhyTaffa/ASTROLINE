@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Scanner : MonoBehaviour
 {
     [Header("Scan Settings")]
-    public Camera playerCamera;
+    private Transform rayOrigin;
     public float scanRange = 5f;
     public LayerMask scannableLayer;
     public float scanTime = 2f;
@@ -24,10 +24,17 @@ public class Scanner : MonoBehaviour
     private Queue<GameObject> GOBuffer = new Queue<GameObject>();
     [SerializeField] private int maxGOBufferSize = 2;
 
+    private CameraManager cameraManager;
+    public Camera playerCamera; 
+
     private void Start()
     {
         GOBuffer.Enqueue(null);
         GOBuffer.Enqueue(null);
+
+        cameraManager = FindObjectOfType<CameraManager>();
+        rayOrigin = this.transform; // Scanner is already in the right place!
+
     }
 
     void Update()
@@ -42,9 +49,11 @@ public class Scanner : MonoBehaviour
         }
     }
 
+
+
     void ScanForObjects()
     {
-        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+        Ray ray = new Ray(rayOrigin.position, rayOrigin.forward);
         RaycastHit hit;
 
         Debug.DrawRay(ray.origin, ray.direction * scanRange, Color.red);
@@ -67,6 +76,12 @@ public class Scanner : MonoBehaviour
 
             isScanning = true;
             scanProgress += Time.deltaTime;
+
+            // ⭐ Update UI Progress here!
+            if (scannerUIManager != null)
+            {
+                scannerUIManager.UpdateScanProgress(scanProgress / scanTime);
+            }
 
             if (scanProgress >= scanTime && !GOBuffer.Contains(hit.transform.gameObject))
             {
@@ -92,14 +107,21 @@ public class Scanner : MonoBehaviour
             if (scannerUIManager != null)
             {
                 scannerUIManager.AddScan(scannable.scanData);
+                scannerUIManager.UpdateScanProgress(0f); // Reset bar after success
             }
 
             Debug.Log("Scan completed: " + scannable.scanData.objectName);
         }
+        ResetScan();
     }
 
     void ResetScan()
     {
+        if (isScanning && scannerUIManager != null)
+        {
+            scannerUIManager.UpdateScanProgress(0f); // Clear bar if interrupted
+        }
+
         isScanning = false;
         scanProgress = 0f;
         ResetHighlight();
