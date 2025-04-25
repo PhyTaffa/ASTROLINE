@@ -47,7 +47,7 @@ public class NotebookManager : MonoBehaviour
             Cursor.visible = true;
 
             // Disable your movement script (adjust the script name if needed)
-            player.GetComponent<PlayerMovement>().enabled = false;
+            //player.GetComponent<PlayerMovement>().enabled = false;
         }
         else
         {
@@ -55,7 +55,7 @@ public class NotebookManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            player.GetComponent<PlayerMovement>().enabled = true;
+            //player.GetComponent<PlayerMovement>().enabled = true;
         }
     }
 
