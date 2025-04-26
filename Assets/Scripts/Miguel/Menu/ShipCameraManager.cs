@@ -9,6 +9,7 @@ public class ShipCameraManager : MonoBehaviour {
     public GameObject interactPrompt; 
     public GameObject computerUI;
     public ShipPlayerController movementController; 
+    public ComputerUISlider sliderUiLogic;
     
     private bool usingAlt = false;
     private bool canSwitch = false;
@@ -21,6 +22,9 @@ public class ShipCameraManager : MonoBehaviour {
         
         shipCamera.enabled = true;
         planetCamera.enabled = false;
+        
+        sliderUiLogic.computerButton.SetActive(false);
+        sliderUiLogic.backgroundButton.SetActive(false);
     }
 
     void Update() {
@@ -34,6 +38,9 @@ public class ShipCameraManager : MonoBehaviour {
             movementController.enabled = !usingAlt;
             Cursor.visible = usingAlt;
             Cursor.lockState = usingAlt ? CursorLockMode.None : CursorLockMode.Locked;
+            
+            sliderUiLogic.computerButton .SetActive(usingAlt);
+            sliderUiLogic.backgroundButton.SetActive(usingAlt);
         }
     }
     public void SetCanSwitch(bool allow) {

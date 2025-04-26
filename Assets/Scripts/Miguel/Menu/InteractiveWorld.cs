@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class InteractiveWorld : MonoBehaviour {
     
     public Camera planetCamera;
+    public ComputerUISlider sliderUiLogic;
+    public GameObject confirmDialog;
     
     public float rotationSpeed = 5f;  
     
@@ -13,36 +16,27 @@ public class InteractiveWorld : MonoBehaviour {
     private bool rotateMode = false;
     private Quaternion initialRotation;
     private Vector3 mouseDownPosition;
-
+    private TrainStop pendingStop;
+    private bool allowRotation = true;
     void Start(){
         initialRotation = transform.rotation;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update(){
-        
-        if (!planetCamera.enabled) return;
-        
-        if (Input.GetKeyDown(KeyCode.R)){
-            
-            //switches bool
-            rotateMode = !rotateMode;                       
-            
-            //checks if false
-            if (rotateMode){  
-                // Cursor.visible = true;
-                // Cursor.lockState = CursorLockMode.Confined;
-                
-            }else{
-                
-                // Cursor.visible = false;
-                // Cursor.lockState = CursorLockMode.Locked;
-                // transform.rotation = initialRotation;
-            }                                
-              
-        }
 
+        if (!planetCamera.enabled){
+            return;
+        }
+        
+        if (!planetCamera.enabled || !allowRotation || confirmDialog.activeSelf)
+            return;
+        
+        bool rotateMode = sliderUiLogic != null && sliderUiLogic.isAtDown && !sliderUiLogic.isMovingPublic;                
+        
+        if (!rotateMode){
+            return;
+        }
+        
         //checks in true
         if (rotateMode){
 
@@ -53,8 +47,10 @@ public class InteractiveWorld : MonoBehaviour {
             }
             
             if (Input.GetMouseButton(0)){
+                
+                // Only set to true if mouse moved significantly
                 if(Vector3.Distance(mouseDownPosition, Input.mousePosition) > 1f){
-                    isDragging = true; // Only set to true if mouse moved significantly
+                    isDragging = true; 
                 }
             }
             
@@ -62,33 +58,60 @@ public class InteractiveWorld : MonoBehaviour {
                 
                 if (!isDragging)
                 {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
-
-                    if (Physics.Raycast(ray, out hit) && hit.collider.CompareTag("TrainStopUI"))
-                    {
-                        TrainStop stop = hit.collider.GetComponent<TrainStop>();
-                        if (stop != null)
-                        {
-                            PlayerPrefs.SetString("SpawnPoint", stop.spawnPointName);
-                            FadeManager.Instance.FadeToScene("Miguel Testing Gorunds");
-                        }
-                    }
+                    TryBeginTeleport();
                 }
                 
                 isDragging = false;
             }
-
-
+            
             if (isDragging){
 
                 float mouseX = Input.GetAxis("Mouse X");
                 float mouseY = Input.GetAxis("Mouse Y");
-
                 Vector3 rotationVector = new Vector3(mouseY, -mouseX, 0) * rotationSpeed;
-
                 transform.Rotate(rotationVector, Space.World);
             }
         }
     }
+    private void TryBeginTeleport()
+    {
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        
+        if (Physics.Raycast(ray, out var hit) && hit.collider.CompareTag("TrainStopUI"))
+        {
+            var stop = hit.collider.GetComponent<TrainStop>();
+            if (stop != null)
+            {
+                pendingStop = stop;
+                ShowConfirm(stop.spawnPointName);
+            }
+        }
+    }
+    
+    private void ShowConfirm(string stopName) {
+        confirmDialog.SetActive(true);
+    }
+
+    public void ConfirmTeleport() {
+       
+        PlayerPrefs.SetString("SpawnPoint", pendingStop.spawnPointName); 
+        FadeManager.Instance.FadeToScene("Miguel Testing Gorunds");
+        confirmDialog.SetActive(false);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        this.enabled = false;
+        allowRotation = false;  
+    }
+
+    public void CancelTeleport()
+    {
+        CloseConfirm();
+    }
+
+    private void CloseConfirm()
+    {
+        pendingStop = null;
+        confirmDialog.SetActive(false);
+    }
+    
 }

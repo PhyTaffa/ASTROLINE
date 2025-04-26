@@ -9,6 +9,8 @@ public class ComputerUIManager : MonoBehaviour {
     public GameObject FaunaMenu;
     public GameObject FloraMenu;
     
+    public ComputerUISlider sliderUiLogic;
+    
     private void Awake(){
         settingsMenu.SetActive(false);
         upgradeMenu.SetActive(false);
@@ -16,6 +18,15 @@ public class ComputerUIManager : MonoBehaviour {
         FloraMenu.SetActive(false);
     }
     void Update(){
+        
+        if (!sliderUiLogic.isAtInitial){
+            settingsMenu.SetActive(false);
+            upgradeMenu.SetActive(false);
+            FaunaMenu.SetActive(false);
+            FloraMenu.SetActive(false);
+            return;
+        }
+        
         if (settingsMenu.activeSelf && Input.GetKeyDown(KeyCode.Escape)){
             CloseSettings();
         }
@@ -63,6 +74,11 @@ public class ComputerUIManager : MonoBehaviour {
     
     // Upgrade Buttons
     public void ToggleUpgrades() {
+
+        if (!sliderUiLogic.isAtInitial) {
+            return;
+        }
+        
         bool isOpen = upgradeMenu.activeSelf;
         settingsMenu.SetActive(false);
         FaunaMenu.SetActive(false);
@@ -70,6 +86,11 @@ public class ComputerUIManager : MonoBehaviour {
         upgradeMenu.SetActive(!isOpen);
     }
     public void OpenUpgrades() {
+        
+        if (!sliderUiLogic.isAtInitial) {
+            return;
+        }
+        
         settingsMenu.SetActive(false);
         FaunaMenu.SetActive(false);
         FloraMenu.SetActive(false);
@@ -81,6 +102,11 @@ public class ComputerUIManager : MonoBehaviour {
     
     // Flora Buttons
     public void ToggleFlora() {
+        
+        if (!sliderUiLogic.isAtInitial) {
+            return;
+        }
+
         bool isOpen = FloraMenu.activeSelf;
         settingsMenu.SetActive(false);
         upgradeMenu.SetActive(false);
@@ -88,6 +114,11 @@ public class ComputerUIManager : MonoBehaviour {
         FloraMenu.SetActive(!isOpen);
     }
     public void OpenFlora(){
+            
+        if (!sliderUiLogic.isAtInitial) {
+            return;
+        }
+
         settingsMenu.SetActive(false);
         upgradeMenu.SetActive(false);
         FaunaMenu.SetActive(false);
@@ -99,6 +130,11 @@ public class ComputerUIManager : MonoBehaviour {
     
     // Fauna Buttons
     public void ToggleFauna() {
+            
+        if (!sliderUiLogic.isAtInitial) {
+            return;
+        }
+
         bool isOpen = FaunaMenu.activeSelf;
         settingsMenu.SetActive(false);
         upgradeMenu.SetActive(false);
@@ -106,6 +142,11 @@ public class ComputerUIManager : MonoBehaviour {
         FaunaMenu.SetActive(!isOpen);
     }
     public void OpenFauna(){
+            
+        if (!sliderUiLogic.isAtInitial) {
+            return;
+        }
+
         settingsMenu.SetActive(false);
         upgradeMenu.SetActive(false);
         FloraMenu.SetActive(false);
