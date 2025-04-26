@@ -19,7 +19,7 @@ public class ComputerUIManager : MonoBehaviour {
     }
     void Update(){
         
-        if (!sliderUiLogic.isAtInitial){
+        if (!sliderUiLogic.isAtInitial || sliderUiLogic.isMovingPublic){
             settingsMenu.SetActive(false);
             upgradeMenu.SetActive(false);
             FaunaMenu.SetActive(false);

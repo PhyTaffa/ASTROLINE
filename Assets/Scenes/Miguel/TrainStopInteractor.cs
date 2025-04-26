@@ -1,11 +1,10 @@
 using UnityEngine;
 
-public class TrainStopInteractor : MonoBehaviour
-{
-    [Tooltip("The UI panel with Cancel/Confirm buttons")]
+public class TrainStopInteractor : MonoBehaviour {
+ 
     public GameObject trainStopUI;
 
-    [Tooltip("Your player‐movement script, so we can disable it while the UI is up")]
+    
     public MonoBehaviour movementController;
 
     private bool inZone = false;
