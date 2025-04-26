@@ -6,11 +6,12 @@ using UnityEngine;
 
 public class Cheat : MonoBehaviour
 {
-    [SerializeField] private Transform Top;
-    [SerializeField] private Transform Bottom;
-    [SerializeField] private Transform Right;
-    [SerializeField] private Transform Left;
-    
+    [SerializeField] private Transform one;
+    [SerializeField] private Transform second;
+    [SerializeField] private Transform three;
+    [SerializeField] private Transform four;
+    [SerializeField] private Transform five;
+    [SerializeField] private Transform six;
     private Transform playerTransform;
     // Start is called before the first frame update
     void Start()
@@ -23,19 +24,27 @@ public class Cheat : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            playerTransform.position = Top.position;
+            playerTransform.position = one.position;
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
-            playerTransform.position = Bottom.position;
+            playerTransform.position = second.position;
         }        
         if (Input.GetKeyDown(KeyCode.C))
         {
-            playerTransform.position = Right.position;
+            playerTransform.position = three.position;
         }        
         if (Input.GetKeyDown(KeyCode.B))
         {
-            playerTransform.position = Left.position;
+            playerTransform.position = four.position;
+        }        
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            playerTransform.position = five.position;
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            playerTransform.position = six.position;
         }
             
     }
