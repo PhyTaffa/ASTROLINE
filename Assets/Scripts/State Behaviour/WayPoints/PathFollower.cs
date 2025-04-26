@@ -8,7 +8,7 @@
         [SerializeField] private WPManager wpManager;
         [SerializeField] private GameObject startNode;
         [SerializeField] private GameObject endNode;
-        [SerializeField] private float speed = 80f;
+        [SerializeField] private float speed = 8f;
         [SerializeField] private float rotationSpeed = 10f;
         
         //to immediatly start a new path
@@ -72,7 +72,7 @@
             if (direction != Vector3.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction, transform.up);
-                rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, rotationSpeed * Time.deltaTime * 100f));
+                rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, rotationSpeed * Time.deltaTime));
             }
 
             // Move towards the target

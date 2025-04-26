@@ -10,7 +10,6 @@ public class Fauna_WanderingingState : AStateBehaviour
     [SerializeField] private PlayerDetectionTrigger playerDetection;// Reference to the PathFollower script
 
     [Header("Wander Settings")]
-    [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private float threshold = 10f;
 

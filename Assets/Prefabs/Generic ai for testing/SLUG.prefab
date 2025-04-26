@@ -158,7 +158,8 @@ GameObject:
   - component: {fileID: 1873868065013701251}
   - component: {fileID: 6622580894542102932}
   - component: {fileID: 4891414014106075868}
-  m_Layer: 0
+  - component: {fileID: 8500690722807735668}
+  m_Layer: 3
   m_Name: SLUG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +176,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -32.8, y: 1.09, z: -61}
-  m_LocalScale: {x: 20, y: 20, z: 20}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5740705606388443584}
@@ -328,10 +329,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pathFollower: {fileID: 5065746987872640910}
   playerDetection: {fileID: 4891414014106075868}
-  moveSpeed: 70
   rotationSpeed: 10
   threshold: 1
-  thirstTimer: 5
+  thirstTimer: 20
   isSupposedToSleep: 0
   currThirstTimer: 0
 --- !u!114 &3333204266552730450
@@ -363,10 +363,10 @@ MonoBehaviour:
   wpManager: {fileID: 0}
   startNode: {fileID: 0}
   endNode: {fileID: 0}
-  speed: 189.7
+  speed: 10
   rotationSpeed: 10
   autoLoopPaths: 1
-  threshqold: 10
+  threshqold: 4
 --- !u!114 &7465633165172168157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,3 +427,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5b2f7a3da24e5148b1e779fb974aa20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8500690722807735668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6584752240557832171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b64240a6c9690f499551f8352eff6c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scanData: {fileID: 11400000, guid: c19e4d2acc84e4a43b208711a438e5aa, type: 2}
