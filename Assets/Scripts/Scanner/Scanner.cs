@@ -56,7 +56,7 @@ public class Scanner : MonoBehaviour
         Ray ray = new Ray(rayOrigin.position, rayOrigin.forward);
         RaycastHit hit;
 
-        Debug.DrawRay(ray.origin, ray.direction * scanRange, Color.red);
+        Debug.DrawRay(ray.origin, ray.direction * scanRange, Color.black);
 
         if (Physics.Raycast(ray, out hit, scanRange, scannableLayer))
         {
@@ -66,7 +66,9 @@ public class Scanner : MonoBehaviour
                 currentTarget = hit.transform;
                 scanProgress = 0f;
 
+                // getting component each single frame
                 targetRenderer = currentTarget.GetComponent<Renderer>();
+                
                 if (targetRenderer != null)
                 {
                     originalMaterial = targetRenderer.material;
@@ -110,7 +112,7 @@ public class Scanner : MonoBehaviour
                 scannerUIManager.UpdateScanProgress(0f); // Reset bar after success
             }
 
-            Debug.Log("Scan completed: " + scannable.scanData.objectName);
+            Debug.Log($"Scan completed: {scannable.scanData.objectName}");
         }
         ResetScan();
     }
@@ -124,6 +126,7 @@ public class Scanner : MonoBehaviour
 
         isScanning = false;
         scanProgress = 0f;
+        currentTarget = null;
         ResetHighlight();
     }
 
