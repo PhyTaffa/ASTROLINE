@@ -7,7 +7,9 @@ public class Fauna_ThirstyState : AStateBehaviour
     [Header("References")]
     [SerializeField] private PathFollower pathFollower;
     [SerializeField] private GameObject waterNode;  // The predefined water node
+    [SerializeField] private PlayerDetectionTrigger playerDetection;// Reference to the PathFollower script
 
+    
     [Header("Drink Settings")]
     [SerializeField] private float drinkDuration = 3.0f;
     
@@ -18,9 +20,9 @@ public class Fauna_ThirstyState : AStateBehaviour
 
     public override bool InitializeState()
     {
-        if (pathFollower == null || waterNode == null)
+        if (pathFollower == null || waterNode == null || playerDetection == null)
         {
-            Debug.LogWarning($"{nameof(Fauna_ThirstyState)} is missing references!");
+            Debug.LogWarning($"Fauna_PatrollingState on {gameObject.name} is missing references");
             return false;
         }
         return true;
@@ -60,6 +62,10 @@ public class Fauna_ThirstyState : AStateBehaviour
 
     public override int StateTransitionCondition()
     {
+        if (playerDetection.IsPlayerInside)
+        {
+            return (int)EFaunaState.Reacting;
+        }
         if (hasArrivedAtWater && currentDrinkTimer < 0f)
         {
             return (int)EFaunaState.Wander;

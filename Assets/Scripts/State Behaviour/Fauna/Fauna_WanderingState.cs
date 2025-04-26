@@ -5,8 +5,9 @@ using UnityEngine.AI;
 
 public class Fauna_WanderingingState : AStateBehaviour
 {
-    [Header("Pathfinding")]
-    [SerializeField] private PathFollower pathFollower;  // Reference to the PathFollower script
+    [Header("References")]
+    [SerializeField] private PathFollower pathFollower;
+    [SerializeField] private PlayerDetectionTrigger playerDetection;// Reference to the PathFollower script
 
     [Header("Wander Settings")]
     [SerializeField] private float moveSpeed = 2f;
@@ -23,9 +24,12 @@ public class Fauna_WanderingingState : AStateBehaviour
     private int currentIndex = 0;
     private bool isMoving = false;
     
-    private LineOfSight monsterLineOfSight = null;
+    //private LineOfSight monsterLineOfSight = null;
 
+    [Header("Debug")]
     [SerializeField] private float currThirstTimer = 0f;
+    
+    
     private bool hasFinishedCurrentPath = false;
    
     private float timer = 0;
@@ -33,10 +37,14 @@ public class Fauna_WanderingingState : AStateBehaviour
 
     public override bool InitializeState()
     {
-        monsterLineOfSight = GetComponent<LineOfSight>();
+        //monsterLineOfSight = GetComponent<LineOfSight>();
         rb = GetComponent<Rigidbody>();
         
-        if (pathFollower == null || monsterLineOfSight == null)
+        //other trigger goddddamn
+        // if(playerDetection == null)
+        //     playerDetection = GetComponent<PlayerDetectionTrigger>();
+        //
+        if (pathFollower == null || playerDetection == null)
         {
             Debug.LogWarning($"Fauna_PatrollingState on {gameObject.name} is missing references!");
             return false;
@@ -63,7 +71,7 @@ public class Fauna_WanderingingState : AStateBehaviour
         pathFollower.autoLoopPaths = true;
 
         pathFollower.OnPathFinished += HandlePathFinished;
-        pathFollower.GenerateNewPath();
+        //pathFollower.GenerateNewPath();
         pathFollower.StartFollowingPath();
     }
 
@@ -106,10 +114,11 @@ public class Fauna_WanderingingState : AStateBehaviour
 
     public override int StateTransitionCondition()
     {
-        //         if (agent.remainingDistance <= agent.stoppingDistance)
-        //         {
-        //             return (int)EMonsterState.Idle;
-        //         }
+        if (playerDetection.IsPlayerInside)
+        {
+            return (int)EFaunaState.Reacting;
+        }
+        
         if (timer < 0)
         {
             return (int)(EFaunaState.Idle);
@@ -121,6 +130,10 @@ public class Fauna_WanderingingState : AStateBehaviour
             {
                 return (int)EFaunaState.Thirsty;
             }
+            else if (isSupposedToSleep)
+            {
+                return (int)EFaunaState.Sleepy;
+            }
             else
             {
                 pathFollower.GenerateNewPath();
@@ -128,10 +141,7 @@ public class Fauna_WanderingingState : AStateBehaviour
             }
         }
 
-        if (isSupposedToSleep)
-        {
-            return (int)EFaunaState.Sleepy;
-        }
+
 
         return (int)EFaunaState.Invalid;
     }

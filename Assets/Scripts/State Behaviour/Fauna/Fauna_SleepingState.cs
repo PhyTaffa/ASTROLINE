@@ -16,7 +16,7 @@ public class Fauna_SleepingState : AStateBehaviour
     {
         if (pathFollower == null || abode == null)
         {
-            Debug.LogWarning($"{nameof(Fauna_ThirstyState)} is missing references!");
+            Debug.LogWarning($"Fauna_PatrollingState on {gameObject.name} is missing references");
             return false;
         }
         return true;
@@ -45,7 +45,7 @@ public class Fauna_SleepingState : AStateBehaviour
     {
         if (isSupposedToBeAwake)
         {
-            return (int)EFaunaState.Wander;
+            return (int)EFaunaState.Idle;
         }
         
         return (int)EFaunaState.Invalid;
