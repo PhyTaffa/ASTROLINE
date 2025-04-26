@@ -119,10 +119,10 @@ public class Fauna_WanderingingState : AStateBehaviour
             return (int)EFaunaState.Reacting;
         }
         
-        if (timer < 0)
-        {
-            return (int)(EFaunaState.Idle);
-        }
+        // if (timer < 0)
+        // {
+        //     return (int)(EFaunaState.Idle);
+        // }
 
         if (hasFinishedCurrentPath)
         {
