@@ -71,7 +71,7 @@ public class InteractiveWorld : MonoBehaviour {
                         if (stop != null)
                         {
                             PlayerPrefs.SetString("SpawnPoint", stop.spawnPointName);
-                            SceneManager.LoadScene("Miguel Testing Gorunds");
+                            FadeManager.Instance.FadeToScene("Miguel Testing Gorunds");
                         }
                     }
                 }

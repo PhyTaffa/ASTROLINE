@@ -16,19 +16,28 @@ public class ShipIntroManager : MonoBehaviour{
     public Image pressAnyKeyText;
     public MonoBehaviour[] scriptsToDisable;
     public MonoBehaviour[] scriptsToEnableDuringIntro;
-
+    
+    private float  inputTimer   = 0f;  
+    private float inputDelay = 8f;
+    
     private bool introStarted = false;
     private float timer = 0f;
     private Vector3 startPos;
     private Quaternion startRot;
 
+    
+    //delete the stuff for enabeling or disableing scripts. make bools for each cammera to enable states
+    
     void Start(){
         
-        Time.timeScale      = 0f;
+        Time.timeScale = 0f;
         introCamera.enabled = true;
         shipCamera.enabled  = false;
-        pressAnyKeyText.gameObject.SetActive(true);
+        pressAnyKeyText.gameObject.SetActive(false);
 
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        
         foreach (var script in scriptsToDisable) {
             if (script != null) {
                 script.enabled = false;
@@ -45,6 +54,18 @@ public class ShipIntroManager : MonoBehaviour{
 
     void Update(){
         
+        inputTimer += Time.unscaledDeltaTime;
+        if (introStarted){
+            timer += Time.unscaledDeltaTime;
+        }
+        
+        if (!introStarted) {
+            if (inputTimer >= inputDelay)
+                pressAnyKeyText.gameObject.SetActive(true);
+            else
+                return;  
+        }
+
         if (!introStarted && Input.anyKeyDown){
             
             pressAnyKeyText.gameObject.SetActive(false);

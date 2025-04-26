@@ -3,28 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerSpawn : MonoBehaviour
-{
-    void Start()
-    {
-        // Gets the saved spawn point name
-        string spawnPointName = PlayerPrefs.GetString("SpawnPoint", "");
-
-        if (spawnPointName != "")
-        {
-            // Finds the spawn point in the scene
-            GameObject spawnPoint = GameObject.Find(spawnPointName);
-
-            if (spawnPoint != null)
-            {
-                // Moves player instantly to spawn point position
-                transform.position = spawnPoint.transform.position;
-                transform.rotation = spawnPoint.transform.rotation;
-            }
-            else
-                Debug.LogError("Couldn't find Spawn Point: " + spawnPointName);
+public class PlayerSpawn : MonoBehaviour{
+    void Start() {
+      
+        string spawnName = PlayerPrefs.GetString("SpawnPoint", "");
+        if (string.IsNullOrEmpty(spawnName)){
+            
+            Debug.LogWarning("No SpawnPoint set – using default transform");
+            return;
         }
-        else
-            Debug.LogError("SpawnPoint was never set!");
+
+        GameObject spawnpoint = GameObject.Find(spawnName);
+        Vector3 finalPos = spawnpoint.transform.position;
+        Quaternion finalRot = spawnpoint.transform.rotation;
+
+        if (spawnName == "TrainStopCheckPoint North"){
+            finalPos += Vector3.forward * 2f;
+        }
+        else if (spawnName == "TrainStopCheckPoint South"){
+            finalPos += Vector3.back * 2f;
+        }
+        else if (spawnName == "TrainStopCheckPoint East"){
+            finalPos += Vector3.right * 2f;
+        }
+        else if (spawnName == "TrainStopCheckPoint West"){
+            finalPos += Vector3.left * 2f;
+        }
+        else if (spawnName == "TrainStopCheckPoint CenterFront"){
+            finalPos += Vector3.forward * 2f;
+        }
+        else if (spawnName == "TrainStopCheckPoint CenterBack"){
+            finalPos += Vector3.back * 2f;
+        }
+        
+        transform.position = finalPos;
+        transform.rotation = finalRot;
     }
 }
