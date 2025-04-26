@@ -1,38 +1,41 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class Upgrades : MonoBehaviour
-{
-    [Tooltip("The thing you actually want to enable/disable when this button is clicked.")]
-    public GameObject upgradeObject;
-
-    [Tooltip("Optional: the text label on the button, so we can show ON/OFF.")]
-    public Text buttonLabel;
-
+public class Upgrades : MonoBehaviour{
+  
+    public GameObject upgrade;
+    public TMP_Text buttonLabel;
+    public string prefsKey = "UpgradeBlueEnabled";
     private bool isOn;
 
-    void Start()
-    {
-        // initialize to match the actual state
-        isOn = upgradeObject != null && upgradeObject.activeSelf;
+    void Awake(){
+        
+        upgrade.SetActive(false);
+    }
+    
+    void Start(){
+       
+        isOn = (PlayerPrefs.GetInt(prefsKey, 0) == 1);
+        upgrade.SetActive(isOn);
         RefreshLabel();
     }
-
-    /// <summary>
-    /// Hook this up to the Button.onClick → UpgradeToggle.Toggle() 
-    /// </summary>
-    public void Toggle()
-    {
-        if (upgradeObject == null) return;
+    
+    public void Toggle() {
 
         isOn = !isOn;
-        upgradeObject.SetActive(isOn);
+        upgrade.SetActive(isOn);
+        PlayerPrefs.SetInt(prefsKey, isOn ? 1 : 0);
+        PlayerPrefs.Save();
         RefreshLabel();
     }
 
-    private void RefreshLabel()
-    {
-        if (buttonLabel == null) return;
-        buttonLabel.text = isOn ? "Disable Upgrade" : "Enable Upgrade";
+    private void RefreshLabel() {
+        
+        if (isOn) {
+            buttonLabel.text = "Disable";
+        }else {
+            buttonLabel.text = "Enable";
+        }
     }
 }
