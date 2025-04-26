@@ -57,7 +57,7 @@ public class Fauna_ChasingState : AStateBehaviour
     public override int StateTransitionCondition()
     {
         if (timer < 0)
-            return (int)EFaunaState.Patrolling;
+            return (int)EFaunaState.Wander;
 
         return (int)EFaunaState.Invalid;
     }

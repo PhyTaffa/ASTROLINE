@@ -44,6 +44,8 @@ public class StateMachine : MonoBehaviour
 
             currentState = stateBehaviours[firstStateIndex];
             currentState.OnStateStart();
+            
+            Debug.Log($"{gameObject.name} successfully initiated, starting state {currentState?.GetType().Name}");
         }
         else
         {
@@ -58,9 +60,13 @@ public class StateMachine : MonoBehaviour
         int newState = currentState.StateTransitionCondition();
         if (IsValidNewStateIndex(newState))
         {
+            string startingState = currentState.GetType().Name;
+
             currentState.OnStateEnd();
             currentState = stateBehaviours[newState];
             currentState.OnStateStart();
+            
+            Debug.Log($"{gameObject.name} transition condition met, going from {startingState} to {currentState?.GetType().Name}");
         }
     }
 

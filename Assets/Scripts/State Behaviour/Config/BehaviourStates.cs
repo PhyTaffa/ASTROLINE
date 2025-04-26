@@ -3,8 +3,10 @@ public enum EFaunaState
 {
     Invalid = -1,
     Idle,
-    Patrolling,
-    Chasing,
+    Wander,
+    Sleepy,
+    Thirsty,
     Reacting,
+    Chasing
 }
 

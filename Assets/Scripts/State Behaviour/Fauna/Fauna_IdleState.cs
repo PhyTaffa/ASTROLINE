@@ -30,7 +30,7 @@ public class Fauna_IdleState : AStateBehaviour
     {
         if (currentTimer <= 0.0f)
         {
-            return (int)EFaunaState.Patrolling;
+            return (int)EFaunaState.Wander;
         }
 
         return (int)EFaunaState.Invalid;
