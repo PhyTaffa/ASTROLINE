@@ -4,37 +4,74 @@ using UnityEngine;
 
 public class Fauna_ThirstyState : AStateBehaviour
 {
-    [SerializeField] private float drinkTimer = 1.0f;
-    float currentTimer = 0.0f;
+    [Header("References")]
+    [SerializeField] private PathFollower pathFollower;
+    [SerializeField] private GameObject waterNode;  // The predefined water node
+
+    [Header("Drink Settings")]
+    [SerializeField] private float drinkDuration = 3.0f;
+    
+    [SerializeField] private float currentDrinkTimer = 0.0f;
+    private bool hasArrivedAtWater = false;
+
+    //private bool isMoving = false;
 
     public override bool InitializeState()
     {
+        if (pathFollower == null || waterNode == null)
+        {
+            Debug.LogWarning($"{nameof(Fauna_ThirstyState)} is missing references!");
+            return false;
+        }
         return true;
     }
 
     public override void OnStateStart()
     {
-        currentTimer = drinkTimer;
+        //necessary stuff for correct behaviour
+        hasArrivedAtWater = false;
+        currentDrinkTimer = drinkDuration;
+        pathFollower.autoLoopPaths = false;
+        
+        // Pick current node as start
+        pathFollower.SetEndNode(waterNode);  // Just change the END node!
+
+        pathFollower.OnPathFinished += HandleArrivalAtWater;
+        pathFollower.StartFollowingPath();
+        //pathFollower.StopFollowingPath();
+        //isMoving = true;
     }
 
     public override void OnStateUpdate()
     {
         
-        
-        currentTimer -= Time.deltaTime;
+        if (hasArrivedAtWater)
+        {
+            currentDrinkTimer -= Time.deltaTime;
+        }
     }
 
     public override void OnStateEnd()
     {
+        pathFollower.StopFollowingPath();
+        pathFollower.OnPathFinished -= HandleArrivalAtWater;
     }
 
     public override int StateTransitionCondition()
     {
-        if (currentTimer <= 0.0f)
+        if (hasArrivedAtWater && currentDrinkTimer < 0.0f)
         {
             return (int)EFaunaState.Wander;
         }
 
         return (int)EFaunaState.Invalid;
+    }
+    
+    private void HandleArrivalAtWater()
+    {
+        hasArrivedAtWater = true;
+        //isMoving = false;
+        //pathFollower.SetEndNode(waterNode);
+        pathFollower.StopFollowingPath();
     }
 }

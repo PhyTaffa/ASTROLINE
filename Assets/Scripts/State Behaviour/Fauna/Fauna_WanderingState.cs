@@ -51,8 +51,9 @@ public class Fauna_WanderingingState : AStateBehaviour
     {
         currThirstTimer = thirstTimer;
         hasFinishedCurrentPath = false;  // Reset when we enter this state
+        pathFollower.autoLoopPaths = true;
 
-        pathFollower.OnPathFinished += HandlePathFinished;  // 👈 Subscribe
+        pathFollower.OnPathFinished += HandlePathFinished; 
         pathFollower.StartFollowingPath();
     }
 

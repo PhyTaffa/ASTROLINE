@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour{
     //movement according to camera
     private Transform activeCameraTransform;
     [SerializeField] private CinemachineBrain cinemachineBrain;
-    [SerializeField] private Transform tihngThatMoveWithCamera;
     private void Start(){
         
         rb = GetComponent<Rigidbody>();
