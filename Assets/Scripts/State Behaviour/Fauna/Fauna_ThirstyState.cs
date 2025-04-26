@@ -33,13 +33,14 @@ public class Fauna_ThirstyState : AStateBehaviour
         currentDrinkTimer = drinkDuration;
         pathFollower.autoLoopPaths = false;
         
-        // Pick current node as start
-        pathFollower.SetEndNode(waterNode);  // Just change the END node!
-
+        
         pathFollower.OnPathFinished += HandleArrivalAtWater;
+        // Pick current node as start
+        //pathFollower.SetEndNode(waterNode);  // Just change the END node!
+        pathFollower.GenerateNewPath(waterNode);
+        
         pathFollower.StartFollowingPath();
-        //pathFollower.StopFollowingPath();
-        //isMoving = true;
+
     }
 
     public override void OnStateUpdate()
@@ -59,7 +60,7 @@ public class Fauna_ThirstyState : AStateBehaviour
 
     public override int StateTransitionCondition()
     {
-        if (hasArrivedAtWater && currentDrinkTimer < 0.0f)
+        if (hasArrivedAtWater && currentDrinkTimer < 0f)
         {
             return (int)EFaunaState.Wander;
         }

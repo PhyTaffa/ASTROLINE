@@ -8,13 +8,16 @@ public class Fauna_WanderingingState : AStateBehaviour
     [Header("Pathfinding")]
     [SerializeField] private PathFollower pathFollower;  // Reference to the PathFollower script
 
-    [Header("Movement Settings")]
+    [Header("Wander Settings")]
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private float threshold = 10f;
 
     [Header("Thirst Settings")]
     [SerializeField] private float thirstTimer = 20f;
+    
+    [Header("Sleep Settings")]
+    [SerializeField] private bool isSupposedToSleep = false;
     
     private List<Node> path;
     private int currentIndex = 0;
@@ -49,11 +52,18 @@ public class Fauna_WanderingingState : AStateBehaviour
 
     public override void OnStateStart()
     {
+        //thirsty
         currThirstTimer = thirstTimer;
+        
+        //sleep
+        isSupposedToSleep = false;
+        
+        //wander
         hasFinishedCurrentPath = false;  // Reset when we enter this state
         pathFollower.autoLoopPaths = true;
 
-        pathFollower.OnPathFinished += HandlePathFinished; 
+        pathFollower.OnPathFinished += HandlePathFinished;
+        pathFollower.GenerateNewPath();
         pathFollower.StartFollowingPath();
     }
 
@@ -105,14 +115,22 @@ public class Fauna_WanderingingState : AStateBehaviour
             return (int)(EFaunaState.Idle);
         }
 
-        if (hasFinishedCurrentPath  && currThirstTimer < 0)
+        if (hasFinishedCurrentPath)
         {
-            return (int)(EFaunaState.Thirsty);
+            if (currThirstTimer < 0f)
+            {
+                return (int)EFaunaState.Thirsty;
+            }
+            else
+            {
+                pathFollower.GenerateNewPath();
+                hasFinishedCurrentPath = false;
+            }
         }
-        
-        if (monsterLineOfSight.HasSeenPlayerThisFrame())
+
+        if (isSupposedToSleep)
         {
-            return (int)EFaunaState.Idle;
+            return (int)EFaunaState.Sleepy;
         }
 
         return (int)EFaunaState.Invalid;
