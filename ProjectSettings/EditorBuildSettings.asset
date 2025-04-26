@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Miguel/Start.unity
+    path: Assets/Scenes/Core Scenes/Start.unity
     guid: 43a7b0fe3c4416a42b9f4c14b57d6207
   - enabled: 1
-    path: Assets/Scenes/Miguel/ShipMenu.unity
+    path: Assets/Scenes/Core Scenes/ShipMenu.unity
     guid: 898191878cf5bda4c9bf660f68d22bf0
   - enabled: 1
-    path: Assets/Scenes/Miguel/Miguel Testing Gorunds.unity
+    path: Assets/Scenes/Core Scenes/Miguel Testing Gorunds.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects: {}
