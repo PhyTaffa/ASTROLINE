@@ -13,11 +13,11 @@ public class Fauna_ThirstyState : AStateBehaviour
     [Header("Drink Settings")]
     [SerializeField] private float drinkDuration = 3.0f;
     
+    [Header("Debug")]
     [SerializeField] private float currentDrinkTimer = 0.0f;
     private bool hasArrivedAtWater = false;
 
-    //private bool isMoving = false;
-
+    private bool hasFinishedCurrentPath = false;
     public override bool InitializeState()
     {
         if (pathFollower == null || waterNode == null || playerDetection == null)
@@ -34,6 +34,7 @@ public class Fauna_ThirstyState : AStateBehaviour
         hasArrivedAtWater = false;
         currentDrinkTimer = drinkDuration;
         pathFollower.autoLoopPaths = false;
+        hasFinishedCurrentPath = false;
         
         
         pathFollower.OnPathFinished += HandleArrivalAtWater;
@@ -42,7 +43,6 @@ public class Fauna_ThirstyState : AStateBehaviour
         pathFollower.GenerateNewPath(waterNode);
         
         pathFollower.StartFollowingPath();
-
     }
 
     public override void OnStateUpdate()
@@ -62,12 +62,13 @@ public class Fauna_ThirstyState : AStateBehaviour
 
     public override int StateTransitionCondition()
     {
-        if (playerDetection.IsPlayerInside)
-        {
-            return (int)EFaunaState.Reacting;
-        }
         if (hasArrivedAtWater && currentDrinkTimer < 0f)
         {
+            if (playerDetection.IsPlayerInside)
+            {
+                return (int)EFaunaState.Reacting;
+            }
+            
             return (int)EFaunaState.Wander;
         }
 

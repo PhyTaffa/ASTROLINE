@@ -51,7 +51,7 @@ public class SLUG_ReactState : AStateBehaviour
     {
         if (currentTimer <= 0.0f)
         {
-            return (int)EFaunaState.Idle;
+            return (int)EFaunaState.Wander;
         }
 
         return (int)EFaunaState.Invalid;
