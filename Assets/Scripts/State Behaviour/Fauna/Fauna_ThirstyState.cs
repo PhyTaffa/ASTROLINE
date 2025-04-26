@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Fauna_ThirstyState : AStateBehaviour
 {
-    [SerializeField] private float maxTimer = 1.0f;
+    [SerializeField] private float drinkTimer = 1.0f;
     float currentTimer = 0.0f;
 
     public override bool InitializeState()
@@ -14,11 +14,13 @@ public class Fauna_ThirstyState : AStateBehaviour
 
     public override void OnStateStart()
     {
-        currentTimer = maxTimer;
+        currentTimer = drinkTimer;
     }
 
     public override void OnStateUpdate()
     {
+        
+        
         currentTimer -= Time.deltaTime;
     }
 

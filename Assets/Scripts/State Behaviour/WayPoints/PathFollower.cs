@@ -9,6 +9,8 @@ public class PathFollower : MonoBehaviour
     [SerializeField] private GameObject endNode;
     [SerializeField] private float speed = 80f;
     [SerializeField] private float rotationSpeed = 10f;
+    
+    
 
     private List<Node> path;
     private int currentIndex = 0;
@@ -17,6 +19,8 @@ public class PathFollower : MonoBehaviour
     private Rigidbody rb;
     [SerializeField] private float threshqold = 10f;
 
+    public event System.Action OnPathFinished;
+    
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -56,10 +60,10 @@ public class PathFollower : MonoBehaviour
         Vector3 targetPos = target.position;
         Vector3 direction = (targetPos - transform.position).normalized;
 
-        // Rotate towards the target
+        // Rotate towards the target, keep in mind the axis of transform.up due to plaent inclination
         if (direction != Vector3.zero)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            Quaternion targetRotation = Quaternion.LookRotation(direction, transform.up);
             rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, rotationSpeed * Time.deltaTime * 100f));
         }
 
@@ -73,6 +77,7 @@ public class PathFollower : MonoBehaviour
             currentIndex++;
             if (currentIndex >= path.Count)
             {
+                OnPathFinished?.Invoke();
                 // Reached the end, generate a new path
                 GenerateNewPath();
             }

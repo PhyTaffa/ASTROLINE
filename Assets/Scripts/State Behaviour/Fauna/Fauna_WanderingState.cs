@@ -13,12 +13,18 @@ public class Fauna_WanderingingState : AStateBehaviour
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private float threshold = 10f;
 
+    [Header("Thirst Settings")]
+    [SerializeField] private float thirstTimer = 20f;
+    
     private List<Node> path;
     private int currentIndex = 0;
     private bool isMoving = false;
     
     private LineOfSight monsterLineOfSight = null;
 
+    [SerializeField] private float currThirstTimer = 0f;
+    private bool hasFinishedCurrentPath = false;
+   
     private float timer = 0;
     private Rigidbody rb;
 
@@ -38,15 +44,23 @@ public class Fauna_WanderingingState : AStateBehaviour
     public override void OnStateEnd()
     {
         pathFollower.StopFollowingPath();
+        pathFollower.OnPathFinished -= HandlePathFinished;
     }
 
     public override void OnStateStart()
     {
+        currThirstTimer = thirstTimer;
+        hasFinishedCurrentPath = false;  // Reset when we enter this state
+
+        pathFollower.OnPathFinished += HandlePathFinished;  // 👈 Subscribe
         pathFollower.StartFollowingPath();
     }
 
     public override void OnStateUpdate()
     {
+        //decrease thirst
+        currThirstTimer -= Time.deltaTime;
+        
         // if (isMoving && path != null && currentIndex < path.Count)
         // {
         //     Transform target = path[currentIndex].GetID().transform;
@@ -90,11 +104,21 @@ public class Fauna_WanderingingState : AStateBehaviour
             return (int)(EFaunaState.Idle);
         }
 
+        if (hasFinishedCurrentPath  && currThirstTimer < 0)
+        {
+            return (int)(EFaunaState.Thirsty);
+        }
+        
         if (monsterLineOfSight.HasSeenPlayerThisFrame())
         {
             return (int)EFaunaState.Idle;
         }
 
         return (int)EFaunaState.Invalid;
+    }
+    
+    private void HandlePathFinished()
+    {
+        hasFinishedCurrentPath = true;
     }
 }
