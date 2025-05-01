@@ -107,24 +107,22 @@ public class PlayerController : MonoBehaviour{
         //mashing the input with the cam's vector reference
         Vector3 moveDirWorld = camRight * inputDirection.x + camForward * inputDirection.z;
 
-        //Project again to character's plane to ensure yaw-only
-        //Vector3 moveDirProjected = Vector3.ProjectOnPlane(moveDirWorld, gravityUp).normalized;
-
-        // // Yaw character toward direction
-        // if (moveDirProjected.sqrMagnitude > 0.001f)
+        // Vector3 yawDirection = Vector3.ProjectOnPlane(moveDirWorld, gravityUp).normalized;
+        // if (yawDirection.sqrMagnitude > 0.001f)
         // {
-        //     Quaternion targetRot = Quaternion.LookRotation(moveDirProjected, gravityUp);
-        //     tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRot, rotateSpeed * Time.deltaTime);
+        //     Quaternion targetRotation = Quaternion.LookRotation(yawDirection, gravityUp);
+        //     tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotateSpeed * Time.deltaTime);
         // }
 
-        
-        
         //this is the magical line that makes it work
         Vector3 moveDirRelative = tf.InverseTransformDirection(moveDirWorld);
+
         
-        //rotation process
-        // Quaternion targetRotation = Quaternion.LookRotation(moveDirRelative, gravityUp);
+        // Quaternion targetRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(moveDirRelative, gravityUp),  gravityUp);
         // tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+        // //tf.rotation = targetRotation;
+
+        
 
         //after calculating the alleged good movements, we apply it
         input = moveDirRelative;
