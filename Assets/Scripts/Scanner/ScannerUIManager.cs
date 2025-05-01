@@ -3,9 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScannerUIManager : MonoBehaviour
-{
-    [Header("Scan Progress UI")]
+public class ScannerUIManager : MonoBehaviour {
+
     public GameObject ScanUI;
     public Slider scanProgressSlider;
     public TextMeshProUGUI scanProgressText;

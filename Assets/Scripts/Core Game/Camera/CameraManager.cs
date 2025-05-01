@@ -12,7 +12,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private Canvas firstPersonUI;
     [SerializeField] private Canvas thirdPersonUI;
 
-    [SerializeField] private KeyCode switchKey = KeyCode.V;
+    private KeyCode switchKey = KeyCode.Q;
     [SerializeField] private GameObject scannerUIRoot;
 
     private MonoBehaviour[] firstPersonScripts;
