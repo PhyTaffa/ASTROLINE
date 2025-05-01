@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour{
     //movement according to camera
     private Transform activeCameraTransform;
     [SerializeField] private CinemachineBrain cinemachineBrain;
+
+    private float i = 0f;
     private void Start(){
         
         rb = GetComponent<Rigidbody>();
@@ -84,30 +86,50 @@ public class PlayerController : MonoBehaviour{
     private void HandleInputs()
     {
         Vector3 inputDirection = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
-        
+
+        if (inputDirection.sqrMagnitude < 0.01f) return;
+
+        //Fetches the current camera each frame, quite stupid 
         CinemachineVirtualCamera currentCam = cinemachineBrain.ActiveVirtualCamera as CinemachineVirtualCamera;
-        if (currentCam != null)
-        {
-            Vector3 gravityUp = tf.up; // or calculate from planet center if you’re not rotating the player yet
+        if (currentCam == null) return;
 
-            Vector3 camForward = Vector3.ProjectOnPlane(currentCam.transform.forward, gravityUp).normalized;
-            Vector3 camRight = Vector3.ProjectOnPlane(currentCam.transform.right, gravityUp).normalized;
+       
+        Vector3 gravityUp = tf.up;
 
-            Debug.DrawRay(this.transform.position, currentCam.transform.forward * 100f, Color.cyan);
-            Debug.DrawRay(this.transform.position, currentCam.transform.right * 100f, Color.magenta);
+        //fetches the current camera's current forward and right, orthogonally projected onto the character's up: opposite of gravity direction
+        Vector3 camForward = Vector3.ProjectOnPlane(currentCam.transform.forward, gravityUp).normalized;
+        Vector3 camRight = Vector3.ProjectOnPlane(currentCam.transform.right, gravityUp).normalized;
+        
+        // Debug.DrawRay(currentCam.transform.position, camForward * 100f, Color.blue);
+        // Debug.DrawRay(currentCam.transform.position, camRight * 100f, Color.red);
 
-            //input = inputDirection.x  +  inputDirection.z;
-            input = inputDirection;
-        }
-        else
-        {
-            input = inputDirection;
-        }
+        
+        //mashing the input with the cam's vector reference
+        Vector3 moveDirWorld = camRight * inputDirection.x + camForward * inputDirection.z;
 
+        //Project again to character's plane to ensure yaw-only
+        //Vector3 moveDirProjected = Vector3.ProjectOnPlane(moveDirWorld, gravityUp).normalized;
 
-        //input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+        // // Yaw character toward direction
+        // if (moveDirProjected.sqrMagnitude > 0.001f)
+        // {
+        //     Quaternion targetRot = Quaternion.LookRotation(moveDirProjected, gravityUp);
+        //     tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRot, rotateSpeed * Time.deltaTime);
+        // }
 
+        
+        
+        //this is the magical line that makes it work
+        Vector3 moveDirRelative = tf.InverseTransformDirection(moveDirWorld);
+        
+        //rotation process
+        // Quaternion targetRotation = Quaternion.LookRotation(moveDirRelative, gravityUp);
+        // tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+
+        //after calculating the alleged good movements, we apply it
+        input = moveDirRelative;
     }
+
     //
     // private void AlignToPlanetSurface()
     // {
