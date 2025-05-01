@@ -9,3 +9,4 @@ public class SunOrbit : MonoBehaviour
         transform.Rotate(Vector3.right, orbitSpeed * Time.deltaTime);
     }
 }
+

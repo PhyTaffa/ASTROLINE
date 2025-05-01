@@ -9,4 +9,3 @@ public class SunVisualRotator : MonoBehaviour
         transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
     }
 }
-
