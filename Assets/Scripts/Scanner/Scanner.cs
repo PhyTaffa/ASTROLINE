@@ -21,7 +21,8 @@ public class Scanner : MonoBehaviour{
 
     // Fauna
     private const string HAS_SCANNED_AXOLOWYRM = "HAS_SCANNED_AXOLOWYRM";
-    private const string HAS_SCANNED_BROODBACK_FROG = "HAS_SCANNED_BROODBACK_FROG";
+    private const string HAS_SCANNED_BROODBACK_FROG_UNBOUND = "HAS_SCANNED_BROODBACK_FROG_UNBOUND";
+    private const string HAS_SCANNED_BROODBACK_FROG_EGGBOUND = "HAS_SCANNED_BROODBACK_FROG_EGGBOUND";
     private const string HAS_SCANNED_BROODBELLY_FROG = "HAS_SCANNED_BROODBELLY_FROG";
     private const string HAS_SCANNED_GREATER_LEMON_SLUG = "HAS_SCANNED_GREATER_LEMON_SLUG";
     private const string HAS_SCANNED_WANDERING_SKY_JELLY = "HAS_SCANNED_WANDERING_SKY_JELLY";
@@ -61,7 +62,8 @@ public class Scanner : MonoBehaviour{
 
             // Fauna
             PlayerPrefs.SetInt(HAS_SCANNED_AXOLOWYRM, 0);
-            PlayerPrefs.SetInt(HAS_SCANNED_BROODBACK_FROG, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_BROODBACK_FROG_UNBOUND, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_BROODBACK_FROG_EGGBOUND, 0);
             PlayerPrefs.SetInt(HAS_SCANNED_BROODBELLY_FROG, 0);
             PlayerPrefs.SetInt(HAS_SCANNED_GREATER_LEMON_SLUG, 0);
             PlayerPrefs.SetInt(HAS_SCANNED_WANDERING_SKY_JELLY, 0);
@@ -151,8 +153,11 @@ public class Scanner : MonoBehaviour{
                 case "Axolowyrm":
                     PlayerPrefs.SetInt(HAS_SCANNED_AXOLOWYRM, 1);
                     break;
-                case "Broodback Frog":
-                    PlayerPrefs.SetInt(HAS_SCANNED_BROODBACK_FROG, 1);
+                case "Broodback Frog (Unbound)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_BROODBACK_FROG_UNBOUND, 1);
+                    break;
+                case "Broodback Frog (Eggbound)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_BROODBACK_FROG_EGGBOUND, 1);
                     break;
                 case "Broodbelly Frog":
                     PlayerPrefs.SetInt(HAS_SCANNED_BROODBELLY_FROG, 1);
