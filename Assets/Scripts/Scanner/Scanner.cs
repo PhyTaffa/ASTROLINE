@@ -11,22 +11,38 @@ public class Scanner : MonoBehaviour{
     
     private const string HAS_SCANNED_ANY = "HAS_SCANNED_ANY";
 
-    // Flora
-    private const string HAS_SCANNED_VIOLET_SPIKEWEED = "HAS_SCANNED_VIOLET_SPIKEWEED";
-    private const string HAS_SCANNED_TOWERING_UNRAVELER = "HAS_SCANNED_TOWERING_UNRAVELER";
-    private const string HAS_SCANNED_CRAB_COMMUNE = "HAS_SCANNED_CRAB_COMMUNE";
-    private const string HAS_SCANNED_CONSTELLATED_GANGLION_TRAY = "HAS_SCANNED_CONSTELLATED_GANGLION_TRAY";
-    private const string HAS_SCANNED_SPONGE_STONE = "HAS_SCANNED_SPONGE_STONE";
-    private const string HAS_SCANNED_CLUSTERED_SLIME_MOLD = "HAS_SCANNED_CLUSTERED_SLIME_MOLD";
-
+    // Flora — Flowers
+    private const string HAS_SCANNED_VIOLET_SPIKEWEED                    = "HAS_SCANNED_VIOLET_SPIKEWEED";
+    private const string HAS_SCANNED_TOWERING_UNRAVELER_YOUNG            = "HAS_SCANNED_TOWERING_UNRAVELER_YOUNG";
+    private const string HAS_SCANNED_TOWERING_UNRAVELER_JUVENILE         = "HAS_SCANNED_TOWERING_UNRAVELER_JUVENILE";
+    private const string HAS_SCANNED_TOWERING_UNRAVELER_ADULT            = "HAS_SCANNED_TOWERING_UNRAVELER_ADULT";
+    
+    // Flora — Funguses
+    private const string HAS_SCANNED_CLUSTERED_SLIME_MOLD                        = "HAS_SCANNED_CLUSTERED_SLIME_MOLD";
+    private const string HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_YOUNG     = "HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_YOUNG";
+    private const string HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_JUVENILE  = "HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_JUVENILE";
+    private const string HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_ADULT     = "HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_ADULT";
+    private const string HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_YOUNG       = "HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_YOUNG";
+    private const string HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_JUVENILE    = "HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_JUVENILE";
+    private const string HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_ADULT       = "HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_ADULT";
+    
+    // Flora — Corals
+    private const string HAS_SCANNED_CRAB_COMMUNE_DEVELOPING            = "HAS_SCANNED_CRAB_COMMUNE_DEVELOPING";
+    private const string HAS_SCANNED_CRAB_COMMUNE_FULLY_DEVELOPED       = "HAS_SCANNED_CRAB_COMMUNE_FULLY_DEVELOPED";
+    private const string HAS_SCANNED_SPONGE_STONE                       = "HAS_SCANNED_SPONGE_STONE";
+    private const string HAS_SCANNED_SPONGE_STONE_INVERTED              = "HAS_SCANNED_SPONGE_STONE_INVERTED";
+    
     // Fauna
-    private const string HAS_SCANNED_AXOLOWYRM = "HAS_SCANNED_AXOLOWYRM";
-    private const string HAS_SCANNED_BROODBACK_FROG_UNBOUND = "HAS_SCANNED_BROODBACK_FROG_UNBOUND";
-    private const string HAS_SCANNED_BROODBACK_FROG_EGGBOUND = "HAS_SCANNED_BROODBACK_FROG_EGGBOUND";
-    private const string HAS_SCANNED_BROODBELLY_FROG = "HAS_SCANNED_BROODBELLY_FROG";
-    private const string HAS_SCANNED_GREATER_LEMON_SLUG = "HAS_SCANNED_GREATER_LEMON_SLUG";
-    private const string HAS_SCANNED_WANDERING_SKY_JELLY = "HAS_SCANNED_WANDERING_SKY_JELLY";
-
+    private const string HAS_SCANNED_AXOLOWYRM                          = "HAS_SCANNED_AXOLOWYRM";
+    private const string HAS_SCANNED_BROODBACK_FROG_UNBOUND             = "HAS_SCANNED_BROODBACK_FROG_UNBOUND";
+    private const string HAS_SCANNED_BROODBACK_FROG_EGGBOUND            = "HAS_SCANNED_BROODBACK_FROG_EGGBOUND";
+    private const string HAS_SCANNED_BROODBELLY_FROG                    = "HAS_SCANNED_BROODBELLY_FROG";
+    private const string HAS_SCANNED_GREATER_LEMON_SLUG                 = "HAS_SCANNED_GREATER_LEMON_SLUG";
+    private const string HAS_SCANNED_WANDERING_SKY_JELLY                = "HAS_SCANNED_WANDERING_SKY_JELLY";
+    private const string HAS_SCANNED_SHOCKSHIELD_CRAB                   = "HAS_SCANNED_SHOCKSHIELD_CRAB";
+    private const string HAS_SCANNED_HALF_HEADED_AVIAN                  = "HAS_SCANNED_HALF_HEADED_AVIAN";
+    private const string HAS_SCANNED_TRAILING_LANDSTAR                  = "HAS_SCANNED_TRAILING_LANDSTAR";
+    
     private Transform rayOrigin;
     private float scanProgress = 0f;
     private bool isScanning = false;
@@ -52,13 +68,26 @@ public class Scanner : MonoBehaviour{
             
             PlayerPrefs.SetInt(HAS_SCANNED_ANY, 0);
 
-            // Flora
+            // Flora — Flowers
             PlayerPrefs.SetInt(HAS_SCANNED_VIOLET_SPIKEWEED, 0);
-            PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER, 0);
-            PlayerPrefs.SetInt(HAS_SCANNED_CRAB_COMMUNE, 0);
-            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY, 0);
-            PlayerPrefs.SetInt(HAS_SCANNED_SPONGE_STONE, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER_YOUNG, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER_JUVENILE, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER_ADULT, 0);
+
+            // Flora — Funguses
             PlayerPrefs.SetInt(HAS_SCANNED_CLUSTERED_SLIME_MOLD, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_YOUNG, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_JUVENILE, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_ADULT, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_YOUNG, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_JUVENILE, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_ADULT, 0);
+
+            // Flora — Corals
+            PlayerPrefs.SetInt(HAS_SCANNED_CRAB_COMMUNE_DEVELOPING, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_CRAB_COMMUNE_FULLY_DEVELOPED, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_SPONGE_STONE, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_SPONGE_STONE_INVERTED, 0);
 
             // Fauna
             PlayerPrefs.SetInt(HAS_SCANNED_AXOLOWYRM, 0);
@@ -67,7 +96,10 @@ public class Scanner : MonoBehaviour{
             PlayerPrefs.SetInt(HAS_SCANNED_BROODBELLY_FROG, 0);
             PlayerPrefs.SetInt(HAS_SCANNED_GREATER_LEMON_SLUG, 0);
             PlayerPrefs.SetInt(HAS_SCANNED_WANDERING_SKY_JELLY, 0);
-
+            PlayerPrefs.SetInt(HAS_SCANNED_SHOCKSHIELD_CRAB, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_HALF_HEADED_AVIAN, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_TRAILING_LANDSTAR, 0);
+            
             PlayerPrefs.Save();
             Debug.Log("All scan flags reset to FALSE");
         }
@@ -132,24 +164,58 @@ public class Scanner : MonoBehaviour{
 
             switch (id){
                 
+                // Flowers
                 case "Violet Spikeweed":
                     PlayerPrefs.SetInt(HAS_SCANNED_VIOLET_SPIKEWEED, 1);
                     break;
-                case "Towering Unraveler":
-                    PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER, 1);
+                case "Towering Unraveler (Young)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER_YOUNG, 1);
                     break;
-                case "Crab Commune":
-                    PlayerPrefs.SetInt(HAS_SCANNED_CRAB_COMMUNE, 1);
+                case "Towering Unraveler (Juvenile)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER_JUVENILE, 1);
                     break;
-                case "Constellated Ganglion Tray":
-                    PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY, 1);
+                case "Towering Unraveler (Adult)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER_ADULT, 1);
+                    break;
+
+                // Funguses
+                case "Clustered Slime Mold":
+                    PlayerPrefs.SetInt(HAS_SCANNED_CLUSTERED_SLIME_MOLD, 1);
+                    break;
+                case "Constellated Ganglion Tray (Female, Young)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_YOUNG, 1);
+                    break;
+                case "Constellated Ganglion Tray (Female, Juvenile)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_JUVENILE, 1);
+                    break;
+                case "Constellated Ganglion Tray (Female, Adult)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_ADULT, 1);
+                    break;
+                case "Constellated Ganglion Tray (Male, Young)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_YOUNG, 1);
+                    break;
+                case "Constellated Ganglion Tray (Male, Juvenile)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_JUVENILE, 1);
+                    break;
+                case "Constellated Ganglion Tray (Male, Adult)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_ADULT, 1);
+                    break;
+
+                // Corals
+                case "Crab Commune (Developing)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_CRAB_COMMUNE_DEVELOPING, 1);
+                    break;
+                case "Crab Commune (Fully-Developed)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_CRAB_COMMUNE_FULLY_DEVELOPED, 1);
                     break;
                 case "Spongestone":
                     PlayerPrefs.SetInt(HAS_SCANNED_SPONGE_STONE, 1);
                     break;
-                case "Clustered Slime Mold":
-                    PlayerPrefs.SetInt(HAS_SCANNED_CLUSTERED_SLIME_MOLD, 1);
+                case "Spongestone (Inverted)":
+                    PlayerPrefs.SetInt(HAS_SCANNED_SPONGE_STONE_INVERTED, 1);
                     break;
+
+                // Fauna 
                 case "Axolowyrm":
                     PlayerPrefs.SetInt(HAS_SCANNED_AXOLOWYRM, 1);
                     break;
@@ -168,8 +234,17 @@ public class Scanner : MonoBehaviour{
                 case "Wandering Sky Jelly":
                     PlayerPrefs.SetInt(HAS_SCANNED_WANDERING_SKY_JELLY, 1);
                     break;
+                case "Shockshield Crab":
+                    PlayerPrefs.SetInt(HAS_SCANNED_SHOCKSHIELD_CRAB, 1);
+                    break;
+                case "Half-Headed_Avian":
+                    PlayerPrefs.SetInt(HAS_SCANNED_HALF_HEADED_AVIAN, 1);
+                    break;
+                case "Trailing Landstar":
+                    PlayerPrefs.SetInt(HAS_SCANNED_TRAILING_LANDSTAR, 1);
+                    break;
             }
-
+            
             PlayerPrefs.Save();
             Debug.Log($"Scan completed: {id}");
         }
