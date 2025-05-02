@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ScannerUIManager : MonoBehaviour {
 
+    private const string prefsKey = "HasScannedAny";
+    
     public GameObject ScanUI;
     public Slider scanProgressSlider;
     public TextMeshProUGUI scanProgressText;
@@ -12,9 +14,18 @@ public class ScannerUIManager : MonoBehaviour {
 
     private HashSet<ScanData> uniqueScans = new HashSet<ScanData>();
 
-    public void AddScan(ScanData data)
-    {
-        if (data == null) return;
+    
+    public static bool HasScanned { get; private set; }
+
+    void Awake() {
+        
+        HasScanned = PlayerPrefs.GetInt(prefsKey, 0) == 1;
+        
+    }
+
+    
+    public void AddScan(ScanData data) {
+
 
         if (uniqueScans.Add(data)) 
         {

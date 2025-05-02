@@ -1,76 +1,104 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Scanner : MonoBehaviour
-{
-    [Header("Scan Settings")]
-    private Transform rayOrigin;
+public class Scanner : MonoBehaviour{
+    
+
     public float scanRange = 5f;
     public LayerMask scannableLayer;
     public float scanTime = 2f;
     public Material highlightMaterial;
+    
+    private const string HAS_SCANNED_ANY = "HAS_SCANNED_ANY";
 
-    [Header("Notebook and UI")]
-    public NotebookManager notebookManager;
-    public ScannerUIManager scannerUIManager;
+    // Flora
+    private const string HAS_SCANNED_VIOLET_SPIKEWEED = "HAS_SCANNED_VIOLET_SPIKEWEED";
+    private const string HAS_SCANNED_TOWERING_UNRAVELER = "HAS_SCANNED_TOWERING_UNRAVELER";
+    private const string HAS_SCANNED_CRAB_COMMUNE = "HAS_SCANNED_CRAB_COMMUNE";
+    private const string HAS_SCANNED_CONSTELLATED_GANGLION_TRAY = "HAS_SCANNED_CONSTELLATED_GANGLION_TRAY";
+    private const string HAS_SCANNED_SPONGE_STONE = "HAS_SCANNED_SPONGE_STONE";
+    private const string HAS_SCANNED_CLUSTERED_SLIME_MOLD = "HAS_SCANNED_CLUSTERED_SLIME_MOLD";
 
+    // Fauna
+    private const string HAS_SCANNED_AXOLOWYRM = "HAS_SCANNED_AXOLOWYRM";
+    private const string HAS_SCANNED_BROODBACK_FROG = "HAS_SCANNED_BROODBACK_FROG";
+    private const string HAS_SCANNED_BROODBELLY_FROG = "HAS_SCANNED_BROODBELLY_FROG";
+    private const string HAS_SCANNED_GREATER_LEMON_SLUG = "HAS_SCANNED_GREATER_LEMON_SLUG";
+    private const string HAS_SCANNED_WANDERING_SKY_JELLY = "HAS_SCANNED_WANDERING_SKY_JELLY";
+
+    private Transform rayOrigin;
     private float scanProgress = 0f;
     private bool isScanning = false;
     private Transform currentTarget;
-
     private Material originalMaterial;
     private Renderer targetRenderer;
 
     private Queue<GameObject> GOBuffer = new Queue<GameObject>();
     [SerializeField] private int maxGOBufferSize = 2;
 
-    private CameraManager cameraManager;
-    public Camera playerCamera; 
+    void Start(){
 
-    private void Start()
-    {
         GOBuffer.Enqueue(null);
         GOBuffer.Enqueue(null);
 
-        cameraManager = FindObjectOfType<CameraManager>();
-        rayOrigin = this.transform; // Scanner is already in the right place!
-
+        rayOrigin = transform;
     }
 
-    void Update()
-    {
-        if (Input.GetKey(KeyCode.E))
-        {
-            ScanForObjects();
+    void Update(){
+        
+        // cheat O to change all to false
+        if (Input.GetKeyDown(KeyCode.O)){
+            
+            PlayerPrefs.SetInt(HAS_SCANNED_ANY, 0);
+
+            // Flora
+            PlayerPrefs.SetInt(HAS_SCANNED_VIOLET_SPIKEWEED, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_CRAB_COMMUNE, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_SPONGE_STONE, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_CLUSTERED_SLIME_MOLD, 0);
+
+            // Fauna
+            PlayerPrefs.SetInt(HAS_SCANNED_AXOLOWYRM, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_BROODBACK_FROG, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_BROODBELLY_FROG, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_GREATER_LEMON_SLUG, 0);
+            PlayerPrefs.SetInt(HAS_SCANNED_WANDERING_SKY_JELLY, 0);
+
+            PlayerPrefs.Save();
+            Debug.Log("All scan flags reset to FALSE");
         }
-        else
-        {
+        
+        if (Input.GetKeyDown(KeyCode.P)){
+            
+           
+            PlayerPrefs.SetInt(HAS_SCANNED_AXOLOWYRM, 1);
+            PlayerPrefs.Save();
+        }
+        
+        if (Input.GetKey(KeyCode.E)){
+            ScanForObjects();
+        }else{
             ResetScan();
         }
+           
     }
 
-
-
-    void ScanForObjects()
-    {
+    void ScanForObjects(){
+        
         Ray ray = new Ray(rayOrigin.position, rayOrigin.forward);
-        RaycastHit hit;
-
-        Debug.DrawRay(ray.origin, ray.direction * scanRange, Color.black);
-
-        if (Physics.Raycast(ray, out hit, scanRange, scannableLayer))
-        {
-            if (currentTarget != hit.transform)
-            {
+        
+        if (Physics.Raycast(ray, out RaycastHit hit, scanRange, scannableLayer)){
+            
+            if (currentTarget != hit.transform){
+                
                 ResetHighlight();
                 currentTarget = hit.transform;
                 scanProgress = 0f;
-
-                // getting component each single frame
                 targetRenderer = currentTarget.GetComponent<Renderer>();
-                
-                if (targetRenderer != null)
-                {
+
+                if (targetRenderer != null) {
                     originalMaterial = targetRenderer.material;
                     targetRenderer.material = highlightMaterial;
                 }
@@ -79,73 +107,89 @@ public class Scanner : MonoBehaviour
             isScanning = true;
             scanProgress += Time.deltaTime;
 
-            // ⭐ Update UI Progress here!
-            if (scannerUIManager != null)
-            {
-                scannerUIManager.UpdateScanProgress(scanProgress / scanTime);
-            }
-
-            if (scanProgress >= scanTime && !GOBuffer.Contains(hit.transform.gameObject))
-            {
-                BufferScannedObject(hit.transform.gameObject);
+            if (scanProgress >= scanTime && !GOBuffer.Contains(hit.transform.gameObject)){
+                
+                GOBuffer.Dequeue();
+                GOBuffer.Enqueue(hit.transform.gameObject);
                 CompleteScan();
             }
-        }
-        else
-        {
+            
+        }else{
             ResetScan();
         }
     }
 
-    void CompleteScan()
-    {
-        if (currentTarget == null) return;
+    void CompleteScan(){
+    
+        PlayerPrefs.SetInt(HAS_SCANNED_ANY, 1);
+        
+        var scannable = currentTarget.GetComponent<ScannableObject>();
+        if (scannable != null && scannable.scanData != null){
+            
+            string id = scannable.scanData.objectName;
 
-        ScannableObject scannable = currentTarget.GetComponent<ScannableObject>();
-        if (scannable != null && scannable.scanData != null)
-        {
-            notebookManager.AddEntry(scannable.scanData);
-
-            if (scannerUIManager != null)
-            {
-                scannerUIManager.AddScan(scannable.scanData);
-                scannerUIManager.UpdateScanProgress(0f); // Reset bar after success
+            switch (id){
+                
+                case "Violet Spikeweed":
+                    PlayerPrefs.SetInt(HAS_SCANNED_VIOLET_SPIKEWEED, 1);
+                    break;
+                case "Towering Unraveler":
+                    PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER, 1);
+                    break;
+                case "Crab Commune":
+                    PlayerPrefs.SetInt(HAS_SCANNED_CRAB_COMMUNE, 1);
+                    break;
+                case "Constellated Ganglion Tray":
+                    PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY, 1);
+                    break;
+                case "Spongestone":
+                    PlayerPrefs.SetInt(HAS_SCANNED_SPONGE_STONE, 1);
+                    break;
+                case "Clustered Slime Mold":
+                    PlayerPrefs.SetInt(HAS_SCANNED_CLUSTERED_SLIME_MOLD, 1);
+                    break;
+                case "Axolowyrm":
+                    PlayerPrefs.SetInt(HAS_SCANNED_AXOLOWYRM, 1);
+                    break;
+                case "Broodback Frog":
+                    PlayerPrefs.SetInt(HAS_SCANNED_BROODBACK_FROG, 1);
+                    break;
+                case "Broodbelly Frog":
+                    PlayerPrefs.SetInt(HAS_SCANNED_BROODBELLY_FROG, 1);
+                    break;
+                case "Greater Lemon Slug":
+                    PlayerPrefs.SetInt(HAS_SCANNED_GREATER_LEMON_SLUG, 1);
+                    break;
+                case "Wandering Sky Jelly":
+                    PlayerPrefs.SetInt(HAS_SCANNED_WANDERING_SKY_JELLY, 1);
+                    break;
             }
 
-            Debug.Log($"Scan completed: {scannable.scanData.objectName}");
+            PlayerPrefs.Save();
+            Debug.Log($"Scan completed: {id}");
         }
+
         ResetScan();
     }
 
-    void ResetScan()
-    {
-        if (isScanning && scannerUIManager != null)
-        {
-            scannerUIManager.UpdateScanProgress(0f); // Clear bar if interrupted
-        }
+    void ResetScan() {
 
-        isScanning = false;
-        scanProgress = 0f;
+        if (isScanning) {
+            Debug.Log("Scan interrupted/reset");
+        }
+        
+        isScanning    = false;
+        scanProgress  = 0f;
         currentTarget = null;
         ResetHighlight();
     }
 
-    void ResetHighlight()
-    {
-        if (targetRenderer != null && originalMaterial != null)
-        {
+    void ResetHighlight(){
+        
+        if (targetRenderer != null && originalMaterial != null){
             targetRenderer.material = originalMaterial;
-            targetRenderer = null;
-            originalMaterial = null;
+            targetRenderer         = null;
+            originalMaterial       = null;
         }
-    }
-
-    private void BufferScannedObject(GameObject scannedObject)
-    {
-        if (GOBuffer.Count >= maxGOBufferSize)
-        {
-            GOBuffer.Dequeue();
-        }
-        GOBuffer.Enqueue(scannedObject);
     }
 }
