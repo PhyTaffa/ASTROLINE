@@ -135,6 +135,7 @@ public class Fauna_WanderingingState : AStateBehaviour
                 return (int)EFaunaState.Sleepy;
             }
 
+            //necessary to allow repathing before and or after transition
             pathFollower.GenerateNewPath();
             hasFinishedCurrentPath = false;
         }
