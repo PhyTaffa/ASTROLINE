@@ -13,6 +13,8 @@ public class Cheat : MonoBehaviour
     [SerializeField] private Transform five;
     [SerializeField] private Transform six;
     private Transform playerTransform;
+    
+    [SerializeField] private GameObject sun;
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +48,10 @@ public class Cheat : MonoBehaviour
         {
             playerTransform.position = six.position;
         }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
             
+        }
     }
 }

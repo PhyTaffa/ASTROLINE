@@ -62,7 +62,7 @@ public class CameraManager : MonoBehaviour{
             script.enabled = !firstPersonActive;
 
         if (scannerUIRoot != null){}
-            //scannerUIRoot.SetActive(firstPersonActive);
+            scannerUIRoot.SetActive(firstPersonActive);
     }
 
 

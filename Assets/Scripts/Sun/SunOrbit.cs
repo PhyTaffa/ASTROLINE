@@ -6,6 +6,7 @@ public class SunOrbit : MonoBehaviour
 
     void Update()
     {
+        
         transform.Rotate(Vector3.right, orbitSpeed * Time.deltaTime);
     }
 }
