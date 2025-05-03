@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class Scanner : MonoBehaviour{
@@ -8,6 +9,8 @@ public class Scanner : MonoBehaviour{
     public LayerMask scannableLayer;
     public float scanTime = 2f;
     public Material highlightMaterial;
+
+    public GameObject alreadyScannedUI; 
     
     private const string HAS_SCANNED_ANY = "HAS_SCANNED_ANY";
 
@@ -59,6 +62,8 @@ public class Scanner : MonoBehaviour{
         GOBuffer.Enqueue(null);
 
         rayOrigin = transform;
+        
+        HideAlreadyScanned();
     }
 
     void Update(){
@@ -140,7 +145,11 @@ public class Scanner : MonoBehaviour{
 
             isScanning = true;
             scanProgress += Time.deltaTime;
-
+            
+            if (scanProgress >= scanTime && GOBuffer.Contains(hit.transform.gameObject)){
+                ShowAlreadyScanned();
+            }
+            
             if (scanProgress >= scanTime && !GOBuffer.Contains(hit.transform.gameObject)){
                 
                 GOBuffer.Dequeue();
@@ -148,11 +157,33 @@ public class Scanner : MonoBehaviour{
                 CompleteScan();
             }
             
+            
+            
         }else{
             ResetScan();
         }
     }
+    
+    void ShowAlreadyScanned() {
+        if (alreadyScannedUI != null)
+        {
+            alreadyScannedUI.SetActive(true);
+         
+            StartCoroutine(HideAfterDelay(2f));
+        }
+        ResetScan();
+    }
 
+    IEnumerator HideAfterDelay(float t) {
+        yield return new WaitForSeconds(t);
+        HideAlreadyScanned();
+    }
+
+    void HideAlreadyScanned() {
+        if (alreadyScannedUI != null)
+            alreadyScannedUI.SetActive(false);
+    }
+    
     void CompleteScan(){
     
         PlayerPrefs.SetInt(HAS_SCANNED_ANY, 1);
