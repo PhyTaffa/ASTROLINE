@@ -107,6 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6868665952545623819}
   - component: {fileID: 7082135805165490305}
+  - component: {fileID: 6074062562629709493}
   m_Layer: 0
   m_Name: Camera Manager
   m_TagString: Untagged
@@ -142,9 +143,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstPersonRoot: {fileID: 3042427555385924588}
+  fpRig: {fileID: 0}
   thirdPersonRoot: {fileID: 260451664848800276}
-  switchKey: 118
+  firstPersonUI: {fileID: 0}
+  thirdPersonUI: {fileID: 0}
+  scannerUIRoot: {fileID: 0}
   isFirstPersonActive: 0
+--- !u!114 &6074062562629709493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 384430030393297990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9184ec7d0d133024f81b8ce8cbdda0a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firstPersonCam: {fileID: 0}
+  thirdPersonCam: {fileID: 0}
+  firstPersonUI: {fileID: 0}
+  cinemachineBrain: {fileID: 0}
 --- !u!1 &2169733576046492339
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,17 +337,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7eae89a03f211f4e818778f87a05955, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 6353885224068960175}
   scanRange: 15
   scannableLayer:
     serializedVersion: 2
     m_Bits: 8
-  scanProgressUI: {fileID: 0}
   scanTime: 2
   highlightMaterial: {fileID: 0}
-  notebookManager: {fileID: 0}
-  currScanning: {fileID: 0}
-  queueToArray: []
+  alreadyScannedUI: {fileID: 0}
   maxGOBufferSize: 2
 --- !u!114 &916151691837587524
 MonoBehaviour:
@@ -344,6 +360,7 @@ MonoBehaviour:
   mouseSensitivity: 100
   topClamp: -80
   bottomClamp: 80
+  cameraPivot: {fileID: 0}
 --- !u!1 &3629872143215104469
 GameObject:
   m_ObjectHideFlags: 0

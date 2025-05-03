@@ -55,8 +55,8 @@ public class CameraManager : MonoBehaviour
         foreach (MonoBehaviour script in thirdPersonScripts)
             script.enabled = !firstPersonActive;
 
-        if (scannerUIRoot != null)
-            scannerUIRoot.SetActive(firstPersonActive);
+        if (scannerUIRoot != null){}
+            //scannerUIRoot.SetActive(firstPersonActive);
     }
 
 
