@@ -12,6 +12,9 @@ public class Fauna_SleepingState : AStateBehaviour
     [FormerlySerializedAs("isAsleep")]
     [Header("Sleeping Settings")]
     [SerializeField] private bool isSupposedToBeAwake = false;
+    
+    //event used var
+    private bool hasFinishedCurrentPath = false;
     public override bool InitializeState()
     {
         if (pathFollower == null || abode == null)
@@ -24,30 +27,45 @@ public class Fauna_SleepingState : AStateBehaviour
 
     public override void OnStateStart()
     {
+        //var initialization
         //sleep
         isSupposedToBeAwake = false;
         
-        //movement
+        //events subcription
+        pathFollower.OnPathFinished += HandlePathFinished;
+        
+        //starts moving
         pathFollower.GenerateNewPath(abode);
     }
 
     public override void OnStateUpdate()
     {
-        // You could check here if close enough to "fall asleep", but since you said it's handled in transition, nothing here yet.
     }
 
     public override void OnStateEnd()
     {
-        // Optional: reset sleeping status if needed
+        pathFollower.StopFollowingPath();
+        
+        pathFollower.OnPathFinished -= HandlePathFinished;
+        
+
     }
 
     public override int StateTransitionCondition()
     {
-        if (isSupposedToBeAwake)
+        if (isSupposedToBeAwake && hasFinishedCurrentPath)
         {
+            pathFollower.GenerateNewPath();
+            hasFinishedCurrentPath = false;
+            
             return (int)EFaunaState.Idle;
         }
         
         return (int)EFaunaState.Invalid;
+    }
+    
+    private void HandlePathFinished()
+    {
+        hasFinishedCurrentPath = true;
     }
 }

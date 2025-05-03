@@ -80,16 +80,20 @@ public class PlayerController : MonoBehaviour{
     }
 
     private void FixedUpdate(){
-        rb.MovePosition(rb.position + transform.TransformDirection(input * (moveSpeed * Time.deltaTime)));
+        rb.MovePosition(rb.position + transform.TransformDirection(input * (moveSpeed * Time.fixedDeltaTime)));
     }
 
     private void HandleInputs()
     {
         Vector3 inputDirection = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
 
-        if (inputDirection.sqrMagnitude < 0.01f) return;
+        if (inputDirection.sqrMagnitude < 0.01f)
+        {
+            input = Vector3.zero;
+            return;
+        }
 
-        //Fetches the current camera each frame, quite stupid 
+        //Fetches the current camera each frame, quite stoobid 
         CinemachineVirtualCamera currentCam = cinemachineBrain.ActiveVirtualCamera as CinemachineVirtualCamera;
         if (currentCam == null) return;
 
@@ -99,10 +103,6 @@ public class PlayerController : MonoBehaviour{
         //fetches the current camera's current forward and right, orthogonally projected onto the character's up: opposite of gravity direction
         Vector3 camForward = Vector3.ProjectOnPlane(currentCam.transform.forward, gravityUp).normalized;
         Vector3 camRight = Vector3.ProjectOnPlane(currentCam.transform.right, gravityUp).normalized;
-        
-        // Debug.DrawRay(currentCam.transform.position, camForward * 100f, Color.blue);
-        // Debug.DrawRay(currentCam.transform.position, camRight * 100f, Color.red);
-
         
         //mashing the input with the cam's vector reference
         Vector3 moveDirWorld = camRight * inputDirection.x + camForward * inputDirection.z;
@@ -117,12 +117,6 @@ public class PlayerController : MonoBehaviour{
         //this is the magical line that makes it work
         Vector3 moveDirRelative = tf.InverseTransformDirection(moveDirWorld);
 
-        
-        // Quaternion targetRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(moveDirRelative, gravityUp),  gravityUp);
-        // tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotateSpeed * Time.deltaTime);
-        // //tf.rotation = targetRotation;
-
-        
 
         //after calculating the alleged good movements, we apply it
         input = moveDirRelative;

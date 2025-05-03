@@ -29,7 +29,10 @@
             rb = GetComponent<Rigidbody>();
         }
 
-        // Start following path from startNode to endNode
+        /// <summary>
+        /// Changes the walking flag to true and allow the character to walking along a A* path on predefined WayPoints
+        /// </summary>
+        /// <remarks>Starts the waling process and GENERATES a path as well</remarks>
         public void StartFollowingPath()
         {
             // if (wpManager.graph.AStar(startNode, endNode))
@@ -62,6 +65,9 @@
             }
         }
 
+        /// <summary>
+        /// Just makes the agent walk to the identified end node
+        /// </summary>
         private void MoveAlongPath()
         {
             Transform target = path[currentIndex].GetID().transform;
@@ -96,7 +102,9 @@
                 }
             }
         }
-        
+        /// <summary>
+        /// JUST generates a path using the previous end as the new start and a picks a random node from the waypoint manager as the new end.
+        /// </summary>
         public void GenerateNewPath()
         {
             if (endNode != null)
@@ -115,6 +123,10 @@
             RunPathfinding();
         }
 
+        /// <summary>
+        /// JUST generates a path using the previous end as the new start and the given gameObject as the new end.
+        /// </summary>
+        /// <param name="specificEnd">New end</param>
         public void GenerateNewPath(GameObject specificEnd)
         {
             if (endNode != null)
@@ -124,6 +136,10 @@
             RunPathfinding();
         }
 
+        /// <summary>
+        /// Runs the path finding algorithm.
+        /// Called once per path
+        /// </summary>
         private void RunPathfinding()
         {
             if (wpManager.graph.AStar(startNode, endNode))
