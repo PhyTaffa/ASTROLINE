@@ -22,17 +22,28 @@ public class ComputerUISlider : MonoBehaviour {
         initialPos = panelRect.anchoredPosition;
         isAtInitial = true;
         isAtDown = false;
+        isMoving = false;
 
-        if (computerButton != null){
-            computerButton.SetActive(false);
-        }
-
-
-        if (backgroundButton != null){
-            backgroundButton.SetActive(isAtInitial);    
-        }
-       
+        if (computerButton!= null) computerButton.SetActive(false);
+        if (backgroundButton!= null) backgroundButton.SetActive(true);
     }
+
+    void Update() {
+
+        if (isMoving) {
+            if (computerButton!= null) computerButton.SetActive(false);
+            if (backgroundButton!= null) backgroundButton.SetActive(false);
+        }
+        else if (isAtInitial) {
+            if (computerButton!= null) computerButton.SetActive(false);
+            if (backgroundButton!= null) backgroundButton.SetActive(true);
+        }
+        else if (isAtDown) {
+            if (computerButton!= null) computerButton.SetActive(true);
+            if (backgroundButton!= null) backgroundButton.SetActive(false);
+        }
+    }
+
 
     public void SlideDown() {
 

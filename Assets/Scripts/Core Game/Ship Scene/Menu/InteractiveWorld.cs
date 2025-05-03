@@ -18,18 +18,22 @@ public class InteractiveWorld : MonoBehaviour {
     private Vector3 mouseDownPosition;
     private TrainStop pendingStop;
     private bool allowRotation = true;
+    
     void Start(){
         initialRotation = transform.rotation;
     }
 
     void Update(){
-
-        if (!planetCamera.enabled){
-            return;
+        
+        if (sliderUiLogic.isAtInitial || sliderUiLogic.isMovingPublic || Input.GetMouseButtonDown(1)) {
+            CloseConfirm();
         }
         
         if (!planetCamera.enabled || !allowRotation || confirmDialog.activeSelf)
+        {
             return;
+        }
+       
         
         bool rotateMode = sliderUiLogic != null && sliderUiLogic.isAtDown && !sliderUiLogic.isMovingPublic;                
         

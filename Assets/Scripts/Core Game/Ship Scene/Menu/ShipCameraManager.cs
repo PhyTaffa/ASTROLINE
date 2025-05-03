@@ -22,9 +22,9 @@ public class ShipCameraManager : MonoBehaviour {
         
         shipCamera.enabled = true;
         planetCamera.enabled = false;
-        
-        sliderUiLogic.computerButton.SetActive(false);
-        sliderUiLogic.backgroundButton.SetActive(false);
+        computerUI.SetActive(false);
+        //sliderUiLogic.computerButton.SetActive(false);
+        //sliderUiLogic.backgroundButton.SetActive(false);
     }
 
     void Update() {
@@ -39,8 +39,7 @@ public class ShipCameraManager : MonoBehaviour {
             Cursor.visible = usingAlt;
             Cursor.lockState = usingAlt ? CursorLockMode.None : CursorLockMode.Locked;
             
-            sliderUiLogic.computerButton .SetActive(usingAlt);
-            sliderUiLogic.backgroundButton.SetActive(usingAlt);
+  
         }
     }
     public void SetCanSwitch(bool allow) {
