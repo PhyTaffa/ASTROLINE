@@ -38,8 +38,8 @@ public class Fauna_ThirstyState : AStateBehaviour
         
         
         pathFollower.OnPathFinished += HandleArrivalAtWater;
-        // Pick current node as start
-        //pathFollower.SetEndNode(waterNode);  // Just change the END node!
+
+        
         pathFollower.GenerateNewPath(waterNode);
         
         pathFollower.StartFollowingPath();
@@ -58,6 +58,7 @@ public class Fauna_ThirstyState : AStateBehaviour
     {
         pathFollower.StopFollowingPath();
         pathFollower.OnPathFinished -= HandleArrivalAtWater;
+        
     }
 
     public override int StateTransitionCondition()
@@ -68,6 +69,9 @@ public class Fauna_ThirstyState : AStateBehaviour
             {
                 return (int)EFaunaState.Reacting;
             }
+            
+            pathFollower.GenerateNewPath();
+            hasFinishedCurrentPath = false;
             
             return (int)EFaunaState.Wander;
         }

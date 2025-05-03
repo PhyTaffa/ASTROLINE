@@ -129,15 +129,14 @@ public class Fauna_WanderingingState : AStateBehaviour
             {
                 return (int)EFaunaState.Thirsty;
             }
-            else if (isSupposedToSleep)
+
+            if (isSupposedToSleep)
             {
                 return (int)EFaunaState.Sleepy;
             }
-            else
-            {
-                pathFollower.GenerateNewPath();
-                hasFinishedCurrentPath = false;
-            }
+
+            pathFollower.GenerateNewPath();
+            hasFinishedCurrentPath = false;
         }
 
 
