@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class CameraManager : MonoBehaviour
-{
+public class CameraManager : MonoBehaviour{
     [SerializeField] private GameObject firstPersonRoot;
     [SerializeField] private GameObject fpRig;
     [SerializeField] private GameObject thirdPersonRoot;
@@ -22,30 +21,37 @@ public class CameraManager : MonoBehaviour
 
     private CinemachineVirtualCamera firstPersonCam;
     private CinemachineVirtualCamera thirdPersonCam;
-
-    void Start()
-    {
+    
+    public static bool ScanModeActive { get; private set; }
+    
+    void Start(){
         firstPersonScripts = firstPersonRoot.GetComponentsInChildren<MonoBehaviour>(true);
         thirdPersonScripts = thirdPersonRoot.GetComponentsInChildren<MonoBehaviour>(true);
 
         firstPersonCam = firstPersonRoot.GetComponentInChildren<CinemachineVirtualCamera>(true);
         thirdPersonCam = thirdPersonRoot.GetComponentInChildren<CinemachineVirtualCamera>(true);
-
+        
+        ScanModeActive = scannerUIRoot != null && scannerUIRoot.activeSelf;
         SetCameraState(isFirstPersonActive);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(switchKey))
-        {
+    private void Update(){
+        
+        ScanModeActive = scannerUIRoot.activeSelf;
+        
+        if (NotebookPages.NotebookOpen || TrainStopInteractor.TrainStopUIActive) {
+            return;
+        }
+        
+        if (Input.GetKeyDown(switchKey)){
             isFirstPersonActive = !isFirstPersonActive;
             fpRig.SetActive(isFirstPersonActive);
             SetCameraState(isFirstPersonActive);
         }
     }
 
-    private void SetCameraState(bool firstPersonActive)
-    {
+    private void SetCameraState(bool firstPersonActive){
+        
         firstPersonCam.Priority = firstPersonActive ? 10 : 0;
         thirdPersonCam.Priority = firstPersonActive ? 0 : 10;
 
@@ -60,8 +66,7 @@ public class CameraManager : MonoBehaviour
     }
 
 
-    public bool IsFirstPersonActive()
-    {
+    public bool IsFirstPersonActive(){
         return isFirstPersonActive;
     }
 

@@ -11,6 +11,7 @@ public class TrainStopUIManager : MonoBehaviour
         
         uiPanel.SetActive(false);
         movementController.enabled = true;
+        Time.timeScale = 1f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }

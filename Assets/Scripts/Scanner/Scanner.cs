@@ -68,7 +68,7 @@ public class Scanner : MonoBehaviour{
 
     void Update(){
         
-        // cheat O to change all to false
+        // cheat O to change all to false and P to true
         if (Input.GetKeyDown(KeyCode.O)){
             
             PlayerPrefs.SetInt(HAS_SCANNED_ANY, 0);
@@ -112,8 +112,42 @@ public class Scanner : MonoBehaviour{
         if (Input.GetKeyDown(KeyCode.P)){
             
            
+            PlayerPrefs.SetInt(HAS_SCANNED_ANY, 1);
+
+            // Flora — Flowers
+            PlayerPrefs.SetInt(HAS_SCANNED_VIOLET_SPIKEWEED, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER_YOUNG, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER_JUVENILE, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_TOWERING_UNRAVELER_ADULT, 1);
+
+            // Flora — Funguses
+            PlayerPrefs.SetInt(HAS_SCANNED_CLUSTERED_SLIME_MOLD, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_YOUNG, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_JUVENILE, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_ADULT, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_YOUNG, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_JUVENILE, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_ADULT, 1);
+
+            // Flora — Corals
+            PlayerPrefs.SetInt(HAS_SCANNED_CRAB_COMMUNE_DEVELOPING, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_CRAB_COMMUNE_FULLY_DEVELOPED, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_SPONGE_STONE, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_SPONGE_STONE_INVERTED, 1);
+
+            // Fauna
             PlayerPrefs.SetInt(HAS_SCANNED_AXOLOWYRM, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_BROODBACK_FROG_UNBOUND, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_BROODBACK_FROG_EGGBOUND, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_BROODBELLY_FROG, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_GREATER_LEMON_SLUG, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_WANDERING_SKY_JELLY, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_SHOCKSHIELD_CRAB, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_HALF_HEADED_AVIAN, 1);
+            PlayerPrefs.SetInt(HAS_SCANNED_TRAILING_LANDSTAR, 1);
+            
             PlayerPrefs.Save();
+            Debug.Log("All scan flags reset to TRUE");
         }
         
         if (Input.GetKey(KeyCode.E)){

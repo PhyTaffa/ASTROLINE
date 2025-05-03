@@ -8,9 +8,10 @@ public class NotebookPages : MonoBehaviour
     [SerializeField] private GameObject settingsPage;
     [SerializeField] private GameObject floraPage;
     [SerializeField] private GameObject faunaPage;
-
+    
+    public static bool NotebookOpen { get; private set; }
+    
     private bool isPaused = false;
-
     private enum NotebookState { Settings, Flora, Fauna }
     private NotebookState currentState = NotebookState.Settings;
     
@@ -19,9 +20,14 @@ public class NotebookPages : MonoBehaviour
         settingsPage.SetActive(false);
         floraPage.SetActive(false);
         faunaPage.SetActive(false);
+        NotebookOpen = false;
     }
-    
+
     void Update(){
+
+        if (CameraManager.ScanModeActive || TrainStopInteractor.TrainStopUIActive){
+            return;
+        }
         
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.N)){
             TogglePause();
@@ -31,6 +37,7 @@ public class NotebookPages : MonoBehaviour
     void TogglePause()
     {
         isPaused = !isPaused;
+        NotebookOpen  = isPaused;
         Time.timeScale = isPaused ? 0f : 1f;
         
         notebookUI.SetActive(isPaused);
@@ -47,6 +54,7 @@ public class NotebookPages : MonoBehaviour
     public void ResumeGame() {
         
         isPaused = false;
+        NotebookOpen  = false;
         Time.timeScale = 1f;
 
         if (notebookUI != null)

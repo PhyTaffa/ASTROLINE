@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public class ScannerUIManager : MonoBehaviour {
 
+    
+    //still confused at what all this does (sezima things?)
     private const string prefsKey = "HasScannedAny";
     
-    public GameObject ScanUI;
+   
     public Slider scanProgressSlider;
     public TextMeshProUGUI scanProgressText;
     [SerializeField] private int totalScannables = 15;
