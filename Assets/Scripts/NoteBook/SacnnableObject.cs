@@ -11,7 +11,7 @@ public class ScannableObject : MonoBehaviour
         if (scanData == null) {
             
             //it's kworking, dont worry about messages about "happy" shit
-            scanData = Resources.Load<ScanData>("Scriptable Object/ScanData/GenericScanData");
+            scanData = Resources.Load<ScanData>("Scriptable Object/Scan Data/GenericScanData");
             
             if (scanData == null){
                 
