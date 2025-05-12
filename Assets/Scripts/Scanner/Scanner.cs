@@ -2,9 +2,8 @@
 using System.Collections;
 using UnityEngine;
 
-public class Scanner : MonoBehaviour{
-    
-
+public class Scanner : MonoBehaviour
+{
     public float scanRange = 5f;
     public LayerMask scannableLayer;
     public float scanTime = 2f;

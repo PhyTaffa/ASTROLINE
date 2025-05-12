@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScannableObject : MonoBehaviour {
-    
+public class ScannableObject : MonoBehaviour 
+{
     public ScanData scanData;
 
     private void Awake() {
@@ -11,7 +11,7 @@ public class ScannableObject : MonoBehaviour {
         if (scanData == null) {
             
             //it's kworking, dont worry about messages about "happy" shit
-            scanData = Resources.Load<ScanData>("ScanData/GenericScanData");
+            scanData = Resources.Load<ScanData>("Scriptable Object/ScanData/GenericScanData");
             
             if (scanData == null){
                 
