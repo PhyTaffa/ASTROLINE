@@ -29,17 +29,33 @@ public class ShipCameraManager : MonoBehaviour {
 
     void Update() {
         
-        if (canSwitch && Input.GetKeyDown(KeyCode.E)){
-            usingAlt = !usingAlt;
-            shipCamera.enabled = !usingAlt;
-            planetCamera.enabled = usingAlt;
-            interactPrompt.SetActive(!usingAlt && canSwitch);
-            computerUI.SetActive(usingAlt);
-            movementController.enabled = !usingAlt;
-            Cursor.visible = usingAlt;
-            Cursor.lockState = usingAlt ? CursorLockMode.None : CursorLockMode.Locked;
+        
+        if (canSwitch)
+        {
+            if (!usingAlt && Input.GetKeyDown(KeyCode.E))
+            {
             
-  
+                usingAlt = true;
+                shipCamera.enabled = false;
+                planetCamera.enabled = true;
+                interactPrompt.SetActive(false);
+                computerUI.SetActive(true);
+                movementController.enabled = false;
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            else if (usingAlt && Input.GetKeyDown(KeyCode.Escape))
+            {
+               
+                usingAlt = false;
+                shipCamera.enabled = true;
+                planetCamera.enabled = false;
+                interactPrompt.SetActive(true);
+                computerUI.SetActive(false);
+                movementController.enabled = true;
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
         }
     }
     public void SetCanSwitch(bool allow) {

@@ -7228,52 +7228,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entries:
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
-  - prefsKey: 
-    infoHidder: {fileID: 0}
+  - prefsKey: HAS_SCANNED_CRAB_COMMUNE_DEVELOPING
+    infoHidder: {fileID: 294575971}
+  - prefsKey: HAS_SCANNED_CRAB_COMMUNE_FULLY_DEVELOPED
+    infoHidder: {fileID: 1466140207}
+  - prefsKey: HAS_SCANNED_SPONGE_STONE
+    infoHidder: {fileID: 1122080346}
+  - prefsKey: HAS_SCANNED_SPONGE_STONE_INVERTED
+    infoHidder: {fileID: 1035105410}
+  - prefsKey: HAS_SCANNED_TOWERING_UNRAVELER_YOUNG
+    infoHidder: {fileID: 595224175}
+  - prefsKey: HAS_SCANNED_TOWERING_UNRAVELER_JUVENILE
+    infoHidder: {fileID: 1691776364}
+  - prefsKey: HAS_SCANNED_TOWERING_UNRAVELER_ADULT
+    infoHidder: {fileID: 1257264007}
+  - prefsKey: HAS_SCANNED_VIOLET_SPIKEWEED
+    infoHidder: {fileID: 635656381}
+  - prefsKey: HAS_SCANNED_CLUSTERED_SLIME_MOLD
+    infoHidder: {fileID: 142364879}
+  - prefsKey: HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_YOUNG
+    infoHidder: {fileID: 1047249321}
+  - prefsKey: HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_JUVENILE
+    infoHidder: {fileID: 1727913024}
+  - prefsKey: HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_ADULT
+    infoHidder: {fileID: 1193116660}
+  - prefsKey: HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_YOUNG
+    infoHidder: {fileID: 696332515}
+  - prefsKey: HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_JUVENILE
+    infoHidder: {fileID: 2011891520}
+  - prefsKey: HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_ADULT
+    infoHidder: {fileID: 804196601}
+  - prefsKey: HAS_SCANNED_GREATER_LEMON_SLUG
+    infoHidder: {fileID: 1361507117}
+  - prefsKey: HAS_SCANNED_AXOLOWYRM
+    infoHidder: {fileID: 2042485155}
+  - prefsKey: HAS_SCANNED_SHOCKSHIELD_CRAB
+    infoHidder: {fileID: 128180837}
+  - prefsKey: HAS_SCANNED_BROODBACK_FROG_UNBOUND
+    infoHidder: {fileID: 857903566}
+  - prefsKey: HAS_SCANNED_BROODBACK_FROG_EGGBOUND
+    infoHidder: {fileID: 1477861896}
+  - prefsKey: HAS_SCANNED_BROODBELLY_FROG
+    infoHidder: {fileID: 244923197}
+  - prefsKey: HAS_SCANNED_TRAILING_LANDSTAR
+    infoHidder: {fileID: 1913592466}
+  - prefsKey: HAS_SCANNED_WANDERING_SKY_JELLY
+    infoHidder: {fileID: 757682672}
+  - prefsKey: HAS_SCANNED_HALF_HEADED_AVIAN
+    infoHidder: {fileID: 2101564189}
 --- !u!1 &268196131
 GameObject:
   m_ObjectHideFlags: 0
@@ -12697,7 +12699,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -20218,7 +20220,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1536452070
 RectTransform:
   m_ObjectHideFlags: 0
