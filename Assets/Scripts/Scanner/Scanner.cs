@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class Scanner : MonoBehaviour
 {
-    public float scanRange = 5f;
+    [SerializeField, Tooltip("Current scan range, auto-adjusted based on upgrades.")]
+    private float scanRange;
+    private bool isZoomed = false;
+    [SerializeField] private Transform cameraTransform;
+
     public LayerMask scannableLayer;
     public float scanTime = 2f;
     public Material highlightMaterial;
@@ -60,13 +64,27 @@ public class Scanner : MonoBehaviour
         GOBuffer.Enqueue(null);
         GOBuffer.Enqueue(null);
 
-        rayOrigin = transform;
+        rayOrigin = cameraTransform;
         
+        scanRange = 5f;
+
         HideAlreadyScanned();
     }
 
     void Update(){
         
+        
+        if (PlayerPrefs.GetInt("UpgradeBlueEnabled", 0) == 1){
+            
+            if (Input.mouseScrollDelta.y != 0) {
+                isZoomed = !isZoomed;
+                scanRange = isZoomed ? 10f : 5f;
+            }
+            
+        }else{
+            scanRange = 5f;
+        }
+
         // cheat O to change all to false and P to true
         if (Input.GetKeyDown(KeyCode.O)){
             
@@ -336,4 +354,12 @@ public class Scanner : MonoBehaviour
             originalMaterial       = null;
         }
     }
+    
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(cameraTransform.position, cameraTransform.position + cameraTransform.forward * scanRange);
+        Gizmos.DrawWireSphere(cameraTransform.position + cameraTransform.forward * scanRange, 0.2f);
+    }
+
 }
