@@ -8,12 +8,10 @@ public class CameraManager : MonoBehaviour{
     [SerializeField] private GameObject fpRig;
     [SerializeField] private GameObject thirdPersonRoot;
 
-    [SerializeField] private Canvas firstPersonUI;
-    [SerializeField] private Canvas thirdPersonUI;
-
     private KeyCode switchKey = KeyCode.Q;
     [SerializeField] private GameObject scannerUIRoot;
-
+    [SerializeField] private GameObject tpUI;
+    
     private MonoBehaviour[] firstPersonScripts;
     private MonoBehaviour[] thirdPersonScripts;
 
@@ -45,7 +43,10 @@ public class CameraManager : MonoBehaviour{
         
         if (Input.GetKeyDown(switchKey)){
             isFirstPersonActive = !isFirstPersonActive;
+            
+            
             fpRig.SetActive(isFirstPersonActive);
+            
             SetCameraState(isFirstPersonActive);
         }
     }
@@ -60,9 +61,10 @@ public class CameraManager : MonoBehaviour{
 
         foreach (MonoBehaviour script in thirdPersonScripts)
             script.enabled = !firstPersonActive;
-
-        if (scannerUIRoot != null){}
-            scannerUIRoot.SetActive(firstPersonActive);
+        
+        //scannerUIRoot.SetActive(firstPersonActive);
+        //tpUI.SetActive(!firstPersonActive);
+            
     }
 
 

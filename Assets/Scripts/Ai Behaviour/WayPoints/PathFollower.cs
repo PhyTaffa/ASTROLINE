@@ -50,6 +50,14 @@
         }
 
         /// <summary>
+        /// Called to continue the path of the ai agent
+        /// </summary>
+        public void ContinueFollowingPath()
+        {
+            isMoving = true;
+        }
+
+        /// <summary>
         /// Called to stop the ai agent after it reaches the given end node
         /// </summary>
         public void StopFollowingPath()

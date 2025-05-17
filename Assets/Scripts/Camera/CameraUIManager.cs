@@ -6,7 +6,10 @@ public class CameraUIManager : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera firstPersonCam;
     [SerializeField] private CinemachineVirtualCamera thirdPersonCam;
-    [SerializeField] private GameObject firstPersonUI;
+
+    [SerializeField] private GameObject firstPersonUIRoot; // scannerUIRoot
+    [SerializeField] private GameObject thirdPersonUIRoot;
+    
     [SerializeField] private CinemachineBrain cinemachineBrain;
 
     private Coroutine blendRoutine;
@@ -14,7 +17,10 @@ public class CameraUIManager : MonoBehaviour
     private void OnEnable()
     {
         cinemachineBrain.m_CameraActivatedEvent.AddListener(OnCameraActivated);
-        firstPersonUI.SetActive(false);
+        
+        //we are starting in 3rd person
+        firstPersonUIRoot.SetActive(false);
+        thirdPersonUIRoot.SetActive(true);
     }
 
     private void OnDisable()
@@ -27,22 +33,27 @@ public class CameraUIManager : MonoBehaviour
         if (blendRoutine != null)
             StopCoroutine(blendRoutine);
         
-        //works in reverser, idk
+        firstPersonUIRoot.SetActive(false);
+        thirdPersonUIRoot.SetActive(false);
+
+        float blendTime = GetBlendTime(fromCam, toCam);
+
         if (fromCam == firstPersonCam)
         {
-            float blendTime = GetBlendTime(fromCam, toCam);
-            blendRoutine = StartCoroutine(ShowUIAfterBlend(blendTime));
+            //show FP UI after the blend
+            blendRoutine = StartCoroutine(ShowUIAfterBlend(firstPersonUIRoot, blendTime));
         }
-        else
+        else if (fromCam == thirdPersonCam)
         {
-            firstPersonUI.SetActive(false);
+            //show TP UI immediately
+            thirdPersonUIRoot.SetActive(true);
         }
     }
 
-    private IEnumerator ShowUIAfterBlend(float delay)
+    private IEnumerator ShowUIAfterBlend(GameObject uiToShow, float delay)
     {
         yield return new WaitForSeconds(delay);
-        firstPersonUI.SetActive(true);
+        uiToShow.SetActive(true);
     }
 
     private float GetBlendTime(ICinemachineCamera fromCam, ICinemachineCamera toCam)

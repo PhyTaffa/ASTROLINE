@@ -10,7 +10,7 @@ public class Fauna_WanderingingState : AStateBehaviour
     [SerializeField] private PlayerDetectionTrigger playerDetection;// Reference to the PathFollower script
 
     [Header("Wander Settings")]
-    [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private float rotationSpeed = 40f;
     [SerializeField] private float threshold = 10f;
 
     [Header("Thirst Settings")]
@@ -18,6 +18,10 @@ public class Fauna_WanderingingState : AStateBehaviour
     
     [Header("Sleep Settings")]
     [SerializeField] private bool isSupposedToSleep = false;
+    
+    [Header("Idle Settings")]
+    [SerializeField] private float timetoGoIdle = 40f;
+    
     
     private List<Node> path;
     private int currentIndex = 0;
@@ -27,7 +31,7 @@ public class Fauna_WanderingingState : AStateBehaviour
 
     [Header("Debug")]
     [SerializeField] private float currThirstTimer = 0f;
-    
+    [SerializeField] private float currIdleTimer = 0f;
     
     private bool hasFinishedCurrentPath = false;
    
@@ -79,44 +83,20 @@ public class Fauna_WanderingingState : AStateBehaviour
         //decrease thirst
         currThirstTimer -= Time.deltaTime;
         
-        // if (isMoving && path != null && currentIndex < path.Count)
-        // {
-        //     Transform target = path[currentIndex].GetID().transform;
-        //     Vector3 targetPos = target.position;
-        //     Vector3 direction = (targetPos - transform.position).normalized;
-        //
-        //     // Rotate toward target
-        //     if (direction != Vector3.zero)
-        //     {
-        //         Quaternion targetRotation = Quaternion.LookRotation(direction);
-        //         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime * 100f);
-        //     }
-        //
-        //     // Move toward target
-        //     // Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
-        //     // rb.MovePosition(newPosition);
-        //     transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
-        //
-        //     
-        //     // Proceed to next node if close enough
-        //     if (Vector3.Distance(transform.position, targetPos) < threshold)
-        //     {
-        //         currentIndex++;
-        //         if (currentIndex >= path.Count)
-        //         {
-        //             isMoving = false;
-        //             Invoke(nameof(GenerateNewPath), 1f); // Optional: small delay before new path
-        //         }
-        //     }
-        // }
+        
+
+        if (playerDetection.IsPlayerInside)
+        {
+            pathFollower.StopFollowingPath();
+        }
+        else
+        {
+            pathFollower.ContinueFollowingPath();
+        }
     }
 
     public override int StateTransitionCondition()
     {
-        if (playerDetection.IsPlayerInside)
-        {
-            return (int)EFaunaState.Reacting;
-        }
         
         // if (timer < 0)
         // {
@@ -135,6 +115,7 @@ public class Fauna_WanderingingState : AStateBehaviour
                 return (int)EFaunaState.Sleepy;
             }
 
+            
             //necessary to allow repathing before and or after transition
             pathFollower.GenerateNewPath();
             hasFinishedCurrentPath = false;

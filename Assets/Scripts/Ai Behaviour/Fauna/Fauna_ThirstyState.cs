@@ -65,10 +65,10 @@ public class Fauna_ThirstyState : AStateBehaviour
     {
         if (hasArrivedAtWater && currentDrinkTimer < 0f)
         {
-            if (playerDetection.IsPlayerInside)
-            {
-                return (int)EFaunaState.Reacting;
-            }
+            // if (playerDetection.IsPlayerInside)
+            // {
+            //     return (int)EFaunaState.Reacting;
+            // }
             
             pathFollower.GenerateNewPath();
             hasFinishedCurrentPath = false;
