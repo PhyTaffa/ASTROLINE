@@ -35,7 +35,7 @@ public class PickUp : MonoBehaviour
         
         if (Input.GetMouseButtonDown(1))
         {
-            DropFirstHeldItem();
+            DropHeldObject();
         }
     }
 
@@ -49,7 +49,7 @@ public class PickUp : MonoBehaviour
 
             if (item != null)
             {
-                TryPickUp(other.gameObject, item);
+                PickUpObject(item);
             }
             else
             {
@@ -58,52 +58,35 @@ public class PickUp : MonoBehaviour
         }
     }
 
-    private void TryPickUp(GameObject obj, PickupItem item)
+    private void PickUpObject(PickupItem item)
     {
-        //PickupItem item = obj.GetComponent<PickupItem>();
-        if (!HasItem(item.itemType))
-        {
-            //currentHeldItems |= item.itemType;
-            heldObjects[item.itemType] = item.gameObject;
-            obj.SetActive(false);
-            Debug.Log($"Picked up: {item.itemType}");
-        }
-        else
-        {
-            Debug.Log($"Already have: {item.itemType}");
-        }
-    }
-    
-    
-    private void DropFirstHeldItem()
-    {
-        foreach (var kvp in heldObjects)
-        {
-            HeldItems itemType = kvp.Key;
-            GameObject obj = kvp.Value;
-
-            // Move to drop position
-            Vector3 dropPos = dropOrigin ? dropOrigin.position : transform.position + transform.forward;
-            obj.transform.position = dropPos;
-            obj.transform.rotation = Quaternion.identity;
-            obj.SetActive(true);
-
-            // Optionally reset physics
-            Rigidbody rb = obj.GetComponent<Rigidbody>();
-            if (rb)
-            {
-                rb.velocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-            }
-
-            heldObjects.Remove(itemType);
-            Debug.Log("Dropped: " + itemType);
-            break;
-        }
+        heldObject = item.gameObject;
+        heldObject.SetActive(false);
+        Debug.Log("Picked up: " + heldObject.name);
     }
 
-    private bool HasItem(HeldItems item)
+    private void DropHeldObject()
     {
-        return (currentHeldItems & item) != 0;
+        if (heldObject == null) return;
+
+        Vector3 dropPos = dropOrigin ? dropOrigin.position : transform.position + transform.forward;
+        heldObject.transform.position = dropPos;
+        heldObject.transform.rotation = Quaternion.identity;
+        heldObject.SetActive(true);
+
+        // Rigidbody rb = heldObject.GetComponent<Rigidbody>();
+        // if (rb)
+        // {
+        //     rb.velocity = Vector3.zero;
+        //     rb.angularVelocity = Vector3.zero;
+        // }
+
+        Debug.Log($"Dropped: {heldObject.name}");
+        heldObject = null;
     }
+
+    // private bool HasItem(HeldItems item)
+    // {
+    //     return (currentHeldItems & item) != 0;
+    // }
 }
