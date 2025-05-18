@@ -12,10 +12,13 @@ public class ShipCameraManager : MonoBehaviour {
     public ComputerUISlider sliderUiLogic;
     public GameObject wasdUi;
     
+    public ComputerUIManager uiManager;
+    
     private bool usingAlt = false;
     private bool canSwitch = false;
 
     private void Awake() {
+        
         computerUI.SetActive(false);
     }
 
@@ -46,10 +49,12 @@ public class ShipCameraManager : MonoBehaviour {
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
                 wasdUi.SetActive(false);
-            }
-            else if (usingAlt && Input.GetKeyDown(KeyCode.Escape))
-            {
-               
+                
+            }else if (usingAlt && Input.GetKeyDown(KeyCode.Escape)){
+                
+                if (uiManager.settingsMenu.activeSelf || uiManager.upgradeMenu.activeSelf || uiManager.FaunaMenu.activeSelf || uiManager.FloraMenu.activeSelf){
+                    return;
+                }
                 usingAlt = false;
                 shipCamera.enabled = true;
                 planetCamera.enabled = false;

@@ -8,6 +8,8 @@ public class ComputerUISlider : MonoBehaviour {
     public GameObject  computerButton;
     public GameObject backgroundButton;
     
+    public GameObject planetControlsUI;
+    
     private float slideDistance = 200f;
     private float slideTime = 0.5f;
 
@@ -26,6 +28,8 @@ public class ComputerUISlider : MonoBehaviour {
 
         if (computerButton!= null) computerButton.SetActive(false);
         if (backgroundButton!= null) backgroundButton.SetActive(true);
+        
+        if (planetControlsUI != null) planetControlsUI.SetActive(false);
     }
 
     void Update() {
@@ -41,6 +45,10 @@ public class ComputerUISlider : MonoBehaviour {
         else if (isAtDown) {
             if (computerButton!= null) computerButton.SetActive(true);
             if (backgroundButton!= null) backgroundButton.SetActive(false);
+        }
+        
+        if (planetControlsUI != null) {
+            planetControlsUI.SetActive(isAtDown && !isMoving);
         }
     }
 
