@@ -10,6 +10,7 @@ public class ShipCameraManager : MonoBehaviour {
     public GameObject computerUI;
     public ShipPlayerController movementController; 
     public ComputerUISlider sliderUiLogic;
+    public GameObject wasdUi;
     
     private bool usingAlt = false;
     private bool canSwitch = false;
@@ -25,6 +26,7 @@ public class ShipCameraManager : MonoBehaviour {
         computerUI.SetActive(false);
         //sliderUiLogic.computerButton.SetActive(false);
         //sliderUiLogic.backgroundButton.SetActive(false);
+        wasdUi.SetActive(true);
     }
 
     void Update() {
@@ -43,6 +45,7 @@ public class ShipCameraManager : MonoBehaviour {
                 movementController.enabled = false;
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
+                wasdUi.SetActive(false);
             }
             else if (usingAlt && Input.GetKeyDown(KeyCode.Escape))
             {
@@ -55,6 +58,7 @@ public class ShipCameraManager : MonoBehaviour {
                 movementController.enabled = true;
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
+                wasdUi.SetActive(true);
             }
         }
     }

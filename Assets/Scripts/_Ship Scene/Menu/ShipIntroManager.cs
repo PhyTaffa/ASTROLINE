@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShipIntroManager : MonoBehaviour
-{
+public class ShipIntroManager : MonoBehaviour{
+    
     public Camera introCamera;
     public Camera shipCamera;
     public Transform cameraTargetPosition;
@@ -24,6 +24,8 @@ public class ShipIntroManager : MonoBehaviour
     private float timer = 0f;
     private Vector3 startPos;
     private Quaternion startRot;
+    
+    public GameObject wasdUi;
 
     
     //delete the stuff for enabeling or disableing scripts. make bools for each cammera to enable states
@@ -35,6 +37,8 @@ public class ShipIntroManager : MonoBehaviour
         shipCamera.enabled  = false;
         pressAnyKeyText.gameObject.SetActive(false);
 
+        wasdUi.SetActive(false);
+        
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         
