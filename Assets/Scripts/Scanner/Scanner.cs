@@ -8,7 +8,7 @@ public class Scanner : MonoBehaviour
     private float scanRange;
     private bool isZoomed = false;
     [SerializeField] private Transform cameraTransform;
-
+    [SerializeField] private Animator zoomAnimator;
     public LayerMask scannableLayer;
     public float scanTime = 2f;
     public Material highlightMaterial;
@@ -83,8 +83,16 @@ public class Scanner : MonoBehaviour
             
         }else{
             scanRange = 5f;
+
         }
 
+        if (scanRange == 5f){
+            
+            zoomAnimator.SetBool("MaxZoom", false);
+        }else {
+            zoomAnimator.SetBool("MaxZoom", true);
+        }
+        
         // cheat O to change all to false and P to true
         if (Input.GetKeyDown(KeyCode.O)){
             
