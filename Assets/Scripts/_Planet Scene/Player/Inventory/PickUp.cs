@@ -18,6 +18,8 @@ public class PickUp : MonoBehaviour
     //private Dictionary<HeldItems, GameObject> heldObjects = new();
     private GameObject heldObject = null;
     private GameObject heldPreviewClone = null;
+
+    private NotebookPages notebook;
     
     private void Awake()
     {
@@ -29,23 +31,33 @@ public class PickUp : MonoBehaviour
         
         if (previewImage != null)
             previewImage.enabled = false;
+        
+        notebook = FindObjectOfType<NotebookPages>();
+        if (notebook == null)
+        {
+            Debug.LogError("Notebook Pages could not be found");
+        }
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (notebook != null)// .!NotebookOpen to avoid picking and dropping while in notebook
         {
-            triggerCollider.enabled = true;
+            if (Input.GetMouseButtonDown(0))
+            {
+                triggerCollider.enabled = true;
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                triggerCollider.enabled = false;
+            }
+            
+            if (Input.GetMouseButtonDown(1))
+            {
+                DropHeldObject();
+            }
         }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            triggerCollider.enabled = false;
-        }
-        
-        if (Input.GetMouseButtonDown(1))
-        {
-            DropHeldObject();
-        }
+
     }
 
     private void OnTriggerStay(Collider other)

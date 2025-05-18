@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour{
         
         HandleInputs();
         
-        
+        //RotateTowardsMovement();
         // Debug.DrawRay(this.transform.position, this.transform.forward * 10f, Color.green);
         // Debug.DrawRay(this.transform.position, this.transform.right * 10f, Color.yellow);
 
@@ -62,21 +62,6 @@ public class PlayerController : MonoBehaviour{
         //new
         // AlignToPlanetSurface();
         // MovePlayer();
-        
-        // if (!isFirstPersonActive && activeCameraTransform != null)
-        // {
-        //     Vector3 camForward = activeCameraTransform.forward;
-        //     Vector3 projectedForward = Vector3.ProjectOnPlane(camForward, tf.up).normalized;
-        //
-        //     if (projectedForward.sqrMagnitude > 0.001f)
-        //     {
-        //         Quaternion targetRot = Quaternion.LookRotation(projectedForward, tf.up);
-        //         tf.rotation = Quaternion.Slerp(tf.rotation, targetRot, rotateSpeed * Time.deltaTime);
-        //     }
-        // }
-
-        //Debug.DrawRay(this.transform.position, this.transform.up * 10f, Color.magenta);
-        
     }
 
     private void FixedUpdate(){
@@ -120,6 +105,37 @@ public class PlayerController : MonoBehaviour{
 
         //after calculating the alleged good movements, we apply it
         input = moveDirRelative;
+        
+        
+        Vector3 flatMoveDir = Vector3.ProjectOnPlane(moveDirWorld, gravityUp).normalized;
+
+        if (flatMoveDir.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(flatMoveDir, gravityUp);
+            tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+        }
+        // Debug.DrawRay(tf.position, flatMoveDir * 20f, Color.red);    // Movement direction
+        // Debug.DrawRay(tf.position, gravityUp * 20f, Color.green);    // Local up (gravity)
+        // Debug.DrawRay(tf.position, tf.forward * 20f, Color.blue);    // Current forward
+    }
+    
+    private void RotateTowardsMovement()
+    {
+        if (input.sqrMagnitude < 0.01f) return;
+
+        Vector3 moveDirWorld = tf.TransformDirection(input);
+        Vector3 projectedDir = Vector3.ProjectOnPlane(moveDirWorld, tf.up).normalized;
+
+        // Current forward, projected on the same plane
+        Vector3 currentForward = Vector3.ProjectOnPlane(tf.forward, tf.up).normalized;
+
+        // Calculate signed angle between current forward and desired movement dir
+        float angle = Vector3.SignedAngle(currentForward, projectedDir, tf.up);
+
+        // Rotate smoothly around the up axis
+        float maxStep = rotateSpeed * Time.deltaTime;
+        float step = Mathf.Clamp(angle, -maxStep, maxStep);
+        tf.Rotate(tf.up, step, Space.World);
     }
 
     //
