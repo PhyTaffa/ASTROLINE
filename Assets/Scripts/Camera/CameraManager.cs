@@ -20,6 +20,7 @@ public class CameraManager : MonoBehaviour{
     private CinemachineVirtualCamera firstPersonCam;
     private CinemachineVirtualCamera thirdPersonCam;
     
+    
     public static bool ScanModeActive { get; private set; }
     
     void Start(){

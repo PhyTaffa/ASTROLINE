@@ -18,8 +18,9 @@ public class PlayerController : MonoBehaviour{
     //movement according to camera
     private Transform activeCameraTransform;
     [SerializeField] private CinemachineBrain cinemachineBrain;
-
-    private float i = 0f;
+    
+    private CameraManager cameraManager;
+    
     private void Start(){
         
         rb = GetComponent<Rigidbody>();
@@ -33,6 +34,8 @@ public class PlayerController : MonoBehaviour{
         // Initialize with the current virtual camera
         if (cinemachineBrain.ActiveVirtualCamera is CinemachineVirtualCamera cam)
             activeCameraTransform = cam.transform;
+
+        cameraManager = FindObjectOfType<CameraManager>();
     }
 
     void OnDestroy()
@@ -134,14 +137,18 @@ public class PlayerController : MonoBehaviour{
         
         
         //most likely add a if that checks if it's in first person or not to disable or not rotation
-        //rotation
-        Vector3 flatMoveDir = Vector3.ProjectOnPlane(moveDirWorld, gravityUp).normalized;
-        
-        if (flatMoveDir.sqrMagnitude > 0.01f)
+        if (!cameraManager.IsFirstPersonActive())
         {
-            Quaternion targetRotation = Quaternion.LookRotation(flatMoveDir, gravityUp);
-            tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+            //rotation
+            Vector3 flatMoveDir = Vector3.ProjectOnPlane(moveDirWorld, gravityUp).normalized;
+            
+            if (flatMoveDir.sqrMagnitude > 0.01f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(flatMoveDir, gravityUp);
+                tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+            }
         }
+
     }
     
     private void RotateTowardsMovement()

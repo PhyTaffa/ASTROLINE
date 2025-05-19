@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
+using Cinemachine;
 using UnityEngine;
 
 public class Scanner : MonoBehaviour
@@ -65,32 +66,48 @@ public class Scanner : MonoBehaviour
     private float currFOV = 60f;
     private float maxFOV = 60f;
     private float minFOV = 30f;
-    private float sensitivity = 1f;
-    
+    private float sensitivity = 120f;
+    private Transform child;
+    private CinemachineVirtualCamera vCam;
     
     void Start(){
 
         GOBuffer.Enqueue(null);
         GOBuffer.Enqueue(null);
 
+        cameraTransform = mainCamera.GetComponent<Transform>();
+        
         rayOrigin = cameraTransform;
         
         scanRange = 5f;
 
-        cameraTransform = mainCamera.GetComponent<Transform>();
+        
         
         HideAlreadyScanned();
+        
+        //virtual cam shid
+        child = this.transform.GetChild(0);
+        vCam = child.GetComponent<CinemachineVirtualCamera>();
     }
 
     void Update(){
         
         
         if (PlayerPrefs.GetInt("UpgradeBlueEnabled", 0) == 1){
-            
             if (Input.mouseScrollDelta.y != 0) {
                 isZoomed = !isZoomed;
                 scanRange = isZoomed ? 10f : 5f;
             }
+            // if (zoomWheel > 0)
+            // {
+            //     isZoomed = false;
+            //     scanProgress = 5f;
+            // }
+            // else if (zoomWheel < 0)
+            // {
+            //     isZoomed = true;
+            //     scanProgress = 10f;
+            // }
             
             
             
@@ -193,7 +210,7 @@ public class Scanner : MonoBehaviour
         }
 
      
-        
+      
         if (Input.GetKey(KeyCode.E)){
             ScanForObjects();
         }else{
@@ -204,10 +221,32 @@ public class Scanner : MonoBehaviour
 
     private void Zoom()
     {
-        //currFOV += Input.GetAxis("Mouse ScrollWheel") * sensitivity;
-        currFOV = Mathf.Clamp(currFOV, minFOV, maxFOV);
+        float zoomDelta = Input.mouseScrollDelta.y;
+
+        //float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
+        // if (zoomDelta != 0)
+        // {
+        //     if(currFOV == maxFOV)
+        //         currFOV = minFOV;
+        //     else
+        //     {
+        //         currFOV = maxFOV;
+        //     }
+        // }
         
-        mainCamera.fieldOfView = currFOV;
+        if (zoomDelta > 0)
+        {
+            currFOV = maxFOV;
+        }
+        else if (zoomDelta < 0)
+        {
+            currFOV = minFOV;
+        }
+         
+        //currFOV += Input.GetAxis("Mouse ScrollWheel") * sensitivity;
+        //currFOV = Mathf.Clamp(currFOV, minFOV, maxFOV);
+        
+        vCam.m_Lens.FieldOfView = currFOV;
     }
 
     void ScanForObjects(){
