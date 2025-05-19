@@ -192,7 +192,7 @@ public class Scanner : MonoBehaviour
             Debug.Log("All scan flags reset to TRUE");
         }
 
-        Zoom();
+     
         
         if (Input.GetKey(KeyCode.E)){
             ScanForObjects();
@@ -204,7 +204,7 @@ public class Scanner : MonoBehaviour
 
     private void Zoom()
     {
-        currFOV += Input.GetAxis("Mouse ScrollWheel") * sensitivity;
+        //currFOV += Input.GetAxis("Mouse ScrollWheel") * sensitivity;
         currFOV = Mathf.Clamp(currFOV, minFOV, maxFOV);
         
         mainCamera.fieldOfView = currFOV;
