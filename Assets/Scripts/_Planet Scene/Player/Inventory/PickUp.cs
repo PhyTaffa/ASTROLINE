@@ -41,7 +41,7 @@ public class PickUp : MonoBehaviour
 
     private void Update()
     {
-        if (notebook != null)// .!NotebookOpen to avoid picking and dropping while in notebook
+        if (notebook)// .!NotebookOpen to avoid picking and dropping while in notebook
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -83,7 +83,7 @@ public class PickUp : MonoBehaviour
     {
         heldObject = item.gameObject;
         heldObject.SetActive(false);
-        Debug.Log("Picked up: " + heldObject.name);
+        Debug.Log($"Picked up: {heldObject.name}");
         
         ShowHeldItemPreview(heldObject);
     }

@@ -62,10 +62,44 @@ public class PlayerController : MonoBehaviour{
         //new
         // AlignToPlanetSurface();
         // MovePlayer();
+        
+        // if (input.sqrMagnitude > 0.01f)
+        // {
+        //     //get the direction to face
+        //     Vector3 gravityUp = tf.up;
+        //     Vector3 targetForward = Vector3.ProjectOnPlane(input, gravityUp).normalized;
+        //
+        //     //rotates the character to face it
+        //     Quaternion targetRot = Quaternion.LookRotation(targetForward, gravityUp);
+        //     tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRot, rotateSpeed * Time.deltaTime);
+        //
+        //     //move forward based on the character's current forward
+        //     // Vector3 move = tf.forward * moveSpeed * Time.deltaTime;
+        //     // rb.MovePosition(rb.position + move);
+        //     
+        //     rb.velocity = tf.forward * moveSpeed;
+        // }
     }
 
-    private void FixedUpdate(){
+    private void FixedUpdate()
+    {
         rb.MovePosition(rb.position + transform.TransformDirection(input * (moveSpeed * Time.fixedDeltaTime)));
+       /* if (input.sqrMagnitude > 0.01f)
+        {
+            //get the direction to face
+            Vector3 gravityUp = tf.up;
+            Vector3 targetForward = Vector3.ProjectOnPlane(input, gravityUp).normalized;
+
+            //rotates the character to face it
+            Quaternion targetRot = Quaternion.LookRotation(targetForward, gravityUp);
+            tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRot, rotateSpeed * Time.fixedDeltaTime);
+
+            //move forward based on the character's current forward
+            // Vector3 move = tf.forward * moveSpeed * Time.fixedDeltaTime;
+            // rb.MovePosition(rb.position + move);
+            
+            rb.velocity = tf.forward * moveSpeed;
+        }*/
     }
 
     private void HandleInputs()
@@ -91,32 +125,23 @@ public class PlayerController : MonoBehaviour{
         
         //mashing the input with the cam's vector reference
         Vector3 moveDirWorld = camRight * inputDirection.x + camForward * inputDirection.z;
-
-        // Vector3 yawDirection = Vector3.ProjectOnPlane(moveDirWorld, gravityUp).normalized;
-        // if (yawDirection.sqrMagnitude > 0.001f)
-        // {
-        //     Quaternion targetRotation = Quaternion.LookRotation(yawDirection, gravityUp);
-        //     tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotateSpeed * Time.deltaTime);
-        // }
-
+        
         //this is the magical line that makes it work
         Vector3 moveDirRelative = tf.InverseTransformDirection(moveDirWorld);
-
-
+        
         //after calculating the alleged good movements, we apply it
         input = moveDirRelative;
         
         
+        //most likely add a if that checks if it's in first person or not to disable or not rotation
+        //rotation
         Vector3 flatMoveDir = Vector3.ProjectOnPlane(moveDirWorld, gravityUp).normalized;
-
+        
         if (flatMoveDir.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(flatMoveDir, gravityUp);
             tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotateSpeed * Time.deltaTime);
         }
-        // Debug.DrawRay(tf.position, flatMoveDir * 20f, Color.red);    // Movement direction
-        // Debug.DrawRay(tf.position, gravityUp * 20f, Color.green);    // Local up (gravity)
-        // Debug.DrawRay(tf.position, tf.forward * 20f, Color.blue);    // Current forward
     }
     
     private void RotateTowardsMovement()
@@ -150,7 +175,7 @@ public class PlayerController : MonoBehaviour{
     //     Quaternion targetRot = Quaternion.FromToRotation(tf.up, gravityDir) * tf.rotation;
     //     tf.rotation = Quaternion.Slerp(tf.rotation, targetRot, rotateSpeed * Time.deltaTime);
     // }
-    //
+    
     // private void MovePlayer()
     // {
     //     if (input == Vector3.zero) return;

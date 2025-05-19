@@ -7,7 +7,8 @@ public class Scanner : MonoBehaviour
     [SerializeField, Tooltip("Current scan range, auto-adjusted based on upgrades.")]
     private float scanRange;
     private bool isZoomed = false;
-    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private Camera mainCamera;
+    private Transform cameraTransform;
     [SerializeField] private Animator zoomAnimator;
     public LayerMask scannableLayer;
     public float scanTime = 2f;
@@ -59,6 +60,14 @@ public class Scanner : MonoBehaviour
     private Queue<GameObject> GOBuffer = new Queue<GameObject>();
     [SerializeField] private int maxGOBufferSize = 2;
 
+    
+    //zoom var
+    private float currFOV = 60f;
+    private float maxFOV = 60f;
+    private float minFOV = 30f;
+    private float sensitivity = 1f;
+    
+    
     void Start(){
 
         GOBuffer.Enqueue(null);
@@ -68,6 +77,8 @@ public class Scanner : MonoBehaviour
         
         scanRange = 5f;
 
+        cameraTransform = mainCamera.GetComponent<Transform>();
+        
         HideAlreadyScanned();
     }
 
@@ -81,6 +92,8 @@ public class Scanner : MonoBehaviour
                 scanRange = isZoomed ? 10f : 5f;
             }
             
+            
+            
         }else{
             scanRange = 5f;
 
@@ -89,8 +102,12 @@ public class Scanner : MonoBehaviour
         if (scanRange == 5f){
             
             zoomAnimator.SetBool("MaxZoom", false);
+            
+            
         }else {
             zoomAnimator.SetBool("MaxZoom", true);
+
+            Zoom();
         }
         
         // cheat O to change all to false and P to true
@@ -174,6 +191,8 @@ public class Scanner : MonoBehaviour
             PlayerPrefs.Save();
             Debug.Log("All scan flags reset to TRUE");
         }
+
+        Zoom();
         
         if (Input.GetKey(KeyCode.E)){
             ScanForObjects();
@@ -181,6 +200,14 @@ public class Scanner : MonoBehaviour
             ResetScan();
         }
            
+    }
+
+    private void Zoom()
+    {
+        currFOV += Input.GetAxis("Mouse ScrollWheel") * sensitivity;
+        currFOV = Mathf.Clamp(currFOV, minFOV, maxFOV);
+        
+        mainCamera.fieldOfView = currFOV;
     }
 
     void ScanForObjects(){
