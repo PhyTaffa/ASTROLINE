@@ -21,6 +21,8 @@ public class PickUp : MonoBehaviour
 
     private NotebookPages notebook;
     
+    public event System.Action OnPickedUp;
+    
     private void Awake()
     {
         triggerCollider = GetComponent<Collider>();
@@ -86,6 +88,11 @@ public class PickUp : MonoBehaviour
         Debug.Log($"Picked up: {heldObject.name}");
         
         ShowHeldItemPreview(heldObject);
+        
+        //event to spawn mf under rock
+        //useless
+        //OnPickedUp?.Invoke();
+        item.SpawnMfUponBeignPickedUp();
     }
 
     private void DropHeldObject()

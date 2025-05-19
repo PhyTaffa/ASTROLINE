@@ -223,6 +223,8 @@ public class Scanner : MonoBehaviour
     {
         float zoomDelta = Input.mouseScrollDelta.y;
 
+        // it takes 2 tick for it to change yet the animator 1.
+        
         //float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
         // if (zoomDelta != 0)
         // {
