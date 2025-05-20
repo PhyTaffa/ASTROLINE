@@ -8,7 +8,7 @@ public class BatteryUI : MonoBehaviour {
 
     private float batteryTimer = 10f;
     private float maxTime = 10f;
-
+    private int currentBatteryIndex = 0;
     private bool isChargingZone = false; 
     // Set this via OnTriggerEnter/Exit later
 
@@ -27,7 +27,7 @@ public class BatteryUI : MonoBehaviour {
             batteryTimer += Time.deltaTime;
             
         } else {
-            batteryTimer -= Time.deltaTime;
+            batteryTimer -= Time.deltaTime * 0.1f;
         }
 
         batteryTimer = Mathf.Clamp(batteryTimer, 0f, maxTime);
@@ -40,9 +40,10 @@ public class BatteryUI : MonoBehaviour {
         if (batteryTimer > 8f) batteryLevel = 0;
         else if (batteryTimer > 6f) batteryLevel = 1;
         else if (batteryTimer > 4f) batteryLevel = 2;
-        else if (batteryTimer > 2f) batteryLevel = 3;
-        else batteryLevel = 4;
+        else if (batteryTimer > 0.01f) batteryLevel = 3;
+        else if (batteryTimer <= 0.01f) batteryLevel = 4;
 
+        currentBatteryIndex = batteryLevel; // <-- Save current battery state index
         SetBatteryLevel(batteryLevel);
     }
 
@@ -55,5 +56,9 @@ public class BatteryUI : MonoBehaviour {
     //add this trigger zone logic later:
     public void SetChargingZone(bool inZone) {
         isChargingZone = inZone;
+    }
+    
+    public int GetBatteryLevelIndex() {
+        return currentBatteryIndex;
     }
 }

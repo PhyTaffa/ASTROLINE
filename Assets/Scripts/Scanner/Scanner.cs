@@ -17,6 +17,11 @@ public class Scanner : MonoBehaviour
 
     public GameObject alreadyScannedUI; 
     
+    [SerializeField] private GameObject focusCenterRed;
+    [SerializeField] private GameObject noBatteryWarning;
+    private BatteryUI battery;
+
+    
     private const string HAS_SCANNED_ANY = "HAS_SCANNED_ANY";
 
     // Flora — Flowers
@@ -98,34 +103,18 @@ public class Scanner : MonoBehaviour
                 isZoomed = !isZoomed;
                 scanRange = isZoomed ? 10f : 5f;
             }
-            // if (zoomWheel > 0)
-            // {
-            //     isZoomed = false;
-            //     scanProgress = 5f;
-            // }
-            // else if (zoomWheel < 0)
-            // {
-            //     isZoomed = true;
-            //     scanProgress = 10f;
-            // }
-            
-            
             
         }else{
             scanRange = 5f;
 
         }
 
-        if (scanRange == 5f){
-            
-            zoomAnimator.SetBool("MaxZoom", false);
-            
-            
-        }else {
-            zoomAnimator.SetBool("MaxZoom", true);
+        bool isAtMaxZoom = scanRange > 5f;
+        zoomAnimator.SetBool("MaxZoom", isAtMaxZoom);
 
-            Zoom();
-        }
+        // Sync camera FOV with scan range
+        vCam.m_Lens.FieldOfView = isAtMaxZoom ? minFOV : maxFOV;
+
         
         // cheat O to change all to false and P to true
         if (Input.GetKeyDown(KeyCode.O)){
@@ -211,11 +200,42 @@ public class Scanner : MonoBehaviour
 
      
       
-        if (Input.GetKey(KeyCode.E)){
+        if (Input.GetKey(KeyCode.E)) {
+            
+            if (battery == null || !battery.isActiveAndEnabled) {
+                battery = FindObjectOfType<BatteryUI>();
+            }
+            
+            if (battery == null) {
+                focusCenterRed.SetActive(false);
+                ResetScan();
+                return;
+            }
+    
+            if (battery.GetBatteryLevelIndex() == 4) {
+
+                if (noBatteryWarning != null && !noBatteryWarning.activeSelf) {
+                    noBatteryWarning.SetActive(true); 
+                }
+
+                focusCenterRed.SetActive(false);
+                ResetScan();
+                return;
+            }
+
+            if (noBatteryWarning != null && noBatteryWarning.activeSelf) {
+                noBatteryWarning.SetActive(false);
+            }
+
+            focusCenterRed.SetActive(true);
             ScanForObjects();
-        }else{
+
+        } else {
+            focusCenterRed.SetActive(false);
             ResetScan();
         }
+
+
            
     }
 
@@ -223,8 +243,6 @@ public class Scanner : MonoBehaviour
     {
         float zoomDelta = Input.mouseScrollDelta.y;
 
-        // it takes 2 tick for it to change yet the animator 1.
-        
         //float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
         // if (zoomDelta != 0)
         // {
