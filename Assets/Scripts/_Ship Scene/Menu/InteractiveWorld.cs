@@ -19,7 +19,7 @@ public class InteractiveWorld : MonoBehaviour {
     private TrainStop pendingStop;
     private bool allowRotation = true;
 
-    [SerializeField] private string GivenScene = "Planet"; 
+    private string GivenScene = "Planet"; 
     
     void Start(){
         initialRotation = transform.rotation;

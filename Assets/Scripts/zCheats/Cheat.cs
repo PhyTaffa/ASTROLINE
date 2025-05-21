@@ -14,7 +14,7 @@ public class Cheat : MonoBehaviour
     [SerializeField] private Transform six;
     private Transform playerTransform;
     
-    [SerializeField] private GameObject sun;
+    // [SerializeField] private GameObject sun;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,34 +24,29 @@ public class Cheat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             playerTransform.position = one.position;
         }
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             playerTransform.position = second.position;
         }        
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             playerTransform.position = three.position;
         }        
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             playerTransform.position = four.position;
         }        
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             playerTransform.position = five.position;
         }
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.Alpha6))
         {
             playerTransform.position = six.position;
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            
         }
     }
 }
