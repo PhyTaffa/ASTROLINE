@@ -209,6 +209,7 @@ public class Scanner : MonoBehaviour
         }
 
      
+        //check waht's sacnnable
         HandleOutlineHighlight(); // new
       
         if (Input.GetKey(KeyCode.E)) {
