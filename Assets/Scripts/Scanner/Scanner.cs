@@ -2,6 +2,7 @@
 using System.Collections;
 using Cinemachine;
 using UnityEngine;
+using TMPro;
 
 public class Scanner : MonoBehaviour
 {
@@ -56,12 +57,17 @@ public class Scanner : MonoBehaviour
     private const string HAS_SCANNED_HALF_HEADED_AVIAN                  = "HAS_SCANNED_HALF_HEADED_AVIAN";
     private const string HAS_SCANNED_TRAILING_LANDSTAR                  = "HAS_SCANNED_TRAILING_LANDSTAR";
     
+    //raycastin
     private Transform rayOrigin;
     private float scanProgress = 0f;
     private bool isScanning = false;
     private Transform currentTarget;
+    
+    //shader outliener
     private Material originalMaterial;
     private Renderer targetRenderer;
+    private OutlineController lastOutline; //new
+    
 
     private Queue<GameObject> GOBuffer = new Queue<GameObject>();
     [SerializeField] private int maxGOBufferSize = 2;
@@ -86,7 +92,11 @@ public class Scanner : MonoBehaviour
         
         scanRange = 5f;
 
-        
+        //avoid problmes, new
+        if (alreadyScannedUI != null)
+        {
+            alreadyScannedUI.SetActive(false); 
+        }
         
         HideAlreadyScanned();
         
@@ -199,6 +209,7 @@ public class Scanner : MonoBehaviour
         }
 
      
+        HandleOutlineHighlight(); // new
       
         if (Input.GetKey(KeyCode.E)) {
             
@@ -228,6 +239,7 @@ public class Scanner : MonoBehaviour
             }
 
             focusCenterRed.SetActive(true);
+            
             ScanForObjects();
 
         } else {
@@ -448,6 +460,52 @@ public class Scanner : MonoBehaviour
             originalMaterial       = null;
         }
     }
+    
+    private void HandleOutlineHighlight()
+    {
+        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, scanRange * 10f))
+        {
+            var outline = hit.transform.GetComponent<OutlineController>();
+            
+
+            if (outline != null && outline != lastOutline)
+            {
+                ClearLastOutline();
+                int layer = hit.transform.gameObject.layer;
+
+                if (layer == LayerMask.NameToLayer("Scannable"))
+                {
+                    outline.ShowOutline(Color.green);
+                    //scannerHintText.text = "Scannable";
+                }
+                else
+                {
+                    outline.ShowOutline(Color.red);
+                    //scannerHintText.text = "Non-Scannable";
+                }
+
+                lastOutline = outline;
+            }
+        }
+        else
+        {
+            ClearLastOutline();
+            //scannerHintText.text = "";
+        }
+    }
+
+    private void ClearLastOutline()
+    {
+        if (lastOutline != null)
+        {
+            lastOutline.HideOutline();
+            lastOutline = null;
+        }
+    }
+
+    
     
     private void OnDrawGizmos()
     {
