@@ -7332,6 +7332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeDelay: 7
   fadeDuration: 1
+  disableAfterFade: 1
 --- !u!1 &287334336
 GameObject:
   m_ObjectHideFlags: 0
@@ -8847,6 +8848,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeDelay: 2
   fadeDuration: 1
+  disableAfterFade: 1
 --- !u!225 &496971076
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -23833,6 +23835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeDelay: 4
   fadeDuration: 1
+  disableAfterFade: 0
 --- !u!1 &1845273834
 GameObject:
   m_ObjectHideFlags: 0

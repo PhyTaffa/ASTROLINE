@@ -93,10 +93,10 @@ public class Scanner : MonoBehaviour
         scanRange = 5f;
 
         //avoid problmes, new
-        if (alreadyScannedUI != null)
-        {
-            alreadyScannedUI.SetActive(false); 
-        }
+        // if (alreadyScannedUI != null)
+        // {
+        //     alreadyScannedUI.SetActive(false); 
+        // }
         
         HideAlreadyScanned();
         

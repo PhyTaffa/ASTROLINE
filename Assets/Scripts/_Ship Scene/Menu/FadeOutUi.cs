@@ -5,6 +5,8 @@ using System.Collections;
 public class FadeOutUI : MonoBehaviour {
     public float fadeDelay = 2f;
     public float fadeDuration = 1f;
+    
+    [SerializeField] private bool disableAfterFade = false; 
 
     private CanvasGroup canvasGroup;
     private Coroutine fadeRoutine;
@@ -43,5 +45,9 @@ public class FadeOutUI : MonoBehaviour {
         }
 
         canvasGroup.alpha = 0f;
+        
+        if (disableAfterFade) {
+            gameObject.SetActive(false);
+        }
     }
 }
