@@ -13,14 +13,16 @@ public class Scanner : MonoBehaviour
     private Transform cameraTransform;
     [SerializeField] private Animator zoomAnimator;
     public LayerMask scannableLayer;
-    public float scanTime = 2f;
+    private float scanTime = 2f;
     public Material highlightMaterial;
 
-    public GameObject alreadyScannedUI; 
+    [SerializeField] private GameObject alreadyScannedUI;
+    [SerializeField] private GameObject newScanEntryUI; 
     
     [SerializeField] private GameObject focusCenterRed;
     [SerializeField] private GameObject noBatteryWarning;
-    private BatteryUI battery;
+    [SerializeField] private BatteryUI battery;
+
 
     
     private const string HAS_SCANNED_ANY = "HAS_SCANNED_ANY";
@@ -91,14 +93,6 @@ public class Scanner : MonoBehaviour
         rayOrigin = cameraTransform;
         
         scanRange = 5f;
-
-        //avoid problmes, new
-        // if (alreadyScannedUI != null)
-        // {
-        //     alreadyScannedUI.SetActive(false); 
-        // }
-        
-        HideAlreadyScanned();
         
         //virtual cam shid
         child = this.transform.GetChild(0);
@@ -116,11 +110,11 @@ public class Scanner : MonoBehaviour
             
         }else{
             scanRange = 5f;
-
         }
-
+        
         bool isAtMaxZoom = scanRange > 5f;
         zoomAnimator.SetBool("MaxZoom", isAtMaxZoom);
+           
 
         // Sync camera FOV with scan range
         vCam.m_Lens.FieldOfView = isAtMaxZoom ? minFOV : maxFOV;
@@ -214,10 +208,6 @@ public class Scanner : MonoBehaviour
       
         if (Input.GetKey(KeyCode.E)) {
             
-            if (battery == null || !battery.isActiveAndEnabled) {
-                battery = FindObjectOfType<BatteryUI>();
-            }
-            
             if (battery == null) {
                 focusCenterRed.SetActive(false);
                 ResetScan();
@@ -248,7 +238,10 @@ public class Scanner : MonoBehaviour
             ResetScan();
         }
 
-
+        //If battery has any electricity the warning of no battery goes off imediatly
+        if (battery.GetBatteryLevelIndex() != 4){
+            noBatteryWarning.SetActive(false);
+        }
            
     }
 
@@ -304,42 +297,67 @@ public class Scanner : MonoBehaviour
             isScanning = true;
             scanProgress += Time.deltaTime;
             
-            if (scanProgress >= scanTime && GOBuffer.Contains(hit.transform.gameObject)){
-                ShowAlreadyScanned();
+            var scannable = currentTarget.GetComponent<ScannableObject>();
+            if (scannable == null || scannable.scanData == null) {
+                ResetScan();
+                return;
             }
             
-            if (scanProgress >= scanTime && !GOBuffer.Contains(hit.transform.gameObject)){
-                
-                GOBuffer.Dequeue();
-                GOBuffer.Enqueue(hit.transform.gameObject);
-                CompleteScan();
+            string key;
+            switch (scannable.scanData.objectName){
+                case "Violet Spikeweed":                             key = HAS_SCANNED_VIOLET_SPIKEWEED; break;
+                case "Towering Unraveler (Young)":                   key = HAS_SCANNED_TOWERING_UNRAVELER_YOUNG; break;
+                case "Towering Unraveler (Juvenile)":                key = HAS_SCANNED_TOWERING_UNRAVELER_JUVENILE; break;
+                case "Towering Unraveler (Adult)":                   key = HAS_SCANNED_TOWERING_UNRAVELER_ADULT; break;
+                case "Clustered Slime Mold":                         key = HAS_SCANNED_CLUSTERED_SLIME_MOLD; break;
+                case "Constellated Ganglion Tray (Female, Young)":   key = HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_YOUNG; break;
+                case "Constellated Ganglion Tray (Female, Juvenile)":key = HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_JUVENILE; break;
+                case "Constellated Ganglion Tray (Female, Adult)":   key = HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_ADULT; break;
+                case "Constellated Ganglion Tray (Male, Young)":     key = HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_YOUNG; break;
+                case "Constellated Ganglion Tray (Male, Juvenile)":  key = HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_JUVENILE; break;
+                case "Constellated Ganglion Tray (Male, Adult)":     key = HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_ADULT; break;
+                case "Crab Commune (Developing)":                    key = HAS_SCANNED_CRAB_COMMUNE_DEVELOPING; break;
+                case "Crab Commune (Fully-Developed)":               key = HAS_SCANNED_CRAB_COMMUNE_FULLY_DEVELOPED; break;
+                case "Spongestone":                                  key = HAS_SCANNED_SPONGE_STONE; break;
+                case "Spongestone (Inverted)":                       key = HAS_SCANNED_SPONGE_STONE_INVERTED; break;
+                case "Axolowyrm":                                    key = HAS_SCANNED_AXOLOWYRM; break;
+                case "Broodback Frog (Unbound)":                     key = HAS_SCANNED_BROODBACK_FROG_UNBOUND; break;
+                case "Broodback Frog (Eggbound)":                    key = HAS_SCANNED_BROODBACK_FROG_EGGBOUND; break;
+                case "Broodbelly Frog":                              key = HAS_SCANNED_BROODBELLY_FROG; break;
+                case "Greater Lemon Slug":                           key = HAS_SCANNED_GREATER_LEMON_SLUG; break;
+                case "Wandering Sky Jelly":                          key = HAS_SCANNED_WANDERING_SKY_JELLY; break;
+                case "Shockshield Crab":                             key = HAS_SCANNED_SHOCKSHIELD_CRAB; break;
+                case "Half-Headed Avian":                            key = HAS_SCANNED_HALF_HEADED_AVIAN; break;
+                case "Trailing Landstar":                            key = HAS_SCANNED_TRAILING_LANDSTAR; break;
+                default: key = scannable.scanData.objectName; break;
             }
-            
-            
-            
-        }else{
+
+            bool hasEverScanned = PlayerPrefs.GetInt(key, 0) == 1;
+            bool inBuffer = GOBuffer.Contains(currentTarget.gameObject);
+
+            if (scanProgress >= scanTime){
+                if (hasEverScanned || inBuffer){
+                    ShowAlreadyScanned();
+                } else {
+                    GOBuffer.Dequeue();
+                    GOBuffer.Enqueue(currentTarget.gameObject);
+                    ShowNewScanEntry();
+                    CompleteScan();
+                }
+            }
+        }
+        else {
             ResetScan();
         }
     }
+
     
     void ShowAlreadyScanned() {
-        if (alreadyScannedUI != null)
-        {
-            alreadyScannedUI.SetActive(true);
-         
-            StartCoroutine(HideAfterDelay(2f));
-        }
+        alreadyScannedUI.SetActive(true);
         ResetScan();
     }
-
-    IEnumerator HideAfterDelay(float t) {
-        yield return new WaitForSeconds(t);
-        HideAlreadyScanned();
-    }
-
-    void HideAlreadyScanned() {
-        if (alreadyScannedUI != null)
-            alreadyScannedUI.SetActive(false);
+    void ShowNewScanEntry(){
+        newScanEntryUI.SetActive(true);
     }
     
     void CompleteScan(){

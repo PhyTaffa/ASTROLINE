@@ -5,6 +5,7 @@ using UnityEngine;
 public class ChargingZone : MonoBehaviour {
     
     [SerializeField] private BatteryUI batteryUI;
+    [SerializeField] private ChargingState manager;   
     
     void OnTriggerEnter(Collider other)
     {
@@ -12,6 +13,7 @@ public class ChargingZone : MonoBehaviour {
         {
             Debug.Log("Entered charging zone");
             batteryUI.SetChargingZone(true);
+            manager.isCharging = true;
         }
     }
 
@@ -21,6 +23,7 @@ public class ChargingZone : MonoBehaviour {
         {
             Debug.Log("Exited charging zone");
             batteryUI.SetChargingZone(false);
+            manager.isCharging = false;
         }
     }
 

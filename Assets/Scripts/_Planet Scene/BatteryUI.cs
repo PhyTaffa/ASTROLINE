@@ -10,8 +10,10 @@ public class BatteryUI : MonoBehaviour {
     private float maxTime = 10f;
     private int currentBatteryIndex = 0;
     private bool isChargingZone = false; 
-    // Set this via OnTriggerEnter/Exit later
 
+    // Log logic
+    private int lastLoggedStep = -1;
+    
     void Start() {
         SetBatteryLevel(0);
     }
@@ -31,6 +33,15 @@ public class BatteryUI : MonoBehaviour {
         }
 
         batteryTimer = Mathf.Clamp(batteryTimer, 0f, maxTime);
+        
+        // Loging Percentage wowzers (10& at a time)we
+        float percent = (batteryTimer / maxTime) * 100f;
+        int step = Mathf.FloorToInt(percent / 10f) * 10;
+        if (step != lastLoggedStep) {
+            lastLoggedStep = step;
+            Debug.Log($"Battery: {step}%");
+        }
+        
         UpdateBatteryUI();
     }
 
