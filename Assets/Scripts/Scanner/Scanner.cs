@@ -24,7 +24,21 @@ public class Scanner : MonoBehaviour
     [SerializeField] private BatteryUI battery;
 
 
-    
+
+    public bool scanningEnabled { get; private set; }
+
+    void EnterFirstPersonScanner()
+    {
+        // your existing code that sets up FPS camera…
+        scanningEnabled = true;
+    }
+
+    void ExitFirstPersonScanner()
+    {
+        // your existing code that tears down FPS camera…
+        scanningEnabled = false;
+    }
+
     private const string HAS_SCANNED_ANY = "HAS_SCANNED_ANY";
 
     // Flora — Flowers

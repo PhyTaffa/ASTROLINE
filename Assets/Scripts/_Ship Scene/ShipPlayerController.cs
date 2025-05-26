@@ -1,9 +1,8 @@
 using UnityEngine;
 
-public class ShipPlayerController : MonoBehaviour
-{
+public class ShipPlayerController : MonoBehaviour{
     private float moveSpeed = 5f;
-    private float rotationSpeed = 360f;
+    private float rotationSpeed = 960f;
 
     private Rigidbody rb;
 
@@ -22,7 +21,6 @@ public class ShipPlayerController : MonoBehaviour
             return; 
         }
         
-        // Calculate the yaw-only rotation
         float targetYaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
         float newYaw = Mathf.MoveTowardsAngle(rb.rotation.eulerAngles.y, targetYaw, rotationSpeed * Time.fixedDeltaTime);
         Quaternion rot = Quaternion.Euler(0f, newYaw, 0f);
