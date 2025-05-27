@@ -1,7 +1,8 @@
 using UnityEngine;
 
 public class TrainStopInteractor : MonoBehaviour {
- 
+    
+    public GameObject warningsUI;
     public GameObject trainStopUI;
     public MonoBehaviour movementController;
     
@@ -9,8 +10,8 @@ public class TrainStopInteractor : MonoBehaviour {
     
     private bool inZone = false;
     
-    
     void Start(){
+        warningsUI.SetActive(false);
         trainStopUI.SetActive(false);
         TrainStopUIActive = false;
     }
@@ -19,6 +20,7 @@ public class TrainStopInteractor : MonoBehaviour {
 
         if (other.CompareTag("Player")){
             inZone = true;
+            warningsUI.SetActive(true);
         }
      
     }
@@ -27,8 +29,8 @@ public class TrainStopInteractor : MonoBehaviour {
         
         if (other.CompareTag("Player")) {
             inZone = false;
+            warningsUI.SetActive(false);
             trainStopUI.SetActive(false);
-            //Time.timeScale = 1f;
             movementController.enabled = true;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -44,7 +46,7 @@ public class TrainStopInteractor : MonoBehaviour {
         // open panel
         if (inZone && !trainStopUI.activeSelf && Input.GetKeyDown(KeyCode.E)) {
             trainStopUI.SetActive(true);
-            //Time.timeScale = 0f; 
+            warningsUI.SetActive(false);
             movementController.enabled = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
