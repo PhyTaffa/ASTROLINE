@@ -1,24 +1,25 @@
+using UnityEditor.UIElements;
 using UnityEngine;
 
 public class PlayerDetectionTrigger : MonoBehaviour
 {
-    private bool isPlayerInside = false;
+    [SerializeField] private string givenTag;
 
-    public bool IsPlayerInside => isPlayerInside; // Read-only access
+    public bool IsPlayerInside { get; private set; } = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag(givenTag))
         {
-            isPlayerInside = true;
+            IsPlayerInside = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag(givenTag))
         {
-            isPlayerInside = false;
+            IsPlayerInside = false;
         }
     }
 }

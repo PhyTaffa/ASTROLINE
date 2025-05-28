@@ -9,7 +9,7 @@
         [SerializeField] private GameObject startNode;
         [SerializeField] private GameObject endNode;
         [SerializeField] private float speed = 8f;
-        [SerializeField] private float rotationSpeed = 10f;
+        [SerializeField] [Range(300, 500)] private float rotationSpeed = 300f;
         
         //to immediatly start a new path
         public bool autoLoopPaths = true;

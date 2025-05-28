@@ -19,7 +19,7 @@ public class BodyGravity : MonoBehaviour {
         tf = transform;
 
         if (gravity == null) {
-            gravity = GameObject.FindGameObjectWithTag("World").GetComponent<WorldGravity>();
+            gravity = GameObject.FindGameObjectWithTag("Planet").GetComponent<WorldGravity>();
         }
     }
 
