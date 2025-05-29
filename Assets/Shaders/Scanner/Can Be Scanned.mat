@@ -65,9 +65,9 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _OutlineWidth: 1.01
+    - _OutlineWidth: 1.12
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _OutlineColor: {r: 0.91999996, g: 1, b: 0, a: 1}
+    - _OutlineColor: {r: 0.2396766, g: 1, b: 0, a: 0.09803922}
   m_BuildTextureStacks: []
