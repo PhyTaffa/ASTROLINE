@@ -5,7 +5,7 @@ using Cinemachine;
 public class CameraUIManager : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera firstPersonCam;
-    [SerializeField] private CinemachineVirtualCamera thirdPersonCam;
+    [SerializeField] private CinemachineVirtualCameraBase thirdPersonCam;
 
     [SerializeField] private GameObject firstPersonUIRoot; // scannerUIRoot
     [SerializeField] private GameObject thirdPersonUIRoot;

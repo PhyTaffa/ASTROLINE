@@ -116,15 +116,19 @@ public class PlayerController : MonoBehaviour{
         }
 
         //Fetches the current camera each frame, quite stoobid 
-        CinemachineVirtualCamera currentCam = cinemachineBrain.ActiveVirtualCamera as CinemachineVirtualCamera;
+        //CinemachineVirtualCamera currentCam = cinemachineBrain.ActiveVirtualCamera as CinemachineVirtualCamera;
+        
+        CinemachineVirtualCameraBase currentCam = cinemachineBrain.ActiveVirtualCamera as CinemachineVirtualCameraBase;
+        
         if (currentCam == null) return;
-
+        Vector3 cameraForward = currentCam.State.FinalOrientation * Vector3.forward;
+        Vector3 cameraRight = currentCam.State.FinalOrientation * Vector3.right;
        
         Vector3 gravityUp = tf.up;
 
         //fetches the current camera's current forward and right, orthogonally projected onto the character's up: opposite of gravity direction
-        Vector3 camForward = Vector3.ProjectOnPlane(currentCam.transform.forward, gravityUp).normalized;
-        Vector3 camRight = Vector3.ProjectOnPlane(currentCam.transform.right, gravityUp).normalized;
+        Vector3 camForward = Vector3.ProjectOnPlane(cameraForward, gravityUp).normalized;
+        Vector3 camRight = Vector3.ProjectOnPlane(cameraRight, gravityUp).normalized;
         
         //mashing the input with the cam's vector reference
         Vector3 moveDirWorld = camRight * inputDirection.x + camForward * inputDirection.z;
