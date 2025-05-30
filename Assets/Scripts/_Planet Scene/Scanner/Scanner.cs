@@ -14,17 +14,15 @@ public class Scanner : MonoBehaviour
     [SerializeField] private Animator zoomAnimator;
     public LayerMask scannableLayer;
     private float scanTime = 2f;
-    public Material highlightMaterial;
+  
 
     [SerializeField] private GameObject alreadyScannedUI;
     [SerializeField] private GameObject newScanEntryUI; 
-    
     [SerializeField] private GameObject focusCenterRed;
     [SerializeField] private GameObject noBatteryWarning;
     [SerializeField] private BatteryUI battery;
 
-
-
+    
     public bool scanningEnabled { get; private set; }
 
     void EnterFirstPersonScanner()
@@ -112,8 +110,30 @@ public class Scanner : MonoBehaviour
         child = this.transform.GetChild(0);
         vCam = child.GetComponent<CinemachineVirtualCamera>();
     }
-
+    private ToggleHighlight lastToggler;
     void Update(){
+        
+        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, scanRange, scannableLayer))
+        {
+            var toggler = hit.transform.GetComponent<ToggleHighlight>();
+            if (toggler != null && toggler != lastToggler)
+            {
+                // turn off the old one
+                if (lastToggler != null)
+                    lastToggler.ToggleOutline();
+
+                // turn on the new one
+                toggler.ToggleOutline();
+                lastToggler = toggler;
+            }
+        }
+        else if (lastToggler != null)
+        {
+            // no longer hitting anything → turn it off
+            lastToggler.ToggleOutline();
+            lastToggler = null;
+        }
         
         
         if (PlayerPrefs.GetInt("UpgradeBlueEnabled", 0) == 1){
@@ -217,8 +237,7 @@ public class Scanner : MonoBehaviour
         }
 
      
-        //check waht's sacnnable
-        HandleOutlineHighlight(); // new
+     
       
         if (Input.GetKey(KeyCode.E)) {
             
@@ -258,36 +277,7 @@ public class Scanner : MonoBehaviour
         }
            
     }
-
-    private void Zoom()
-    {
-        float zoomDelta = Input.mouseScrollDelta.y;
-
-        //float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
-        // if (zoomDelta != 0)
-        // {
-        //     if(currFOV == maxFOV)
-        //         currFOV = minFOV;
-        //     else
-        //     {
-        //         currFOV = maxFOV;
-        //     }
-        // }
-        
-        if (zoomDelta > 0)
-        {
-            currFOV = maxFOV;
-        }
-        else if (zoomDelta < 0)
-        {
-            currFOV = minFOV;
-        }
-         
-        //currFOV += Input.GetAxis("Mouse ScrollWheel") * sensitivity;
-        //currFOV = Mathf.Clamp(currFOV, minFOV, maxFOV);
-        
-        vCam.m_Lens.FieldOfView = currFOV;
-    }
+    
 
     void ScanForObjects(){
         
@@ -296,16 +286,10 @@ public class Scanner : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, scanRange, scannableLayer)){
             
             if (currentTarget != hit.transform){
-                
-                ResetHighlight();
+      
                 currentTarget = hit.transform;
                 scanProgress = 0f;
-                targetRenderer = currentTarget.GetComponent<Renderer>();
-
-                if (targetRenderer != null) {
-                    originalMaterial = targetRenderer.material;
-                    targetRenderer.material = highlightMaterial;
-                }
+                
             }
 
             isScanning = true;
@@ -482,61 +466,11 @@ public class Scanner : MonoBehaviour
         isScanning    = false;
         scanProgress  = 0f;
         currentTarget = null;
-        ResetHighlight();
     }
 
-    void ResetHighlight(){
-        
-        if (targetRenderer != null && originalMaterial != null){
-            targetRenderer.material = originalMaterial;
-            targetRenderer         = null;
-            originalMaterial       = null;
-        }
-    }
+  
     
-    private void HandleOutlineHighlight()
-    {
-        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, scanRange * 10f))
-        {
-            var outline = hit.transform.GetComponent<OutlineController>();
-            
-
-            if (outline != null && outline != lastOutline)
-            {
-                ClearLastOutline();
-                int layer = hit.transform.gameObject.layer;
-
-                if (layer == LayerMask.NameToLayer("Scannable"))
-                {
-                    outline.ShowOutline(Color.green);
-                    //scannerHintText.text = "Scannable";
-                }
-                else
-                {
-                    outline.ShowOutline(Color.red);
-                    //scannerHintText.text = "Non-Scannable";
-                }
-
-                lastOutline = outline;
-            }
-        }
-        else
-        {
-            ClearLastOutline();
-            //scannerHintText.text = "";
-        }
-    }
-
-    private void ClearLastOutline()
-    {
-        if (lastOutline != null)
-        {
-            lastOutline.HideOutline();
-            lastOutline = null;
-        }
-    }
 
     
     

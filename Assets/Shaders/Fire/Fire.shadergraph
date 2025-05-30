@@ -1870,7 +1870,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Radius",
     "m_StageCapability": 3,
-    "m_Value": 0.3700000047683716,
+    "m_Value": 0.8199999928474426,
     "m_DefaultValue": 0.10000000149011612,
     "m_Labels": []
 }
@@ -1887,10 +1887,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -466.6667785644531,
-            "y": 82.66666412353516,
-            "width": 209.33334350585938,
-            "height": 304.0000305175781
+            "x": -484.0,
+            "y": 75.33334350585938,
+            "width": 209.33331298828126,
+            "height": 304.0
         }
     },
     "m_Slots": [
