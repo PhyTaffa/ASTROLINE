@@ -80,7 +80,6 @@ public class Scanner : MonoBehaviour
     //shader outliener
     private Material originalMaterial;
     private Renderer targetRenderer;
-    private OutlineController lastOutline; //new
     
 
     private Queue<GameObject> GOBuffer = new Queue<GameObject>();
@@ -111,31 +110,130 @@ public class Scanner : MonoBehaviour
         vCam = child.GetComponent<CinemachineVirtualCamera>();
     }
     private ToggleHighlight lastToggler;
-    void Update(){
-        
-        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, scanRange, scannableLayer))
-        {
-            var toggler = hit.transform.GetComponent<ToggleHighlight>();
-            if (toggler != null && toggler != lastToggler)
-            {
-                // turn off the old one
-                if (lastToggler != null)
-                    lastToggler.ToggleOutline();
 
-                // turn on the new one
-                toggler.ToggleOutline();
-                lastToggler = toggler;
+    void Update(){
+
+        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+        bool hitSomething = Physics.Raycast(ray, out RaycastHit hit, scanRange, scannableLayer);
+        ToggleHighlight current;
+        if (hitSomething) {
+            
+            current = hit.transform.GetComponent<ToggleHighlight>();
+        }else{
+            
+            current = null;
+        }
+
+     
+        if (current != lastToggler){
+
+            if (lastToggler != null){
+                lastToggler.ToggleOutline();
+            }
+
+            if (current != null){
+                current.ToggleOutline();
+            }
+            
+            lastToggler = current;
+        }
+
+        if (current != null){
+            
+            var scannable = hit.transform.GetComponent<ScannableObject>();
+            
+            if (scannable != null){
+
+                string key = scannable.scanData.objectName;
+                switch (key){
+                    case "Violet Spikeweed":
+                        key = HAS_SCANNED_VIOLET_SPIKEWEED;
+                        break;
+                    case "Towering Unraveler (Young)":
+                        key = HAS_SCANNED_TOWERING_UNRAVELER_YOUNG;
+                        break;
+                    case "Towering Unraveler (Juvenile)":
+                        key = HAS_SCANNED_TOWERING_UNRAVELER_JUVENILE;
+                        break;
+                    case "Towering Unraveler (Adult)":
+                        key = HAS_SCANNED_TOWERING_UNRAVELER_ADULT;
+                        break;
+                    case "Clustered Slime Mold":
+                        key = HAS_SCANNED_CLUSTERED_SLIME_MOLD;
+                        break;
+                    case "Constellated Ganglion Tray (Female, Young)":
+                        key = HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_YOUNG;
+                        break;
+                    case "Constellated Ganglion Tray (Female, Juvenile)":
+                        key = HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_JUVENILE;
+                        break;
+                    case "Constellated Ganglion Tray (Female, Adult)":
+                        key = HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_FEMALE_ADULT;
+                        break;
+                    case "Constellated Ganglion Tray (Male, Young)":
+                        key = HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_YOUNG;
+                        break;
+                    case "Constellated Ganglion Tray (Male, Juvenile)":
+                        key = HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_JUVENILE;
+                        break;
+                    case "Constellated Ganglion Tray (Male, Adult)":
+                        key = HAS_SCANNED_CONSTELLATED_GANGLION_TRAY_MALE_ADULT;
+                        break;
+                    case "Crab Commune (Developing)":
+                        key = HAS_SCANNED_CRAB_COMMUNE_DEVELOPING;
+                        break;
+                    case "Crab Commune (Fully-Developed)":
+                        key = HAS_SCANNED_CRAB_COMMUNE_FULLY_DEVELOPED;
+                        break;
+                    case "Spongestone":
+                        key = HAS_SCANNED_SPONGE_STONE;
+                        break;
+                    case "Spongestone (Inverted)":
+                        key = HAS_SCANNED_SPONGE_STONE_INVERTED;
+                        break;
+                    case "Axolowyrm":
+                        key = HAS_SCANNED_AXOLOWYRM;
+                        break;
+                    case "Broodback Frog (Unbound)":
+                        key = HAS_SCANNED_BROODBACK_FROG_UNBOUND;
+                        break;
+                    case "Broodback Frog (Eggbound)":
+                        key = HAS_SCANNED_BROODBACK_FROG_EGGBOUND;
+                        break;
+                    case "Broodbelly Frog":
+                        key = HAS_SCANNED_BROODBELLY_FROG;
+                        break;
+                    case "Greater Lemon Slug":
+                        key = HAS_SCANNED_GREATER_LEMON_SLUG;
+                        break;
+                    case "Wandering Sky Jelly":
+                        key = HAS_SCANNED_WANDERING_SKY_JELLY;
+                        break;
+                    case "Shockshield Crab":
+                        key = HAS_SCANNED_SHOCKSHIELD_CRAB;
+                        break;
+                    case "Half-Headed Avian":
+                        key = HAS_SCANNED_HALF_HEADED_AVIAN;
+                        break;
+                    case "Trailing Landstar":
+                        key = HAS_SCANNED_TRAILING_LANDSTAR;
+                        break;
+                    default: break;
+                }
+
+                bool hasScanned = PlayerPrefs.GetInt(key, 0) == 1;
+                int mode = hasScanned ? 1 : 0;
+
+                if (Input.GetKey(KeyCode.E)) {
+                    mode = 2;
+                }
+
+                current.SetMode(mode);
             }
         }
-        else if (lastToggler != null)
-        {
-            // no longer hitting anything → turn it off
-            lastToggler.ToggleOutline();
-            lastToggler = null;
-        }
-        
-        
+    
+
+
         if (PlayerPrefs.GetInt("UpgradeBlueEnabled", 0) == 1){
             if (Input.mouseScrollDelta.y != 0) {
                 isZoomed = !isZoomed;
@@ -467,15 +565,8 @@ public class Scanner : MonoBehaviour
         scanProgress  = 0f;
         currentTarget = null;
     }
-
-  
     
-
-
-    
-    
-    private void OnDrawGizmos()
-    {
+    private void OnDrawGizmos() {
         Gizmos.color = Color.cyan;
         Gizmos.DrawLine(cameraTransform.position, cameraTransform.position + cameraTransform.forward * scanRange);
         Gizmos.DrawWireSphere(cameraTransform.position + cameraTransform.forward * scanRange, 0.2f);

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class AsteroidMove : MonoBehaviour{
     
-    private float minMoveSpeed = 30f;
-    private float maxMoveSpeed = 1500f;
+    private float minMoveSpeed = 200f;
+    private float maxMoveSpeed = 400f;
     
     private float moveSpeed;
     
