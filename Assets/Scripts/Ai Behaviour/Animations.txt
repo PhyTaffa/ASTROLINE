@@ -1,0 +1,1 @@
+The animator component has to reside on the same Game Object as the model's container otherwise it will give biiig problem

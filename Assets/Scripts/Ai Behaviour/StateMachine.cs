@@ -16,13 +16,18 @@ public class StateMachine : MonoBehaviour
         for (int i = 0; i < stateBehaviours.Count; ++i)
         {
             AStateBehaviour stateBehaviour = stateBehaviours[i];
-            if (stateBehaviour && stateBehaviour.InitializeState())
+
+            if (stateBehaviour)
             {
+                //Debug.Log($"Initializing state: {stateBehaviour.GetType().Name}");
+                
                 stateBehaviour.AssociatedStateMachine = this;
-                continue;
+
+                if (stateBehaviour.InitializeState())
+                    continue;
             }
 
-            Debug.Log($"StateMachine On {gameObject.name} has failed to initalize the state {stateBehaviours[i]?.GetType().Name}!");
+            Debug.Log($"StateMachine on {gameObject.name} has failed to initialize the state {stateBehaviours[i]?.GetType().Name}!");
             return false;
         }
 

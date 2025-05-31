@@ -20,6 +20,13 @@ public class Fauna_IdleState : AStateBehaviour
 
     public override bool InitializeState()
     {
+        if (!base.InitializeState())
+        {
+            Debug.LogWarning("Fauna Idle State not initialized");
+            return false;
+        }
+        
+        Debug.Log($"{gameObject.name} Initialized Fauna Idle State!");
         return true;
     }
 
@@ -31,6 +38,9 @@ public class Fauna_IdleState : AStateBehaviour
         
         //chance to stop and rotate around
         //willRotate = (int)Random.value * randomChanceOfStopping == randomChanceOfStopping;
+        
+        //playe animation here
+        FaunaAnimator.SetAnimationState(EFaunaAnimatorState.Idle);
     }
 
     public override void OnStateUpdate()
@@ -67,7 +77,7 @@ public class Fauna_IdleState : AStateBehaviour
             float rotationThisFrame = direction * speedDegPerSec * Time.deltaTime;
             transform.Rotate(Vector3.up, rotationThisFrame);
 
-            rotatedDegrees += Mathf.Abs(rotationThisFrame); // Always add positive value
+            rotatedDegrees += Mathf.Abs(rotationThisFrame); //increase the rotation
 
             yield return null;
         }

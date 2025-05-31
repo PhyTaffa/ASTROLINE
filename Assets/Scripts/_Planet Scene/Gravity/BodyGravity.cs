@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class BodyGravity : MonoBehaviour {
     
     [SerializeField] private WorldGravity gravity;
@@ -9,12 +11,22 @@ public class BodyGravity : MonoBehaviour {
     public bool isFlying = false; 
     private Rigidbody rb;
     private Transform tf;
-    
-    private void Start() {
-        
+
+    private void OnValidate()
+    {
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+    }
+
+    private void Start() {
+        
+        if (!rb) 
+            rb = GetComponent<Rigidbody>();
+        
+        rb.useGravity = false;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+
         
         tf = transform;
 

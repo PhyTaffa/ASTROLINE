@@ -11,3 +11,11 @@ public enum EFaunaState
     Chasing
 }
 
+public enum EFaunaAnimatorState
+{
+    Invalid = -1,
+    Idle,
+    Wander,
+    Thirsty,
+}
+
