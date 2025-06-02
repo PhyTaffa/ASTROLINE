@@ -124,12 +124,6 @@ public class SLUG_WanderingingState : AStateBehaviour
 
     public override int StateTransitionCondition()
     {
-        
-        // if (timer < 0)
-        // {
-        //     return (int)(EFaunaState.Idle);
-        // }
-
         if (hasFinishedCurrentPath)
         {
             if (currThirstTimer < 0f)
@@ -152,9 +146,7 @@ public class SLUG_WanderingingState : AStateBehaviour
             pathFollower.GenerateNewPath();
             hasFinishedCurrentPath = false;
         }
-
-
-
+        
         return (int)EFaunaState.Invalid;
     }
     

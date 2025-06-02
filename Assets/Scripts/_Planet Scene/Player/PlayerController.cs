@@ -7,8 +7,12 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class PlayerController : MonoBehaviour{
     
+    [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float rotateSpeed = 5f;
+    [SerializeField] private float jumpSpeed = 20f;
+    [SerializeField] private KeyCode runKey = KeyCode.LeftShift;
+    [SerializeField] private int runMultiplier = 2;
 
     private Vector3 input;
     private Rigidbody rb;
@@ -16,10 +20,14 @@ public class PlayerController : MonoBehaviour{
     private WorldGravity worldGravity;
     
     //movement according to camera
+    [Header("Camera's Ref")]
     private Transform activeCameraTransform;
     [SerializeField] private CinemachineBrain cinemachineBrain;
     
     private CameraManager cameraManager;
+    
+    [Header("Animations")]
+    [SerializeField] private PlayerAnimator playerAnimator;
     
     private void Start(){
         
@@ -28,7 +36,7 @@ public class PlayerController : MonoBehaviour{
         //worldGravity = GetComponent<BodyGravity>();
         
         //cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
-        cinemachineBrain.m_CameraActivatedEvent.AddListener(OnCameraActivated);
+        //cinemachineBrain.m_CameraActivatedEvent.AddListener(OnCameraActivated);
 
 
         // Initialize with the current virtual camera
@@ -36,6 +44,8 @@ public class PlayerController : MonoBehaviour{
             activeCameraTransform = cam.transform;
 
         cameraManager = FindObjectOfType<CameraManager>();
+        
+        playerAnimator.SetAnimationState(EPlayerAnimatorStates.Idle);
     }
 
     void OnDestroy()
@@ -112,9 +122,25 @@ public class PlayerController : MonoBehaviour{
         if (inputDirection.sqrMagnitude < 0.01f)
         {
             input = Vector3.zero;
+            
+            playerAnimator.SetAnimationState(EPlayerAnimatorStates.Idle);
+            
             return;
         }
 
+        if (Input.GetKey(runKey))
+        {
+            inputDirection *= runMultiplier;
+            
+            playerAnimator.SetAnimationState(EPlayerAnimatorStates.Run);
+        }
+        else
+        {
+            playerAnimator.SetAnimationState(EPlayerAnimatorStates.Walk);
+        }
+
+        
+        
         //Fetches the current camera each frame, quite stoobid 
         //CinemachineVirtualCamera currentCam = cinemachineBrain.ActiveVirtualCamera as CinemachineVirtualCamera;
         
@@ -138,6 +164,8 @@ public class PlayerController : MonoBehaviour{
         
         //after calculating the alleged good movements, we apply it
         input = moveDirRelative;
+        
+        
         
         
         //most likely add a if that checks if it's in first person or not to disable or not rotation

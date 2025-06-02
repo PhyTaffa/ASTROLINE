@@ -10,10 +10,6 @@ public class Fauna_WanderingingState : AStateBehaviour
     [SerializeField] private PathFollower pathFollower;
     [SerializeField] private PlayerDetectionTrigger playerDetection;// Reference to the PathFollower script
 
-    [Header("Wander Settings")]
-    [SerializeField] private float rotationSpeed = 40f;
-    [SerializeField] private float threshold = 10f;
-
     [Header("Thirst Settings")]
     [SerializeField] private float thirstTimer = 20f;
     
@@ -21,7 +17,7 @@ public class Fauna_WanderingingState : AStateBehaviour
     [SerializeField] private bool isSupposedToSleep = false;
     
     [Header("Idle Settings")]
-    [SerializeField] private float timetoGoIdle = 40f;
+    [SerializeField] private float timeToGoIdle = 10f;
     
     [Header("Reaction Settings")]
     [SerializeField] private float reactionTimer = 4f;

@@ -12,6 +12,9 @@ public class PickUp : MonoBehaviour
     [SerializeField] private Camera previewCamera;
     [SerializeField] private RawImage previewImage;
     
+    [Header("Animations")]
+    [SerializeField] private PlayerAnimator playerAnimator;
+    
     private Collider triggerCollider;
     //private HeldItems currentHeldItems = HeldItems.None;
 
@@ -48,6 +51,7 @@ public class PickUp : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 triggerCollider.enabled = true;
+                playerAnimator.SetAnimationState(EPlayerAnimatorStates.Grab);
             }
             else if (Input.GetMouseButtonUp(0))
             {
@@ -73,6 +77,9 @@ public class PickUp : MonoBehaviour
             if (item != null)
             {
                 PickUpObject(item);
+                
+                //animation
+                
             }
             else
             {

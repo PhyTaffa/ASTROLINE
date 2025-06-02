@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerDetectionTrigger : MonoBehaviour
 {
-    [SerializeField] private string givenTag;
+    [SerializeField] private string givenTag = "Player";
 
     public bool IsPlayerInside { get; private set; } = false;
 

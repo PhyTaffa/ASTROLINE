@@ -49,8 +49,6 @@ public class StateMachine : MonoBehaviour
 
             currentState = stateBehaviours[firstStateIndex];
             currentState.OnStateStart();
-            
-            Debug.Log($"{gameObject.name} successfully initiated, starting state {currentState?.GetType().Name}");
         }
         else
         {
