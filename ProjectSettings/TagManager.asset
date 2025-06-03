@@ -10,6 +10,11 @@ TagManager:
   - TrainStopUI
   - Top of Player
   - WP
+  - hide
+  - Death
+  - Goal
+  - Avatar
+  - Spawned
   layers:
   - Default
   - TransparentFX
@@ -25,7 +30,7 @@ TagManager:
   - IntroCam
   - Player
   - ThirdPersonCam
-  - 
+  - GameCam
   - 
   - 
   - 

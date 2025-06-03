@@ -9,7 +9,7 @@ public class IntroMenu : MonoBehaviour {
 
     public void PlayGame() {
         
-        SceneManager.LoadScene("ShipMenu");
+        SceneManager.LoadScene("Cutscene");
        // fading.FadeOutAndChangeScene(1); // Trigger fade-out and load scene
     }
 

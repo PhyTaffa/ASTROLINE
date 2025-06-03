@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SunMove : MonoBehaviour{
     
-    private float moveSpeed = 100f;
+    private float moveSpeed = 40f;
     
     private Vector3 driftDirection = Vector3.forward;
     private Rigidbody rb;
