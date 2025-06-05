@@ -28,7 +28,10 @@ public class MinigameManager : MonoBehaviour{
     [SerializeField] private GameObject playUIprompt;
     
     [HideInInspector] public bool hasShownIntro = false;
-
+    
+    // [SerializeField] private AudioClip minigameMusic;
+    // [SerializeField] private AudioSource source;
+    
     private void Awake(){
         minigameCamera.enabled = false;
         image1.SetActive(false);
@@ -37,11 +40,13 @@ public class MinigameManager : MonoBehaviour{
         gameEffectVolume.SetActive(false);
         GameState.IsRunning = false;
     }
+    
+    
 
     private void Update(){
         
-        if (minigameCamera.enabled && !hasShownIntro)
-        {
+        if (minigameCamera.enabled && !hasShownIntro){
+            
             hasShownIntro = true;
             gameEffectVolume.SetActive(false);
             playUIprompt.SetActive(false);
@@ -54,14 +59,14 @@ public class MinigameManager : MonoBehaviour{
             if (image2 != null)
                 image2.SetActive(false);
         }
-
-        // if (minigameCamera.enabled && !GameState.IsRunning){
-        //     image2.SetActive(true);
+        
+        // if (minigameCamera.enabled) {
+        //     source.PlayOneShot(minigameMusic);
         // }
     } 
-
- 
     
+
+
     public void OnImage1Clicked(){
             image1.SetActive(false);
             image2.SetActive(true);
