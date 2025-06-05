@@ -5,28 +5,28 @@ public class ToggleHighlight : MonoBehaviour
 {
     [SerializeField] private Material highlightMaterial;
 
-    private MeshRenderer meshRenderer;
-    private SkinnedMeshRenderer skinnedMeshRenderer;
+    private List<MeshRenderer> meshRenderers = new();
+    private List<SkinnedMeshRenderer> skinnedMeshRenderers = new();
     private Material baseMaterial;
     private Material overlayInstance;
     private bool highlightOn = false;
 
     void Awake()
     {
-        meshRenderer = GetComponentInChildren<MeshRenderer>();
-        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        meshRenderers.AddRange(GetComponentsInChildren<MeshRenderer>());
+        skinnedMeshRenderers.AddRange(GetComponentsInChildren<SkinnedMeshRenderer>());
 
-        if (meshRenderer != null)
+        if (meshRenderers.Count > 0)
         {
-            baseMaterial = meshRenderer.materials[0];
+            baseMaterial = meshRenderers[0].materials[0];
         }
-        else if (skinnedMeshRenderer != null)
+        else if (skinnedMeshRenderers.Count > 0)
         {
-            baseMaterial = skinnedMeshRenderer.materials[0];
+            baseMaterial = skinnedMeshRenderers[0].materials[0];
         }
         else
         {
-            Debug.LogError($"ToggleHighlight on '{name}' couldn't find a MeshRenderer or SkinnedMeshRenderer!");
+            Debug.LogError($"ToggleHighlight on '{name}' couldn't find any MeshRenderer or SkinnedMeshRenderer!");
             enabled = false;
             return;
         }
@@ -45,17 +45,21 @@ public class ToggleHighlight : MonoBehaviour
             overlayInstance = new Material(highlightMaterial);
             var mats = new List<Material> { baseMaterial, overlayInstance };
 
-            if (meshRenderer != null)
-                meshRenderer.materials = mats.ToArray();
-            else if (skinnedMeshRenderer != null)
-                skinnedMeshRenderer.materials = mats.ToArray();
+            foreach (var mr in meshRenderers)
+                mr.materials = mats.ToArray();
+
+            foreach (var smr in skinnedMeshRenderers)
+                smr.materials = mats.ToArray();
         }
         else
         {
-            if (meshRenderer != null)
-                meshRenderer.materials = new Material[] { baseMaterial };
-            else if (skinnedMeshRenderer != null)
-                skinnedMeshRenderer.materials = new Material[] { baseMaterial };
+            var baseMats = new Material[] { baseMaterial };
+
+            foreach (var mr in meshRenderers)
+                mr.materials = baseMats;
+
+            foreach (var smr in skinnedMeshRenderers)
+                smr.materials = baseMats;
 
             overlayInstance = null;
         }

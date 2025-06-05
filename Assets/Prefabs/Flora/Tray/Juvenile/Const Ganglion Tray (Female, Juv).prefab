@@ -48420,6 +48420,7 @@ GameObject:
   - component: {fileID: 1426634386660213491}
   - component: {fileID: 2674784084818615670}
   - component: {fileID: 7648463945977896962}
+  - component: {fileID: 4965210722431265808}
   m_Layer: 3
   m_Name: Const Ganglion Tray (Female, Juv)
   m_TagString: Untagged
@@ -48518,3 +48519,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightMaterial: {fileID: 2100000, guid: 3be5398b492ba7846b7245997c4ba14e, type: 2}
+--- !u!114 &4965210722431265808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6260872416307235963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b64240a6c9690f499551f8352eff6c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scanData: {fileID: 11400000, guid: 6471e3d691776084a921fc7bfc1078a5, type: 2}
