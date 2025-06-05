@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour{
     [SerializeField] private float rotateSpeed = 8f;
     [SerializeField] private float jumpSpeed = 20f;
     [SerializeField] private KeyCode runKey = KeyCode.LeftShift;
-    [SerializeField] private int runMultiplier = 2;
+    [SerializeField] private float runMultiplier = 2;
 
     private Vector3 input;
     private Rigidbody rb;

@@ -6,8 +6,11 @@ public class DetectionTrigger : MonoBehaviour
 {
     [SerializeField] private LayerMask givenLayer;
     [SerializeField] private GameObject detectionObjectToSpawn;
-    private bool instanciatedAlready = false;
     [SerializeField] private float offsetValue = 1f;
+    
+    [SerializeField] private bool shouldMoveTowardsTarget = true;
+    private bool instanciatedAlready = false;
+    
     private void OnTriggerEnter(Collider other)
     {
         //chekc if on good layer
@@ -44,8 +47,36 @@ public class DetectionTrigger : MonoBehaviour
                 Quaternion rotation = Quaternion.LookRotation(tangentDirection, surfaceNormal);
 
                 Instantiate(detectionObjectToSpawn, transform.position, rotation);
-                Debug.Log($"{this.gameObject.name} beign picked up, spawend: {detectionObjectToSpawn.name}");
+                
+                if (shouldMoveTowardsTarget)
+                {
+                    StartCoroutine(MoveTowardsTargetCoroutine(other.transform));
+                }
             }
         }
+    }
+    
+    private IEnumerator MoveTowardsTargetCoroutine(Transform target)
+    {
+        // === START-like setup ===
+        Vector3 targetPosition = target.position;
+        float stopDistance = 0.1f;
+
+        Vector3 direction = (targetPosition - transform.position).normalized;
+        transform.rotation = Quaternion.LookRotation(direction);
+
+        // === UPDATE-like loop ===
+        while (Vector3.Distance(transform.position, targetPosition) > stopDistance)
+        {
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                targetPosition, 
+                2f * Time.deltaTime
+            );
+
+            yield return null; // wait for next frame
+        }
+
+        Debug.Log($"{this.name} has arrived at {target.name}");
     }
 }

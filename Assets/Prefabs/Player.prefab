@@ -397,6 +397,10 @@ PrefabInstance:
       propertyPath: m_LookAt
       value: 
       objectReference: {fileID: 7106269626280012098}
+    - target: {fileID: 2250985868746964381, guid: d24e7ea126eabb04993320cf7e5d822d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2706367850933713839, guid: d24e7ea126eabb04993320cf7e5d822d, type: 3}
       propertyPath: playerAnimator
       value: 
@@ -441,6 +445,10 @@ PrefabInstance:
       propertyPath: m_LookAt
       value: 
       objectReference: {fileID: 7106269626280012098}
+    - target: {fileID: 5646805087630666635, guid: d24e7ea126eabb04993320cf7e5d822d, type: 3}
+      propertyPath: m_XAxis.m_InvertInput
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6354865838549452297, guid: d24e7ea126eabb04993320cf7e5d822d, type: 3}
       propertyPath: m_Follow
       value: 
