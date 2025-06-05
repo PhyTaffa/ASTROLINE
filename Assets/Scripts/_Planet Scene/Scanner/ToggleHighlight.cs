@@ -1,30 +1,40 @@
-        using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class ToggleHighlight : MonoBehaviour {
+public class ToggleHighlight : MonoBehaviour
+{
     [SerializeField] private Material highlightMaterial;
 
     private MeshRenderer meshRenderer;
+    private SkinnedMeshRenderer skinnedMeshRenderer;
     private Material baseMaterial;
     private Material overlayInstance;
     private bool highlightOn = false;
 
-    private SkinnedMeshRenderer skinnedMeshRenderer;
-    
-    void Awake(){
+    void Awake()
+    {
         meshRenderer = GetComponentInChildren<MeshRenderer>();
-        if(meshRenderer == null){
-            Debug.LogError($"ToggleHighlight on '{name}' couldn't find a MeshRenderer!");
+        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+
+        if (meshRenderer != null)
+        {
+            baseMaterial = meshRenderer.materials[0];
+        }
+        else if (skinnedMeshRenderer != null)
+        {
+            baseMaterial = skinnedMeshRenderer.materials[0];
+        }
+        else
+        {
+            Debug.LogError($"ToggleHighlight on '{name}' couldn't find a MeshRenderer or SkinnedMeshRenderer!");
             enabled = false;
-            
             return;
         }
-        baseMaterial  = meshRenderer.materials[0];
     }
 
     /// <summary>
-    /// Toggle the overlay on/off.  When on, we create a fresh instance
-    /// of the shader‐graph material so we can drive its _Mode.
+    /// Toggle the overlay on/off. When on, creates a fresh instance
+    /// of the highlight material and applies it.
     /// </summary>
     public void ToggleOutline()
     {
@@ -32,32 +42,34 @@ public class ToggleHighlight : MonoBehaviour {
 
         if (highlightOn)
         {
-            // make one instance copy so setting _Mode won't affect
-            // every object using that same highlightMaterial asset
             overlayInstance = new Material(highlightMaterial);
-
-            // build array: [ baseMaterial, overlayInstance ]
             var mats = new List<Material> { baseMaterial, overlayInstance };
-            meshRenderer.materials = mats.ToArray();
+
+            if (meshRenderer != null)
+                meshRenderer.materials = mats.ToArray();
+            else if (skinnedMeshRenderer != null)
+                skinnedMeshRenderer.materials = mats.ToArray();
         }
         else
         {
-            // just revert to only the base
-            meshRenderer.materials = new Material[] { baseMaterial };
+            if (meshRenderer != null)
+                meshRenderer.materials = new Material[] { baseMaterial };
+            else if (skinnedMeshRenderer != null)
+                skinnedMeshRenderer.materials = new Material[] { baseMaterial };
+
             overlayInstance = null;
         }
     }
 
     /// <summary>
-    /// Drive the shader-graph's Mode property: 0=Red, 1=Green, 2=Rainbow.
-    /// If overlay isn't currently on, we'll turn it on for you.
+    /// Set the _Mode property on the overlay material.
+    /// Automatically enables highlighting if off.
     /// </summary>
     public void SetMode(int mode)
     {
         if (!highlightOn)
             ToggleOutline();
 
-        // safety check
         if (overlayInstance != null)
             overlayInstance.SetFloat("_Mode", mode);
     }
