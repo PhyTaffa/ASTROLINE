@@ -14,6 +14,10 @@ public class CameraUIManager : MonoBehaviour
     
     [Header("BrIAn")]
     [SerializeField] private CinemachineBrain cinemachineBrain;
+    
+    [Header("Post‐Process / VFX Volumes")]
+    [SerializeField] private GameObject scannerCamEffect;
+    [SerializeField] private GameObject planetCamEffect;
 
     private Coroutine blendRoutine;
 
@@ -24,6 +28,9 @@ public class CameraUIManager : MonoBehaviour
         //we are starting in 3rd person
         firstPersonUIRoot.SetActive(false);
         thirdPersonUIRoot.SetActive(true);
+        
+        scannerCamEffect.SetActive(false);
+        planetCamEffect.SetActive(true);
     }
 
     private void OnDisable()
@@ -38,6 +45,9 @@ public class CameraUIManager : MonoBehaviour
         
         firstPersonUIRoot.SetActive(false);
         thirdPersonUIRoot.SetActive(false);
+        
+        scannerCamEffect.SetActive(false);
+        planetCamEffect.SetActive(true);
 
         float blendTime = GetBlendTime(fromCam, toCam);
 
@@ -50,6 +60,9 @@ public class CameraUIManager : MonoBehaviour
         {
             //show TP UI immediately
             thirdPersonUIRoot.SetActive(true);
+            
+            scannerCamEffect.SetActive(false);
+            planetCamEffect.SetActive(true);
         }
     }
 
@@ -57,6 +70,9 @@ public class CameraUIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         uiToShow.SetActive(true);
+        
+        scannerCamEffect.SetActive(true);
+        planetCamEffect.SetActive(false);
     }
 
     private float GetBlendTime(ICinemachineCamera fromCam, ICinemachineCamera toCam)

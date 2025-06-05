@@ -13,6 +13,8 @@ public class CameraManager : MonoBehaviour{
 
     private KeyCode switchKey = KeyCode.Q;
     
+    
+    
     [Header("UIs")]
     [SerializeField] private GameObject scannerUIRoot;
     [SerializeField] private GameObject tpUI;
@@ -38,6 +40,14 @@ public class CameraManager : MonoBehaviour{
         
         ScanModeActive = scannerUIRoot != null && scannerUIRoot.activeSelf;
         SetCameraState(isFirstPersonActive);
+        
+        // if (isFirstPersonActive) {
+        //     scannerCamEffect.SetActive(false);
+        //     planetCamEffect.SetActive(true);
+        // }else {
+        //     scannerCamEffect.SetActive(true);
+        //     planetCamEffect.SetActive(false);
+        // }
     }
 
     private void Update(){
@@ -50,8 +60,6 @@ public class CameraManager : MonoBehaviour{
         
         if (Input.GetKeyDown(switchKey)){
             isFirstPersonActive = !isFirstPersonActive;
-            
-            //Mf add the colume swithc in here
             
             fpRig.SetActive(isFirstPersonActive);
             
