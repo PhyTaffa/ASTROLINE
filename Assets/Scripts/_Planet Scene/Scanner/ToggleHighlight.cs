@@ -9,6 +9,8 @@ public class ToggleHighlight : MonoBehaviour {
     private Material overlayInstance;
     private bool highlightOn = false;
 
+    private SkinnedMeshRenderer skinnedMeshRenderer;
+    
     void Awake(){
         meshRenderer = GetComponentInChildren<MeshRenderer>();
         if(meshRenderer == null){
