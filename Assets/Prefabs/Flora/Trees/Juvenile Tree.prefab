@@ -23417,7 +23417,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 18
+  m_VersionIndex: 81
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -23436,6 +23436,8 @@ GameObject:
   - component: {fileID: 619277414667342068}
   - component: {fileID: 6881247850729204595}
   - component: {fileID: 3337650843975020231}
+  - component: {fileID: 6410952671382290892}
+  - component: {fileID: 7103825854409435020}
   m_Layer: 3
   m_Name: Juvenile Tree
   m_TagString: Untagged
@@ -23453,7 +23455,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -23.1, y: -1809.02, z: -1509.02}
-  m_LocalScale: {x: 7, y: 7, z: 7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8845082641888233616}
@@ -23502,7 +23504,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1.5, y: 2.9, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
@@ -23514,7 +23516,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5672429565605418483}
   serializedVersion: 4
-  m_Mass: 1000
+  m_Mass: 1000000
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -23547,3 +23549,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: {fileID: 0}
   isFlying: 0
+--- !u!65 &6410952671382290892
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5672429565605418483}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.8, y: 1.48, z: 0.8}
+  m_Center: {x: -0.1, y: -0.51, z: 0.07}
+--- !u!135 &7103825854409435020
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5672429565605418483}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.88
+  m_Center: {x: 0, y: 0.64, z: 0}

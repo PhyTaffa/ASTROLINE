@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 7963587524599452986}
   - component: {fileID: 6521608868750417638}
   - component: {fileID: 379307757854808381}
+  - component: {fileID: 4816533752028330767}
+  - component: {fileID: 415805900721557446}
   m_Layer: 3
   m_Name: Adult Tree
   m_TagString: Untagged
@@ -31,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -33.41, y: -1809.02, z: -1537.24}
-  m_LocalScale: {x: 7, y: 7, z: 7}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5048901619215422200}
@@ -80,7 +82,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 2.035646, y: 3.0565784, z: 2.0708022}
   m_Center: {x: 0, y: 0, z: 0}
@@ -92,7 +94,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5515873431973198561}
   serializedVersion: 4
-  m_Mass: 1000
+  m_Mass: 1000000
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -125,6 +127,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: {fileID: 0}
   isFlying: 0
+--- !u!135 &4816533752028330767
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5515873431973198561}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.13
+  m_Center: {x: 0, y: 0.11, z: 0}
+--- !u!65 &415805900721557446
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5515873431973198561}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.79, y: 1, z: 0.84}
+  m_Center: {x: 0.09, y: -0.88, z: -0.06}
 --- !u!1 &7807233644226678191
 GameObject:
   m_ObjectHideFlags: 0
@@ -21528,7 +21572,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 24
+  m_VersionIndex: 42
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
