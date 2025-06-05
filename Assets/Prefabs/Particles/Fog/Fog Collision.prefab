@@ -15,7 +15,7 @@ PrefabInstance:
     - target: {fileID: 3542354057525613039, guid: 5079c31dd38ec1341b944e03f382cc72, type: 3}
       propertyPath: m_Icon
       value: 
-      objectReference: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+      objectReference: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
     - target: {fileID: 3542354057525613039, guid: 5079c31dd38ec1341b944e03f382cc72, type: 3}
       propertyPath: m_Name
       value: Fog Collision

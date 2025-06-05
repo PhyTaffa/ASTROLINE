@@ -5,8 +5,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.ProBuilder.MeshOperations;
 
-public class PlayerController : MonoBehaviour{
-    
+public class PlayerController : MonoBehaviour
+{
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float rotateSpeed = 8f;
@@ -29,8 +29,8 @@ public class PlayerController : MonoBehaviour{
     [Header("Animations")]
     [SerializeField] private PlayerAnimator playerAnimator;
     
-    private void Start(){
-        
+    private void Start()
+    {
         rb = GetComponent<Rigidbody>();
         tf = transform;
         //worldGravity = GetComponent<BodyGravity>();
@@ -61,8 +61,8 @@ public class PlayerController : MonoBehaviour{
         // }
     }
     
-    private void Update(){
-        
+    private void Update()
+    {
         HandleInputs();
 
         //Jump();
@@ -189,7 +189,7 @@ public class PlayerController : MonoBehaviour{
         }
     }
     
-    private void RotateTowardsMovement()
+    private void RotateTowardsMovement() 
     {
         if (input.sqrMagnitude < 0.01f) return;
 
