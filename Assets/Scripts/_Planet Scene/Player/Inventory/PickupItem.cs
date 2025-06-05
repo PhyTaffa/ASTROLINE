@@ -27,8 +27,8 @@ public class PickupItem : MonoBehaviour
             wasEverePickedUp = true;
             
             //instanciate the scannable
-            float offSet = scannableToSpawn.GetComponent<CapsuleCollider>().height/2;
-            Vector3 spawnPos = new Vector3(transform.position.x, transform.position.y + offSet, transform.position.z);
+            //float offSet = scannableToSpawn.GetComponent<Collider>()./2;
+            Vector3 spawnPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
             Instantiate(scannableToSpawn, spawnPos, Quaternion.identity);
             Debug.Log($"{this.gameObject.name} beign picked up, spawend: {scannableToSpawn.name}");
         }
