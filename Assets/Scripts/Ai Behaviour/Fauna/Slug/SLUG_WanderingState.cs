@@ -56,6 +56,13 @@ public class SLUG_WanderingingState : AStateBehaviour
             Debug.LogWarning($"Fauna_PatrollingState on {gameObject.name} is missing references!");
             return false;
         }
+        
+        if (!base.InitializeState())
+        {
+            Debug.LogWarning("Fauna Idle State not initialized");
+            return false;
+        }
+        
         return true;
     }
 
@@ -109,6 +116,7 @@ public class SLUG_WanderingingState : AStateBehaviour
             pathFollower.StopFollowingPath();
             
             currentReactionTime = reactionTimer;
+            FaunaAnimator.SetAnimationState(EFaunaAnimatorState.Idle);
         }
         else
         {
@@ -123,6 +131,8 @@ public class SLUG_WanderingingState : AStateBehaviour
                 pathFollower.ContinueFollowingPath();
             }
         }
+        
+        FaunaAnimator.SetAnimationState(EFaunaAnimatorState.Wander);
     }
 
     public override int StateTransitionCondition()
