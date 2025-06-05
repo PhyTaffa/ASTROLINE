@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 8532445206011290777}
   - component: {fileID: 1168810495845019673}
   - component: {fileID: 1151360714216097158}
+  - component: {fileID: 7430063023014102185}
   m_Layer: 3
   m_Name: FrogN
   m_TagString: Untagged
@@ -205,6 +206,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scanData: {fileID: 11400000, guid: 98e7d08855c4eb7479d6f864fb733044, type: 2}
+--- !u!114 &7430063023014102185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8440970866802924974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df41d3694a9f9c5458c0d1abb0b61299, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightMaterial: {fileID: 2100000, guid: 3be5398b492ba7846b7245997c4ba14e, type: 2}
 --- !u!1001 &732316933767983941
 PrefabInstance:
   m_ObjectHideFlags: 0
