@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,37 +5,32 @@ public class PickUp : MonoBehaviour
 {
     [SerializeField] private LayerMask detectableLayers;
     [SerializeField] private Transform dropOrigin;
-    
+
     [Header("UI Preview")]
     [SerializeField] private Transform previewHolder;
     [SerializeField] private Camera previewCamera;
     [SerializeField] private RawImage previewImage;
-    
+
     [Header("Animations")]
     [SerializeField] private PlayerAnimator playerAnimator;
-    
-    private Collider triggerCollider;
-    //private HeldItems currentHeldItems = HeldItems.None;
 
-    //private Dictionary<HeldItems, GameObject> heldObjects = new();
+    private Collider triggerCollider;
     private GameObject heldObject = null;
-    private GameObject heldPreviewClone = null;
+    private int originalLayer = -1;
 
     private NotebookPages notebook;
-    
+
     public event System.Action OnPickedUp;
-    
+
     private void Awake()
     {
         triggerCollider = GetComponent<Collider>();
-        
-        //to avoid editor problmes
         triggerCollider.isTrigger = true;
         triggerCollider.enabled = false;
-        
+
         if (previewImage != null)
             previewImage.enabled = false;
-        
+
         notebook = FindObjectOfType<NotebookPages>();
         if (notebook == null)
         {
@@ -46,7 +40,7 @@ public class PickUp : MonoBehaviour
 
     private void Update()
     {
-        if (notebook)// .!NotebookOpen to avoid picking and dropping while in notebook
+        if (notebook)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -57,29 +51,24 @@ public class PickUp : MonoBehaviour
             {
                 triggerCollider.enabled = false;
             }
-            
+
             if (Input.GetMouseButtonDown(1))
             {
                 DropHeldObject();
             }
         }
-
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (heldObject != null) return; // Already holding something
+        if (heldObject != null) return;
 
         if (((1 << other.gameObject.layer) & detectableLayers) != 0)
         {
             PickupItem item = other.GetComponent<PickupItem>();
-
             if (item != null)
             {
                 PickUpObject(item);
-                
-                //animation
-                
             }
             else
             {
@@ -91,72 +80,57 @@ public class PickUp : MonoBehaviour
     private void PickUpObject(PickupItem item)
     {
         heldObject = item.gameObject;
-        heldObject.SetActive(false);
-        Debug.Log($"Picked up: {heldObject.name}");
-        
-        ShowHeldItemPreview(heldObject);
-        
-        //event to spawn mf under rock
-        //useless
-        //OnPickedUp?.Invoke();
         item.SpawnMfUponBeignPickedUp();
+        originalLayer = heldObject.layer;
+
+        ShowHeldItemPreview(heldObject);
+        Debug.Log($"Picked up: {heldObject.name}");
     }
 
     private void DropHeldObject()
     {
         if (heldObject == null) return;
 
-        Vector3 dropPos = dropOrigin ? dropOrigin.position : transform.position + transform.forward;
-        heldObject.transform.position = dropPos;
-        heldObject.transform.rotation = Quaternion.identity;
-        heldObject.SetActive(true);
+        HideHeldItemPreview();
 
-        // Rigidbody rb = heldObject.GetComponent<Rigidbody>();
-        // if (rb)
-        // {
-        //     rb.velocity = Vector3.zero;
-        //     rb.angularVelocity = Vector3.zero;
-        // }
+        heldObject.transform.SetParent(null);
+        heldObject.transform.position = dropOrigin ? dropOrigin.position : transform.position + transform.forward;
+        heldObject.transform.rotation = Quaternion.identity;
 
         Debug.Log($"Dropped: {heldObject.name}");
         heldObject = null;
-        
-        HideHeldItemPreview();
+        originalLayer = -1;
     }
-    
-    private void ShowHeldItemPreview(GameObject original)
+
+    private void ShowHeldItemPreview(GameObject obj)
     {
-        if (heldPreviewClone != null)
-            Destroy(heldPreviewClone);
+        obj.transform.SetParent(previewHolder);
+        obj.transform.localPosition = Vector3.zero;
+        obj.transform.localRotation = Quaternion.identity;
+        obj.transform.localScale = Vector3.one;
 
-        heldPreviewClone = Instantiate(original, previewHolder);
-        heldPreviewClone.layer = LayerMask.NameToLayer("Preview");
-        foreach (Transform t in heldPreviewClone.GetComponentsInChildren<Transform>(true))
-        {
-            t.gameObject.layer = LayerMask.NameToLayer("Preview");
-        }
-
-        heldPreviewClone.transform.localPosition = Vector3.zero;
-        heldPreviewClone.transform.localRotation = Quaternion.identity;
-        heldPreviewClone.transform.localScale = Vector3.one;
+        int previewLayer = LayerMask.NameToLayer("Preview");
+        SetLayerRecursively(obj, previewLayer);
 
         if (previewImage != null)
             previewImage.enabled = true;
-        
-        heldPreviewClone.SetActive(true);
     }
 
     private void HideHeldItemPreview()
     {
-        if (heldPreviewClone != null)
-            Destroy(heldPreviewClone);
+        heldObject.transform.SetParent(null);
+        SetLayerRecursively(heldObject, originalLayer);
 
         if (previewImage != null)
             previewImage.enabled = false;
     }
 
-    // private bool HasItem(HeldItems item)
-    // {
-    //     return (currentHeldItems & item) != 0;
-    // }
+    private void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        obj.layer = newLayer;
+        foreach (Transform t in obj.GetComponentsInChildren<Transform>(true))
+        {
+            t.gameObject.layer = newLayer;
+        }
+    }
 }
