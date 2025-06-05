@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class GameGoalSpawner : MonoBehaviour{
     
@@ -9,16 +9,14 @@ public class GameGoalSpawner : MonoBehaviour{
     [SerializeField] private GameObject circlePrefab;
     
     [Header("UI Text to display score")]
-    [SerializeField] private Text scoreText;
-    
-    [Header("Maximum circles allowed on screen")]
-    [SerializeField] private int maxCircles = 5;
+    [SerializeField] private TextMeshProUGUI  scoreText;
     
     private float spawnInterval = 6f;
     private BoxCollider spawnZone;
     private int score = 0;
-    private int activeCount = 0;
 
+    public static bool scoreReachedFive = false;
+    
     private void Awake(){
         
         spawnZone = GetComponent<BoxCollider>();
@@ -29,7 +27,22 @@ public class GameGoalSpawner : MonoBehaviour{
         StartCoroutine(SpawnRoutine());
         UpdateScoreUI();
     }
-
+    
+    private void Update(){
+        
+        scoreText.gameObject.SetActive(GameState.IsRunning);
+        
+        if (!GameState.IsRunning){
+            score = 0;
+            UpdateScoreUI();
+            
+            return;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.I)){
+            scoreReachedFive = false;
+        }
+    }
     private IEnumerator SpawnRoutine(){
         
         while (!GameState.IsRunning){
@@ -53,9 +66,7 @@ public class GameGoalSpawner : MonoBehaviour{
         
         if (!GameState.IsRunning) return;
         if (circlePrefab == null) return;
-        if (activeCount >= maxCircles) return;
 
-        // Pick a random point within the BoxCollider bounds
         Vector3 center = spawnZone.center + transform.position;
         Vector3 size = spawnZone.size;
         
@@ -66,22 +77,21 @@ public class GameGoalSpawner : MonoBehaviour{
         Vector3 spawnPos = center + new Vector3(randomX, minY, randomZ);
         
         Instantiate(circlePrefab, spawnPos, Quaternion.identity);
-        activeCount++;
     }
 
     public void IncrementScore(){
         if (!GameState.IsRunning) return;
         score++;
         UpdateScoreUI();
+        
+        if (score >= 5){
+            scoreReachedFive = true;
+        }
     }
     
-    public void NotifyCircleDestroyed(){
-        
-        activeCount = Mathf.Max(0, activeCount - 1);
-    }
     private void UpdateScoreUI(){
-        if (scoreText != null)
-        {
+        
+        if (scoreText != null){
             scoreText.text = "Score: " + score;
         }
     }

@@ -8,6 +8,7 @@ public class PlayerButtonDetector : MonoBehaviour
     public GameObject playButtonArea;
     public GameObject door1ButtonArea;
     public GameObject door2ButtonArea;
+    public GameObject prayArea;
     public ShipCameraManager cameraManager;
     public GameObject shipInteractPrompt;
     public GameObject cargoInteractPrompt;
@@ -15,6 +16,7 @@ public class PlayerButtonDetector : MonoBehaviour
     public GameObject door2InteractPrompt;
     public GameObject door1GoPrompt;
     public GameObject door2GoPrompt;
+    public GameObject isBleesed;
     
     private void Awake(){
         shipInteractPrompt.SetActive(false);
@@ -24,6 +26,7 @@ public class PlayerButtonDetector : MonoBehaviour
         door2InteractPrompt.SetActive(false);
         door1GoPrompt.SetActive(false);
         door2GoPrompt.SetActive(false);
+        isBleesed.SetActive(false);
     }
 
     void OnTriggerEnter(Collider other){
@@ -48,6 +51,11 @@ public class PlayerButtonDetector : MonoBehaviour
             door2InteractPrompt.SetActive(true);    
             door2GoPrompt.SetActive(true);     
         }
+        
+        if (other.gameObject == prayArea){
+            isBleesed.SetActive(true);
+        }
+    
     }
 
     void OnTriggerExit(Collider other){
@@ -71,6 +79,10 @@ public class PlayerButtonDetector : MonoBehaviour
         if (other.gameObject == door2ButtonArea){
             door2InteractPrompt.SetActive(false);
             door2GoPrompt.SetActive(false); 
+        }
+        
+        if (other.gameObject == prayArea){
+            isBleesed.SetActive(false);
         }
     }
 }

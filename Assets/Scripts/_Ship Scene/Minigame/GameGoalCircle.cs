@@ -14,7 +14,6 @@ public class GameGoalCircle : MonoBehaviour{
             GameGoalSpawner spawner = FindObjectOfType<GameGoalSpawner>();
             if (spawner != null){
                 spawner.IncrementScore();
-                spawner.NotifyCircleDestroyed();
             }
 
             Destroy(gameObject);
