@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour{
     
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float rotateSpeed = 5f;
+    [SerializeField] private float rotateSpeed = 8f;
     [SerializeField] private float jumpSpeed = 20f;
     [SerializeField] private KeyCode runKey = KeyCode.LeftShift;
     [SerializeField] private int runMultiplier = 2;
@@ -64,18 +64,20 @@ public class PlayerController : MonoBehaviour{
     private void Update(){
         
         HandleInputs();
-        
+
+        //Jump();
+
         //RotateTowardsMovement();
         // Debug.DrawRay(this.transform.position, this.transform.forward * 10f, Color.green);
         // Debug.DrawRay(this.transform.position, this.transform.right * 10f, Color.yellow);
 
 
         //RotateForward();
-        
+
         //new
         // AlignToPlanetSurface();
         // MovePlayer();
-        
+
         // if (input.sqrMagnitude > 0.01f)
         // {
         //     //get the direction to face
@@ -92,6 +94,11 @@ public class PlayerController : MonoBehaviour{
         //     
         //     rb.velocity = tf.forward * moveSpeed;
         // }
+    }
+
+    private void Jump()
+    {
+        //Xd no jump even thoug the char is black
     }
 
     private void FixedUpdate()
@@ -180,7 +187,6 @@ public class PlayerController : MonoBehaviour{
                 tf.rotation = Quaternion.RotateTowards(tf.rotation, targetRotation, rotateSpeed * Time.deltaTime);
             }
         }
-
     }
     
     private void RotateTowardsMovement()

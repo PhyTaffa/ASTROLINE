@@ -29,7 +29,8 @@ public class BodyGravity : MonoBehaviour {
 
         
         tf = transform;
-
+        
+        
         if (gravity == null) {
             gravity = GameObject.FindGameObjectWithTag("Planet").GetComponent<WorldGravity>();
         }
@@ -37,7 +38,7 @@ public class BodyGravity : MonoBehaviour {
 
     private void Update() {
         if (gravity != null) {
-            gravity.Gravity(tf, isFlying); // Pass flag into gravity method
+            gravity.Gravity(tf, rb, isFlying); // Pass flag into gravity method
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(PathFollower))]
 public class Fauna_WanderingingState : AStateBehaviour
@@ -9,9 +10,9 @@ public class Fauna_WanderingingState : AStateBehaviour
     [Header("References")]
     [SerializeField] private PathFollower pathFollower;
     [SerializeField] private PlayerDetectionTrigger playerDetection;// Reference to the PathFollower script
-
+    
     [Header("Thirst Settings")]
-    [SerializeField] private float thirstTimer = 20f;
+    [SerializeField] private float timeToGetThirty = 20f;
     
     [Header("Sleep Settings")]
     [SerializeField] private bool isSupposedToSleep = false;
@@ -29,9 +30,11 @@ public class Fauna_WanderingingState : AStateBehaviour
     
     //private LineOfSight monsterLineOfSight = null;
 
-    [Header("Debug info")]
-    [SerializeField] private float currThirstTimer = 0f;
-    [SerializeField] private float currIdleTimer = 0f;
+    [Header("Debug info")] 
+    [SerializeField] private float minRandomTimer = 0.8f;
+    [SerializeField] private float maxRandomTimer = 1.2f;
+    [SerializeField] private float timeLeftToDrink = 0f;
+    [SerializeField] private float timeLeftToIdle = 0f;
     [SerializeField] private float currentReactionTime = 0f;
     
     private bool hasFinishedCurrentPath = false;
@@ -50,11 +53,17 @@ public class Fauna_WanderingingState : AStateBehaviour
         // if(playerDetection == null)
         //     playerDetection = GetComponent<PlayerDetectionTrigger>();
         
-        if (pathFollower == null || playerDetection == null)
+        if (pathFollower == null)
         {
             Debug.LogWarning($"Fauna_PatrollingState on {gameObject.name} is missing references!");
             return false;
         }
+
+        // if (playerDetection == null)
+        // {
+        //     Debug.LogWarning($"Fauna_PatrollingState on {gameObject.name} is missing references!");
+        //     return false;
+        // }
         
         if (!base.InitializeState())
         {
@@ -77,13 +86,16 @@ public class Fauna_WanderingingState : AStateBehaviour
     {
         //Setting parameters, missing a small +- 20% randomizazion for the floats
         //thirsty
-        currThirstTimer = thirstTimer;
+        timeLeftToDrink = timeToGetThirty * Random.Range(minRandomTimer, maxRandomTimer);
         
         //sleep
         isSupposedToSleep = false;
         
         //reaction
         currentReactionTime = reactionTimer;
+        
+        //idle
+        timeLeftToIdle = timeToGoIdle * Random.Range(minRandomTimer, maxRandomTimer);;
         
         //wander
         hasFinishedCurrentPath = false;  // Reset when we enter this state
@@ -95,16 +107,17 @@ public class Fauna_WanderingingState : AStateBehaviour
         
         //animation
         FaunaAnimator.SetAnimationState(EFaunaAnimatorState.Wander);
-        
     }
 
     public override void OnStateUpdate()
     {
-        //decrease thirst
-        currThirstTimer -= Time.deltaTime;
-        currIdleTimer -= Time.deltaTime;
+        //decrease thirst & idle
+        timeLeftToDrink -= Time.deltaTime;
+        timeLeftToIdle -= Time.deltaTime;
         
-
+        //idle could be not a state but inside the thing
+        
+        
         //simulates the reacttion
         // if (playerDetection.IsPlayerInside)
         // {
@@ -137,18 +150,21 @@ public class Fauna_WanderingingState : AStateBehaviour
 
         if (hasFinishedCurrentPath)
         {
-            if (currThirstTimer < 0f)
+            if (timeLeftToDrink < 0f)
             {
                 return (int)EFaunaState.Thirsty;
             }
 
             if (isSupposedToSleep)
             {
-                return (int)EFaunaState.Sleepy;
+                //return (int)EFaunaState.Sleepy;
             }
 
-            if (currIdleTimer < 0f)
+            if (timeLeftToIdle < 0f)
             {
+                pathFollower.GenerateNewPath();
+                hasFinishedCurrentPath = false;
+                
                 return (int)EFaunaState.Idle;
             }
 

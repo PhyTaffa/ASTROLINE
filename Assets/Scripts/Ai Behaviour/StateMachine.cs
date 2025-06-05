@@ -11,6 +11,8 @@ public class StateMachine : MonoBehaviour
 
     private AStateBehaviour currentState = null;
 
+    [SerializeField] private string currStateString = null;
+    
     bool InitializeStates()
     {
         for (int i = 0; i < stateBehaviours.Count; ++i)
@@ -49,6 +51,8 @@ public class StateMachine : MonoBehaviour
 
             currentState = stateBehaviours[firstStateIndex];
             currentState.OnStateStart();
+            
+            currStateString = currentState.GetType().Name;
         }
         else
         {
@@ -70,6 +74,7 @@ public class StateMachine : MonoBehaviour
             currentState.OnStateStart();
             
             Debug.Log($"{gameObject.name} transition condition met, going from {startingState} to {currentState?.GetType().Name}");
+            currStateString = currentState.GetType().Name;
         }
     }
 

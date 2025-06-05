@@ -84,6 +84,9 @@ public class SLUG_WanderingingState : AStateBehaviour
         //wander
         hasFinishedCurrentPath = false;  // Reset when we enter this state
         pathFollower.autoLoopPaths = true;
+        
+        //animations
+        FaunaAnimator.SetAnimationState(EFaunaAnimatorState.Wander);
 
         pathFollower.OnPathFinished += HandlePathFinished;
         //pathFollower.GenerateNewPath();
@@ -128,12 +131,12 @@ public class SLUG_WanderingingState : AStateBehaviour
         {
             if (currThirstTimer < 0f)
             {
-                return (int)EFaunaState.Thirsty;
+                //return (int)EFaunaState.Thirsty;
             }
 
             if (isSupposedToSleep)
             {
-                return (int)EFaunaState.Sleepy;
+                //return (int)EFaunaState.Sleepy;
             }
 
             if (currIdleTimer < timetoGoIdle)

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 11789cbbd6286594b899f0df6f75822e
+guid: 6ee8a68fdf88b654a8ec7cceee01d93b
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -66,7 +66,7 @@ ModelImporter:
       takeName: Armature|JUMPfrog1
       internalID: -2924525434168279571
       firstFrame: 0
-      lastFrame: 79
+      lastFrame: 50
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -110,7 +110,7 @@ ModelImporter:
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
-    bakeAxisConversion: 0
+    bakeAxisConversion: 1
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4

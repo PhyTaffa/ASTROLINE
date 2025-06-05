@@ -1,6 +1,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
+    using UnityEngine.Serialization;
 
     public class PathFollower : MonoBehaviour
     {
@@ -9,7 +10,7 @@
         [SerializeField] private GameObject startNode;
         [SerializeField] private GameObject endNode;
         [SerializeField] private float speed = 8f;
-        [SerializeField] [Range(300, 500)] private float rotationSpeed = 300f;
+        [SerializeField] [Range(300, 600)] private float rotationSpeed = 600f;
         
         //to immediatly start a new path
         public bool autoLoopPaths = true;
@@ -20,7 +21,7 @@
         private bool isMoving = false;
 
         private Rigidbody rb;
-        [SerializeField] private float threshqold = 10f;
+        [SerializeField] private float threshold = 4f;
 
         public event System.Action OnPathFinished;
         
@@ -94,7 +95,7 @@
             rb.MovePosition(newPosition);
 
             // Proceed to next node if close enough
-            if (Vector3.Distance(transform.position, targetPos) < threshqold)
+            if (Vector3.Distance(transform.position, targetPos) < threshold)
             {
                 currentIndex++;
                 if (currentIndex >= path.Count)

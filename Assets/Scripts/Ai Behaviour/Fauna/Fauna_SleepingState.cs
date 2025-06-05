@@ -22,6 +22,19 @@ public class Fauna_SleepingState : AStateBehaviour
             Debug.LogWarning($"Fauna_PatrollingState on {gameObject.name} is missing references");
             return false;
         }
+        
+        if (!base.InitializeState())
+        {
+            Debug.LogWarning("Fauna Wandering State BASE not initialized");
+            return false;
+        }
+        
+        if (!base.InitializeState())
+        {
+            Debug.LogWarning("Fauna Wandering State BASE not initialized");
+            return false;
+        }
+        
         return true;
     }
 

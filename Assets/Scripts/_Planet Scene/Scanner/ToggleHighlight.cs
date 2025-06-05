@@ -1,4 +1,4 @@
-using UnityEngine;
+        using UnityEngine;
 using System.Collections.Generic;
 
 public class ToggleHighlight : MonoBehaviour {
@@ -14,6 +14,7 @@ public class ToggleHighlight : MonoBehaviour {
         if(meshRenderer == null){
             Debug.LogError($"ToggleHighlight on '{name}' couldn't find a MeshRenderer!");
             enabled = false;
+            
             return;
         }
         baseMaterial  = meshRenderer.materials[0];

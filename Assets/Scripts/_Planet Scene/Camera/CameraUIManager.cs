@@ -4,12 +4,15 @@ using Cinemachine;
 
 public class CameraUIManager : MonoBehaviour
 {
+    [Header("1st Person")]
     [SerializeField] private CinemachineVirtualCamera firstPersonCam;
-    [SerializeField] private CinemachineVirtualCameraBase thirdPersonCam;
-
     [SerializeField] private GameObject firstPersonUIRoot; // scannerUIRoot
+    
+    [Header("3rd Person")]
+    [SerializeField] private CinemachineVirtualCameraBase thirdPersonCam;
     [SerializeField] private GameObject thirdPersonUIRoot;
     
+    [Header("BrIAn")]
     [SerializeField] private CinemachineBrain cinemachineBrain;
 
     private Coroutine blendRoutine;

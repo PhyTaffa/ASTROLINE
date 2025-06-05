@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(Animator))]
+//[RequireComponent(typeof(Animator))]
 public class FaunaAnimator : MonoBehaviour
 {
     [SerializeField] private Animator animator;
@@ -20,5 +20,13 @@ public class FaunaAnimator : MonoBehaviour
         //avoid repetition
         animator.SetInteger(animatorProperty, (int)newState);
         currentAnimState = newState;
+    }
+
+    private void Start()
+    {
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
     }
 }

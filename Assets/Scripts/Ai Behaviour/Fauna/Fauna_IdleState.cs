@@ -7,7 +7,7 @@ public class Fauna_IdleState : AStateBehaviour
     [Header("Idle Settings")]
     [SerializeField] private float maxTimer = 5.0f;
     [SerializeField] private int randomChanceOfStopping = 10;
-    [SerializeField] private bool willRotate = true;
+    [SerializeField] private bool willRotate = false;
     
     [Header("Idle rotation Settings")]
     [SerializeField] private bool isRotating = false;

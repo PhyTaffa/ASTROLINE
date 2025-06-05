@@ -7,7 +7,7 @@ public class Fauna_ThirstyState : AStateBehaviour
     [Header("References")]
     [SerializeField] private PathFollower pathFollower;
     [SerializeField] private GameObject waterNode;  // The predefined water node
-    [SerializeField] private PlayerDetectionTrigger playerDetection;// Reference to the PathFollower script
+    [HideInInspector] [SerializeField] private PlayerDetectionTrigger playerDetection;// Reference to the PathFollower script
 
     
     [Header("Drink Settings")]
@@ -20,11 +20,18 @@ public class Fauna_ThirstyState : AStateBehaviour
     private bool hasFinishedCurrentPath = false;
     public override bool InitializeState()
     {
-        if (pathFollower == null || waterNode == null || playerDetection == null)
+        if (pathFollower == null || waterNode == null)
         {
             Debug.LogWarning($"Fauna_PatrollingState on {gameObject.name} is missing references");
             return false;
         }
+        
+        if (!base.InitializeState())
+        {
+            Debug.LogWarning("Fauna Wandering State BASE not initialized");
+            return false;
+        }
+        
         return true;
     }
 
@@ -50,6 +57,7 @@ public class Fauna_ThirstyState : AStateBehaviour
         
         if (hasArrivedAtWater)
         {
+            FaunaAnimator.SetAnimationState(EFaunaAnimatorState.Thirsty);
             currentDrinkTimer -= Time.deltaTime;
         }
     }

@@ -4,17 +4,23 @@ using UnityEngine;
 using Cinemachine;
 
 public class CameraManager : MonoBehaviour{
+    [Header("1st Person Cm")]
     [SerializeField] private GameObject firstPersonRoot;
     [SerializeField] private GameObject fpRig;
+    
+    [Header("3rd Person Cam")]
     [SerializeField] private GameObject thirdPersonRoot;
 
     private KeyCode switchKey = KeyCode.Q;
+    
+    [Header("UIs")]
     [SerializeField] private GameObject scannerUIRoot;
     [SerializeField] private GameObject tpUI;
     
     private MonoBehaviour[] firstPersonScripts;
     private MonoBehaviour[] thirdPersonScripts;
 
+    [Header("Debug var")]
     [SerializeField] private bool isFirstPersonActive = true;
 
     private CinemachineVirtualCamera firstPersonCam;
@@ -45,6 +51,7 @@ public class CameraManager : MonoBehaviour{
         if (Input.GetKeyDown(switchKey)){
             isFirstPersonActive = !isFirstPersonActive;
             
+            //Mf add the colume swithc in here
             
             fpRig.SetActive(isFirstPersonActive);
             
